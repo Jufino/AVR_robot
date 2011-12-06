@@ -1,0 +1,318 @@
+;/*****************************************************
+;This program was produced by the
+;CodeWizardAVR V2.03.4 Standard
+;Automatic Program Generator
+;© Copyright 1998-2008 Pavel Haiduc, HP InfoTech s.r.l.
+;http://www.hpinfotech.com
+;
+;Project :
+;Version :
+;Date    : 28. 5. 2011
+;Author  :
+;Company :
+;Comments:
+;
+;
+;Chip type           : ATtiny25
+;Clock frequency     : 1,000000 MHz
+;Memory model        : Tiny
+;External RAM size   : 0
+;Data Stack size     : 32
+;*****************************************************/
+;
+;#include <tiny25.h>
+;PCODE: $00000000 VOL: 0
+	#ifndef __SLEEP_DEFINED__
+;PCODE: $00000001 VOL: 0
+	#define __SLEEP_DEFINED__
+;PCODE: $00000002 VOL: 0
+	.EQU __se_bit=0x20
+;PCODE: $00000003 VOL: 0
+	.EQU __sm_mask=0x18
+;PCODE: $00000004 VOL: 0
+	.EQU __sm_adc_noise_red=0x08
+;PCODE: $00000005 VOL: 0
+	.EQU __sm_powerdown=0x10
+;PCODE: $00000006 VOL: 0
+	.EQU __sm_standby=0x18
+;PCODE: $00000007 VOL: 0
+	.SET power_ctrl_reg=mcucr
+;PCODE: $00000008 VOL: 0
+	#endif
+;PCODE: $00000009 VOL: 0
+;PCODE: $0000000A VOL: 0
+;
+;#include <delay.h>
+;
+;#define ADC_VREF_TYPE 0x20
+;
+;// Read the 8 most significant bits
+;// of the AD conversion result
+;unsigned char read_adc(unsigned char adc_input)
+; 0000 0020 {
+
+	.CSEG
+;PCODE: $0000000B VOL: 0
+;PCODE: $0000000C VOL: 0
+; 0000 0021 ADMUX=adc_input | (ADC_VREF_TYPE & 0xff);
+;	adc_input -> Y+0
+;PCODE: $0000000D VOL: 0
+;PCODE: $0000000E VOL: 0
+;PCODE: $0000000F VOL: 0
+;PCODE: $00000010 VOL: 0
+; 0000 0022 // Delay needed for the stabilization of the ADC input voltage
+; 0000 0023 delay_us(10);
+;PCODE: $00000011 VOL: 0
+; 0000 0024 // Start the AD conversion
+; 0000 0025 ADCSRA|=0x40;
+;PCODE: $00000012 VOL: 0
+;PCODE: $00000013 VOL: 0
+;PCODE: $00000014 VOL: 0
+;PCODE: $00000015 VOL: 0
+; 0000 0026 // Wait for the AD conversion to complete
+; 0000 0027 while ((ADCSRA & 0x10)==0);
+;PCODE: $00000016 VOL: 0
+;PCODE: $00000017 VOL: 0
+;PCODE: $00000018 VOL: 0
+;PCODE: $00000019 VOL: 0
+;PCODE: $0000001A VOL: 0
+;PCODE: $0000001B VOL: 0
+;PCODE: $0000001C VOL: 0
+; 0000 0028 ADCSRA|=0x10;
+;PCODE: $0000001D VOL: 0
+;PCODE: $0000001E VOL: 0
+;PCODE: $0000001F VOL: 0
+;PCODE: $00000020 VOL: 0
+; 0000 0029 return ADCH;
+;PCODE: $00000021 VOL: 0
+;PCODE: $00000022 VOL: 0
+;PCODE: $00000023 VOL: 0
+; 0000 002A }
+;PCODE: $00000024 VOL: 0
+;
+;// Declare your global variables here
+;
+;void main(void)
+; 0000 002F {
+;PCODE: $00000025 VOL: 0
+; 0000 0030 // Declare your local variables here
+; 0000 0031 
+; 0000 0032 // Crystal Oscillator division factor: 1
+; 0000 0033 #pragma optsize-
+; 0000 0034 CLKPR=0x80;
+;PCODE: $00000026 VOL: 0
+;PCODE: $00000027 VOL: 0
+; 0000 0035 CLKPR=0x00;
+;PCODE: $00000028 VOL: 0
+;PCODE: $00000029 VOL: 0
+; 0000 0036 #ifdef _OPTIMIZE_SIZE_
+; 0000 0037 #pragma optsize+
+; 0000 0038 #endif
+; 0000 0039 
+; 0000 003A // Input/Output Ports initialization
+; 0000 003B // Port B initialization
+; 0000 003C // Func5=Out Func4=In Func3=In Func2=In Func1=In Func0=In
+; 0000 003D // State5=0 State4=T State3=T State2=T State1=T State0=T
+; 0000 003E PORTB=0x00;
+;PCODE: $0000002A VOL: 0
+;PCODE: $0000002B VOL: 0
+; 0000 003F DDRB=0x03;
+;PCODE: $0000002C VOL: 0
+;PCODE: $0000002D VOL: 0
+; 0000 0040 
+; 0000 0041 // Timer/Counter 0 initialization
+; 0000 0042 // Clock source: System Clock
+; 0000 0043 // Clock value: Timer 0 Stopped
+; 0000 0044 // Mode: Normal top=FFh
+; 0000 0045 // OC0A output: Disconnected
+; 0000 0046 // OC0B output: Disconnected
+; 0000 0047 TCCR0A=0x00;
+;PCODE: $0000002E VOL: 0
+;PCODE: $0000002F VOL: 0
+; 0000 0048 TCCR0B=0x00;
+;PCODE: $00000030 VOL: 0
+;PCODE: $00000031 VOL: 0
+; 0000 0049 TCNT0=0x00;
+;PCODE: $00000032 VOL: 0
+;PCODE: $00000033 VOL: 0
+; 0000 004A OCR0A=0x00;
+;PCODE: $00000034 VOL: 0
+;PCODE: $00000035 VOL: 0
+; 0000 004B OCR0B=0x00;
+;PCODE: $00000036 VOL: 0
+;PCODE: $00000037 VOL: 0
+; 0000 004C 
+; 0000 004D // Timer/Counter 1 initialization
+; 0000 004E // Clock source: System Clock
+; 0000 004F // Clock value: Timer 1 Stopped
+; 0000 0050 // Mode: Normal top=FFh
+; 0000 0051 // OC1A output: Disconnected
+; 0000 0052 // OC1B output: Disconnected
+; 0000 0053 // Timer 1 Overflow Interrupt: Off
+; 0000 0054 // Compare A Match Interrupt: Off
+; 0000 0055 // Compare B Match Interrupt: Off
+; 0000 0056 PLLCSR=0x00;
+;PCODE: $00000038 VOL: 0
+;PCODE: $00000039 VOL: 0
+; 0000 0057 TCCR1=0x00;
+;PCODE: $0000003A VOL: 0
+;PCODE: $0000003B VOL: 0
+; 0000 0058 GTCCR=0x00;
+;PCODE: $0000003C VOL: 0
+;PCODE: $0000003D VOL: 0
+; 0000 0059 TCNT1=0x00;
+;PCODE: $0000003E VOL: 0
+;PCODE: $0000003F VOL: 0
+; 0000 005A OCR1A=0x00;
+;PCODE: $00000040 VOL: 0
+;PCODE: $00000041 VOL: 0
+; 0000 005B OCR1B=0x00;
+;PCODE: $00000042 VOL: 0
+;PCODE: $00000043 VOL: 0
+; 0000 005C OCR1C=0x00;
+;PCODE: $00000044 VOL: 0
+;PCODE: $00000045 VOL: 0
+; 0000 005D 
+; 0000 005E // External Interrupt(s) initialization
+; 0000 005F // INT0: Off
+; 0000 0060 // Interrupt on any change on pins PCINT0-5: Off
+; 0000 0061 GIMSK=0x00;
+;PCODE: $00000046 VOL: 0
+;PCODE: $00000047 VOL: 0
+; 0000 0062 MCUCR=0x00;
+;PCODE: $00000048 VOL: 0
+;PCODE: $00000049 VOL: 0
+; 0000 0063 
+; 0000 0064 // Timer(s)/Counter(s) Interrupt(s) initialization
+; 0000 0065 TIMSK=0x00;
+;PCODE: $0000004A VOL: 0
+;PCODE: $0000004B VOL: 0
+; 0000 0066 
+; 0000 0067 // Universal Serial Interface initialization
+; 0000 0068 // Mode: Disabled
+; 0000 0069 // Clock source: Register & Counter=no clk.
+; 0000 006A // USI Counter Overflow Interrupt: Off
+; 0000 006B USICR=0x00;
+;PCODE: $0000004C VOL: 0
+;PCODE: $0000004D VOL: 0
+; 0000 006C 
+; 0000 006D // Analog Comparator initialization
+; 0000 006E // Analog Comparator: Off
+; 0000 006F ACSR=0x80;
+;PCODE: $0000004E VOL: 0
+;PCODE: $0000004F VOL: 0
+; 0000 0070 ADCSRB=0x00;
+;PCODE: $00000050 VOL: 0
+;PCODE: $00000051 VOL: 0
+; 0000 0071 
+; 0000 0072 // ADC initialization
+; 0000 0073 // ADC Clock frequency: 500,000 kHz
+; 0000 0074 // ADC Voltage Reference: AVCC pin
+; 0000 0075 // ADC Bipolar Input Mode: Off
+; 0000 0076 // ADC Reverse Input Polarity: Off
+; 0000 0077 // ADC Auto Trigger Source: None
+; 0000 0078 // Only the 8 most significant bits of
+; 0000 0079 // the AD conversion result are used
+; 0000 007A // Digital input buffers on ADC0: On, ADC1: On, ADC2: On, ADC3: On
+; 0000 007B DIDR0&=0x03;
+;PCODE: $00000052 VOL: 0
+;PCODE: $00000053 VOL: 0
+;PCODE: $00000054 VOL: 0
+;PCODE: $00000055 VOL: 0
+; 0000 007C DIDR0|=0x00;
+;PCODE: $00000056 VOL: 0
+;PCODE: $00000057 VOL: 0
+;PCODE: $00000058 VOL: 0
+; 0000 007D ADMUX=ADC_VREF_TYPE & 0xff;
+;PCODE: $00000059 VOL: 0
+;PCODE: $0000005A VOL: 0
+; 0000 007E ADCSRA=0x81;
+;PCODE: $0000005B VOL: 0
+;PCODE: $0000005C VOL: 0
+; 0000 007F ADCSRB&=0x5F;
+;PCODE: $0000005D VOL: 0
+;PCODE: $0000005E VOL: 0
+;PCODE: $0000005F VOL: 0
+;PCODE: $00000060 VOL: 0
+; 0000 0080 
+; 0000 0081 while (1)
+;PCODE: $00000061 VOL: 0
+; 0000 0082       {
+; 0000 0083         if (read_adc(0) > 171 && read_adc(1) > 171 && read_adc(2) > 171 && read_adc(3) > 171)
+;PCODE: $00000062 VOL: 0
+;PCODE: $00000063 VOL: 0
+;PCODE: $00000064 VOL: 0
+;PCODE: $00000065 VOL: 0
+;PCODE: $00000066 VOL: 0
+;PCODE: $00000067 VOL: 0
+;PCODE: $00000068 VOL: 0
+;PCODE: $00000069 VOL: 0
+;PCODE: $0000006A VOL: 0
+;PCODE: $0000006B VOL: 0
+;PCODE: $0000006C VOL: 0
+;PCODE: $0000006D VOL: 0
+;PCODE: $0000006E VOL: 0
+;PCODE: $0000006F VOL: 0
+;PCODE: $00000070 VOL: 0
+;PCODE: $00000071 VOL: 0
+;PCODE: $00000072 VOL: 0
+;PCODE: $00000073 VOL: 0
+;PCODE: $00000074 VOL: 0
+;PCODE: $00000075 VOL: 0
+;PCODE: $00000076 VOL: 0
+;PCODE: $00000077 VOL: 0
+;PCODE: $00000078 VOL: 0
+;PCODE: $00000079 VOL: 0
+; 0000 0084             PORTB.0 = 1; //vecsie ako 3,4V na vystupe 1
+;PCODE: $0000007A VOL: 0
+;PCODE: $0000007B VOL: 0
+; 0000 0085         else
+;PCODE: $0000007C VOL: 0
+;PCODE: $0000007D VOL: 0
+; 0000 0086             PORTB.0 = 0; //mensie ako 3,4V na vystupe 0
+;PCODE: $0000007E VOL: 0
+;PCODE: $0000007F VOL: 0
+; 0000 0087         if (read_adc(0) > 163 && read_adc(1) > 163 && read_adc(2) > 163 && read_adc(3) > 163)
+;PCODE: $00000080 VOL: 0
+;PCODE: $00000081 VOL: 0
+;PCODE: $00000082 VOL: 0
+;PCODE: $00000083 VOL: 0
+;PCODE: $00000084 VOL: 0
+;PCODE: $00000085 VOL: 0
+;PCODE: $00000086 VOL: 0
+;PCODE: $00000087 VOL: 0
+;PCODE: $00000088 VOL: 0
+;PCODE: $00000089 VOL: 0
+;PCODE: $0000008A VOL: 0
+;PCODE: $0000008B VOL: 0
+;PCODE: $0000008C VOL: 0
+;PCODE: $0000008D VOL: 0
+;PCODE: $0000008E VOL: 0
+;PCODE: $0000008F VOL: 0
+;PCODE: $00000090 VOL: 0
+;PCODE: $00000091 VOL: 0
+;PCODE: $00000092 VOL: 0
+;PCODE: $00000093 VOL: 0
+;PCODE: $00000094 VOL: 0
+;PCODE: $00000095 VOL: 0
+;PCODE: $00000096 VOL: 0
+;PCODE: $00000097 VOL: 0
+;PCODE: $00000098 VOL: 0
+; 0000 0088             PORTB.1 = 1; //vecsie ako 3,25V na vystupe 1
+;PCODE: $00000099 VOL: 0
+;PCODE: $0000009A VOL: 0
+; 0000 0089         else
+;PCODE: $0000009B VOL: 0
+;PCODE: $0000009C VOL: 0
+; 0000 008A             PORTB.1 = 0; //mensie ako 3,25V na vystupe 0
+;PCODE: $0000009D VOL: 0
+;PCODE: $0000009E VOL: 0
+; 0000 008B 
+; 0000 008C       };
+;PCODE: $0000009F VOL: 0
+;PCODE: $000000A0 VOL: 0
+;PCODE: $000000A1 VOL: 0
+; 0000 008D }
+;PCODE: $000000A2 VOL: 0
+;PCODE: $000000A3 VOL: 0
+;PCODE: $000000A4 VOL: 0

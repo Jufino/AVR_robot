@@ -1,0 +1,271 @@
+#define Senzor_8 read_adc(3)
+#define Senzor_7 read_adc(2)
+#define Senzor_6 read_adc(1)
+#define Senzor_5 read_adc(0)
+#define Senzor_4 read_adc(4)
+#define Senzor_3 read_adc(5)
+#define Senzor_2 read_adc(6)
+#define Senzor_1 read_adc(7)
+#define Kick_sens   PINB.5                     //kicker senzor
+#define Mot_sens    PINB.6                     //motor prudova ochrana
+
+//---------------------------------
+// Nacitavanie ADC - 8bit
+//---------------------------------
+unsigned char read_adc(unsigned char adc_input)
+{
+ADMUX=adc_input | (ADC_VREF_TYPE & 0xff);
+// Delay needed for the stabilization of the ADC input voltage
+delay_us(10);
+// Start the AD conversion
+ADCSRA|=0x40;
+// Wait for the AD conversion to complete
+while ((ADCSRA & 0x10)==0);
+ADCSRA|=0x10;
+return ADCH;
+} 
+//senzory lopty
+//------------------------------
+unsigned char maxh;
+unsigned char inrange(unsigned char a, unsigned char b, unsigned char range){
+if (a <= b && b <= (a+range))
+    return 1; 
+if (b <= a && a <= (b+range))
+    return 1;
+else
+    return 0;
+}
+unsigned char maxx(unsigned char maxvid/*maximalna hodnota videnia*/){
+    unsigned char sens = 17;
+    unsigned char s[8];
+    unsigned char rozptyl = 8;
+    maxh = 255;
+    s[0] = Senzor_1;
+    if (s[0] < maxvid ){
+        if (s[0] <= maxh){
+            sens = 1;
+            maxh = s[0];
+            }
+    }    
+    s[1] = Senzor_2;
+    if (s[1] < maxvid ){
+        if (s[1] <= maxh){
+            sens = 3;
+            maxh = s[1];
+            }
+    }  
+    s[2] = Senzor_3;
+    if (s[2] < maxvid ){
+        if (s[2] < maxh){
+            sens = 5;
+            maxh = s[2];
+            }
+    }  
+    s[3] = Senzor_4;
+    if (s[3] < maxvid ){
+        if (s[3] <= maxh){
+            sens = 7;
+            maxh = s[3];
+            }
+    }  
+    s[4] = Senzor_5;
+    if (s[4] < maxvid ){
+        if (s[4] <= maxh){
+            sens = 9;
+            maxh = s[4];
+            }
+    }  
+    s[5] = Senzor_6;
+    if (s[5] < maxvid ){
+        if (s[5] <= maxh){
+            sens = 11;
+            maxh = s[5];
+            }
+    }  
+    s[6] = Senzor_7;
+    if (s[6] < maxvid ){
+        if (s[6] <= maxh){
+            sens = 13;
+            maxh = s[6];
+            }
+    }  
+    s[7] = Senzor_8;
+    if (s[7] < maxvid ){
+        if (s[7] <= maxh){
+            sens = 15;
+            maxh = s[7];
+            }
+    }  
+    if (sens == 1){
+        if (inrange(s[0],s[1],rozptyl) == 1)
+            sens = 2;                       
+        else if(inrange(s[7],s[0],rozptyl) == 1)
+            sens = 16;                              
+            }
+    else if (sens == 3){
+        if (inrange(s[1],s[2],rozptyl) == 1) 
+            sens = 4;                          
+        else if(inrange(s[0],s[1],rozptyl) == 1)
+            sens = 2;                             
+            }
+    else if (sens == 5){
+        if (inrange(s[2],s[3],rozptyl) == 1)
+            sens = 6;                          
+        else if(inrange(s[1],s[2],rozptyl) == 1)
+            sens = 4;                               
+            }
+    else if (sens == 7){
+        if (inrange(s[3],s[4],rozptyl) == 1)
+            sens = 8;                         
+        else if(inrange(s[2],s[3],rozptyl) == 1)
+            sens = 6;                               
+            }
+    else if (sens == 9){
+        if (inrange(s[4],s[5],rozptyl) == 1)     
+            sens = 10;                               
+        else if(inrange(s[3],s[4],rozptyl) == 1)  
+            sens = 8;                                  
+            }
+    else if (sens == 11){
+        if (inrange(s[5],s[6],rozptyl) == 1)          
+            sens = 12;                                   
+        else if(inrange(s[4],s[5],rozptyl) == 1)       
+            sens = 10;                                      
+            }
+    else if (sens == 13){
+        if (inrange(s[6],s[7],rozptyl) == 1)             
+            sens = 14;                                       
+        else if(inrange(s[5],s[6],rozptyl) == 1)          
+            sens = 12;                                          
+            }
+    else if (sens == 15){
+        if (inrange(s[7],s[0],rozptyl) == 1)                  
+            sens = 16;                                           
+        else if(inrange(s[6],s[7],rozptyl) == 1)               
+            sens = 14;                                             
+            }
+return sens;
+}                                                             
+//kompas
+//------------------------------
+unsigned char compass_2(){
+    unsigned char value;
+    i2c_start();
+    i2c_write(0xC0);
+    i2c_write(1);
+    i2c_start();
+    i2c_write(0xC1);
+    value = i2c_read(0);
+    i2c_stop();
+    return value;
+}
+//------------------------------
+void cmps03_scanmode(unsigned char mode){
+        i2c_start();
+        i2c_write(0xC0);
+        i2c_write(0x12);
+        i2c_write(0x55);
+        i2c_write(0x5A);
+        i2c_write(0xA5);
+        i2c_write(0x09 + mode);
+        i2c_stop();
+}
+void cmps03_reset(void){
+        i2c_start();
+        i2c_write(0xC0);
+        i2c_write(0x12);
+        i2c_write(0x55);
+        i2c_write(0x5A);
+        i2c_write(0xA5);
+        i2c_write(0xF2);
+        i2c_stop();
+}
+int cmps03_read(unsigned char mode){
+    unsigned char a,b;
+    if (mode==1){
+        i2c_start();
+        i2c_write(0xC0);
+        i2c_write(0x01);
+        i2c_start();
+        i2c_write(0xC1);
+        a = i2c_read(0);
+        i2c_stop();
+        return a;
+    }
+    else if(mode==2){
+        i2c_start();
+        i2c_write(0xC0);
+        i2c_write(0x02);
+        i2c_start();
+        i2c_write(0xC1);
+        a = i2c_read(1);
+        b = i2c_read(0);
+        i2c_stop();
+        return (a * 256 + b);
+    }
+    else{
+        return -1;
+    }
+}
+int prepocetcompasu(int stupen, unsigned char mode){
+    int prepocet;    
+    if (mode == 1){
+        prepocet = cmps03_read(1) - stupen;
+        if (prepocet >= 255){
+            prepocet = prepocet - 255;
+        }
+        if (prepocet < 0){
+            prepocet = prepocet + 255;
+        }
+    }   
+    else {      
+        prepocet = cmps03_read(2) - stupen;
+        if (prepocet > 3599){
+            prepocet = prepocet - 3599;
+        }
+        if (prepocet < 0){
+            prepocet = prepocet + 3599;
+        }
+    }
+    
+    
+    return prepocet;
+}
+//------------------------------
+//Ultrazvuky
+//------------------------------
+int ult_lavy()
+{
+   char ulth[3];
+   int vysl;
+   nastav_9600();
+    PORTC.5 = 1 ;
+    delay_ms(10); 
+    while(getchar() != 0x52);
+    ulth[0] = getchar();
+    ulth[1] = getchar();
+    ulth[2] = getchar();
+    PORTC.5 = 0 ;
+    vysl = atoi(ulth); 
+          nastav_115200(); 
+    delay_ms(5); 
+    return vysl;
+}
+int ult_zadny()
+{
+   char ulth[3];
+   int vysl;
+   nastav_9600();
+   PORTC.7 = 1 ;
+   delay_ms(10); 
+    while(getchar() != 0x52);
+    ulth[0] = getchar();
+    ulth[1] = getchar();
+    ulth[2] = getchar();
+    PORTC.7 = 0 ;
+    vysl = atoi(ulth); 
+          nastav_115200();     
+    delay_ms(5);
+    return vysl;
+}
+//------------------------------

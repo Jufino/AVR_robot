@@ -1,0 +1,26 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+datax                                                             0260h       50
+bolo_nacita                                                       0292h        1
+_seed                                                             0293h        4
+p                                                                 0297h        2
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+branka                                                            0000h        2
+on                                                                0002h        1
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+maxh                                                              R5           1
+rychlost_presunu                                                  R4           1
+rychlost_presunu_zrychlene                                        R7           1
+rychlost_presunu_vzad                                             R6           1
+prog                                                              R9           1
+smer                                                              R8           1
+x1                                                                R10,R11      2
+rychlost                                                          R13          1
+rychl                                                             R12          1

@@ -1,0 +1,20 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+bateriamin                                                        0080h        8
+bateriamin_indik                                                  0088h        8
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+motorymin                                                         R4,R5        2
+kriticalmot                                                       R6,R7        2
+cas                                                               R8,R9        2
+poc                                                               R10,R11      2
+mot1x                                                             R12          1
+mot2x                                                             R13          1
+mot3x                                                             R14          1
