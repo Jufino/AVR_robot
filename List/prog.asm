@@ -1065,16 +1065,15 @@ _tbl10_G100:
 _tbl16_G100:
 	.DB  0x0,0x10,0x0,0x1,0x10,0x0,0x1,0x0
 
-_0x19C:
+_0x19B:
 	.DB  0xD2,0x0,0xC8,0xD2,0x0,0x0,0x0,0x0
 	.DB  0x0,0xC8
 _0x0:
 	.DB  0x25,0x73,0x0,0x64,0x61,0x74,0x61,0x0
-	.DB  0x6B,0x69,0x63,0x6B,0x0,0x4C,0x31,0x65
-	.DB  0x64,0x0,0x4C,0x30,0x65,0x64,0x0,0x4C
-	.DB  0x45,0x44,0x30,0x0,0x4C,0x45,0x44,0x31
-	.DB  0x0,0x73,0x6D,0x65,0x72,0x0,0x72,0x79
-	.DB  0x63,0x68,0x0,0x6F,0x62,0x63,0x68,0x0
+	.DB  0x6B,0x69,0x63,0x6B,0x0,0x4C,0x45,0x44
+	.DB  0x30,0x0,0x4C,0x45,0x44,0x31,0x0,0x62
+	.DB  0x6C,0x69,0x6B,0x0,0x73,0x6D,0x65,0x72
+	.DB  0x0,0x72,0x79,0x63,0x68,0x0
 _0x202005F:
 	.DB  0x1
 _0x2020000:
@@ -1083,7 +1082,7 @@ _0x2020000:
 __GLOBAL_INI_TBL:
 	.DW  0x0A
 	.DW  0x04
-	.DW  _0x19C*2
+	.DW  _0x19B*2
 
 	.DW  0x01
 	.DW  __seed_G101
@@ -1277,7 +1276,8 @@ _0x3:
 	OUT  0x6,R30
 ;return ADCH;
 	IN   R30,0x5
-	RJMP _0x20A0009
+	ADIW R28,1
+	RET
 ;}
 ;//senzory lopty
 ;//------------------------------
@@ -1306,7 +1306,7 @@ _0x7:
 _0x8:
 ;    return 1;
 	LDI  R30,LOW(1)
-	RJMP _0x20A0008
+	RJMP _0x20A0007
 ;if (b <= a && a <= (b+range))
 _0x6:
 	LDD  R30,Y+2
@@ -1327,13 +1327,15 @@ _0xA:
 _0xB:
 ;    return 1;
 	LDI  R30,LOW(1)
-	RJMP _0x20A0008
+	RJMP _0x20A0007
 ;else
 _0x9:
 ;    return 0;
 	LDI  R30,LOW(0)
-	RJMP _0x20A0008
 ;}
+_0x20A0007:
+	ADIW R28,3
+	RET
 ;unsigned char maxx(unsigned char maxvid/*maximalna hodnota videnia*/){
 _maxx:
 ;    unsigned char sens = 17;
@@ -1725,9 +1727,7 @@ _cmps03_scanmode:
 ;        i2c_stop();
 	CALL _i2c_stop
 ;}
-_0x20A0009:
-	ADIW R28,1
-	RET
+	JMP  _0x20A0005
 ;void cmps03_reset(void){
 _cmps03_reset:
 ;        i2c_start();
@@ -1774,9 +1774,7 @@ _cmps03_read:
 	LDI  R31,0
 	LDD  R17,Y+1
 	LDD  R16,Y+0
-_0x20A0008:
-	ADIW R28,3
-	RET
+	JMP  _0x20A0004
 ;    }
 ;    else if(mode==2){
 _0x44:
@@ -1962,11 +1960,11 @@ _0x4B:
 ;        }
 ;//--------------------------------------------------
 ;    }
+;    return posun;
 ;}
 ;//data_vystup je multiarray = vystupne rozkodovane data
 ;//data_vstup je char = zakodovane data v klastrovom protokole
 ;int dekoduj(char data_vystup[][char_for_array],char data_vstup[]){
-_dekoduj:
 ;    int posun=0;
 ;    int size=0;
 ;    int poc_znakov=0;
@@ -1974,13 +1972,6 @@ _dekoduj:
 ;    int z=0;
 ;//nacita pocet dat--------------------
 ;    size=data_vstup[posun];
-	SBIW R28,4
-	LDI  R30,LOW(0)
-	ST   Y,R30
-	STD  Y+1,R30
-	STD  Y+2,R30
-	STD  Y+3,R30
-	CALL __SAVELOCR6
 ;	data_vystup -> Y+12
 ;	data_vstup -> Y+10
 ;	posun -> R16,R17
@@ -1988,83 +1979,21 @@ _dekoduj:
 ;	poc_znakov -> R20,R21
 ;	i -> Y+8
 ;	z -> Y+6
-	__GETWRN 16,17,0
-	__GETWRN 18,19,0
-	__GETWRN 20,21,0
-	CALL SUBOPT_0xF
-	LD   R18,X
-	CLR  R19
 ;    posun++;
-	__ADDWRN 16,17,1
 ;//------------------------------------
 ;    for(i=0;i < size;i++){
-	LDI  R30,0
-	STD  Y+8,R30
-	STD  Y+8+1,R30
-_0x63:
-	LDD  R26,Y+8
-	LDD  R27,Y+8+1
-	CP   R26,R18
-	CPC  R27,R19
-	BRGE _0x64
 ;//------------------------------------
 ;        poc_znakov=data_vstup[posun];
-	CALL SUBOPT_0xF
-	LD   R20,X
-	CLR  R21
 ;        posun++;
-	__ADDWRN 16,17,1
 ;//prijma znaky----------------------
 ;        for(z=0;z< poc_znakov;z++){
-	LDI  R30,0
-	STD  Y+6,R30
-	STD  Y+6+1,R30
-_0x66:
-	LDD  R26,Y+6
-	LDD  R27,Y+6+1
-	CP   R26,R20
-	CPC  R27,R21
-	BRGE _0x67
 ;            data_vystup[i][z] = data_vstup[posun];
-	LDD  R30,Y+8
-	LDD  R31,Y+8+1
-	__GETWRS 22,23,12
-	LDI  R26,LOW(10)
-	LDI  R27,HIGH(10)
-	CALL __MULW12U
-	ADD  R30,R22
-	ADC  R31,R23
-	LDD  R26,Y+6
-	LDD  R27,Y+6+1
-	ADD  R30,R26
-	ADC  R31,R27
-	MOVW R0,R30
-	CALL SUBOPT_0xF
-	LD   R30,X
-	MOVW R26,R0
-	ST   X,R30
 ;            posun++;
-	__ADDWRN 16,17,1
 ;        }
-	LDD  R30,Y+6
-	LDD  R31,Y+6+1
-	ADIW R30,1
-	STD  Y+6,R30
-	STD  Y+6+1,R31
-	RJMP _0x66
-_0x67:
 ;//------------------------------------------
 ;    }
-	LDD  R30,Y+8
-	LDD  R31,Y+8+1
-	ADIW R30,1
-	STD  Y+8,R30
-	STD  Y+8+1,R31
-	RJMP _0x63
-_0x64:
+;    return posun;
 ;}
-	CALL __LOADLOCR6
-	RJMP _0x20A0006
 ;void odosli_data_beagle(char data[][char_for_array],int pocet_dat){
 ;    char buffer[128];
 ;    zakoduj(buffer,data,pocet_dat);
@@ -2075,34 +2004,12 @@ _0x64:
 ;}
 ;char datax[5][char_for_array];
 ;void prijem_dat(){
-_prijem_dat:
 ;//---------------------------
 ;    char str[128];
 ;    scanf ("%s",str);
-	SBIW R28,63
-	SBIW R28,63
-	SBIW R28,2
 ;	str -> Y+0
-	__POINTW1FN _0x0,0
-	ST   -Y,R31
-	ST   -Y,R30
-	MOVW R30,R28
-	ADIW R30,2
-	CLR  R22
-	CLR  R23
-	CALL __PUTPARD1
-	LDI  R24,4
-	CALL _scanf
-	ADIW R28,6
 ;    dekoduj(datax,str);
-	CALL SUBOPT_0x10
-	CALL SUBOPT_0x11
-	RCALL _dekoduj
 ;}
-	ADIW R28,63
-	ADIW R28,63
-	ADIW R28,2
-	RET
 ;//------------------------------
 ;//------------------------------
 ;#include "library_motor.c"
@@ -2113,7 +2020,7 @@ _prijem_dat:
 _motor1:
 ;    if (rychlost > 0){
 ;	rychlost -> Y+0
-	CALL SUBOPT_0x12
+	CALL SUBOPT_0xF
 	BRGE _0x68
 ;        PORTC.3 = 1;
 	SBI  0x15,3
@@ -2140,7 +2047,7 @@ _0x6E:
 ;        PORTC.4 = 1;
 	SBI  0x15,4
 ;        rychlost = rychlost*(-1);
-	CALL SUBOPT_0x13
+	CALL SUBOPT_0x10
 ;    }
 _0x73:
 _0x6D:
@@ -2150,12 +2057,12 @@ _0x6D:
 	OUT  0x28+1,R31
 	OUT  0x28,R30
 ;}
-	RJMP _0x20A0007
+	RJMP _0x20A0006
 ;void motor3(int rychlost){
 _motor3:
 ;    if (rychlost > 0){
 ;	rychlost -> Y+0
-	CALL SUBOPT_0x12
+	CALL SUBOPT_0xF
 	BRGE _0x78
 ;        PORTC.2 = 0;
 	CBI  0x15,2
@@ -2182,7 +2089,7 @@ _0x7E:
 ;        PORTD.6 = 0;
 	CBI  0x12,6
 ;        rychlost = rychlost*(-1);
-	CALL SUBOPT_0x13
+	CALL SUBOPT_0x10
 ;    }
 _0x83:
 _0x7D:
@@ -2192,12 +2099,12 @@ _0x7D:
 	OUT  0x2A+1,R31
 	OUT  0x2A,R30
 ;}
-	RJMP _0x20A0007
+	RJMP _0x20A0006
 ;void motor2(int rychlost){
 _motor2:
 ;    if (rychlost > 0){
 ;	rychlost -> Y+0
-	CALL SUBOPT_0x12
+	CALL SUBOPT_0xF
 	BRGE _0x88
 ;        PORTC.1 = 1;
 	SBI  0x15,1
@@ -2224,7 +2131,7 @@ _0x8E:
 ;        PORTC.0 = 1;
 	SBI  0x15,0
 ;        rychlost = rychlost*(-1);
-	CALL SUBOPT_0x13
+	CALL SUBOPT_0x10
 ;    }
 _0x93:
 _0x8D:
@@ -2233,12 +2140,12 @@ _0x8D:
 	LDD  R31,Y+1
 	OUT  0x23,R30
 ;}
-	RJMP _0x20A0007
+	RJMP _0x20A0006
 ;void motor4(int rychlost){
 _motor4:
 ;    if (rychlost > 0){
 ;	rychlost -> Y+0
-	CALL SUBOPT_0x12
+	CALL SUBOPT_0xF
 	BRGE _0x98
 ;        PORTB.1 = 0;
 	CBI  0x18,1
@@ -2265,7 +2172,7 @@ _0x9E:
 ;        PORTB.2 = 0;
 	CBI  0x18,2
 ;        rychlost = rychlost*(-1);
-	CALL SUBOPT_0x13
+	CALL SUBOPT_0x10
 ;    }
 _0xA3:
 _0x9D:
@@ -2274,35 +2181,35 @@ _0x9D:
 	LDD  R31,Y+1
 	OUT  0x3C,R30
 ;}
-	RJMP _0x20A0007
+	RJMP _0x20A0006
 ;void m_0(unsigned char rychlost){
 _m_0:
 ;motor1(-rychlost);
 ;	rychlost -> Y+0
 	CALL SUBOPT_0x0
-	CALL SUBOPT_0x14
-	CALL SUBOPT_0x15
+	CALL SUBOPT_0x11
+	CALL SUBOPT_0x12
 ;motor2(-rychlost);
-	CALL SUBOPT_0x14
-	CALL SUBOPT_0x16
+	CALL SUBOPT_0x11
+	CALL SUBOPT_0x13
 ;motor3(rychlost);
-	CALL SUBOPT_0x17
+	CALL SUBOPT_0x14
 ;motor4(rychlost);
-	CALL SUBOPT_0x18
+	CALL SUBOPT_0x15
 ;}
 	JMP  _0x20A0005
 ;void m_45(unsigned char rychlost){
 _m_45:
 ;motor1(0);
 ;	rychlost -> Y+0
-	CALL SUBOPT_0x19
-	CALL SUBOPT_0x15
+	CALL SUBOPT_0x16
+	CALL SUBOPT_0x12
 ;motor2(-rychlost);
-	CALL SUBOPT_0x14
-	CALL SUBOPT_0x1A
+	CALL SUBOPT_0x11
+	CALL SUBOPT_0x17
 ;motor3(0);
 ;motor4(rychlost);
-	CALL SUBOPT_0x18
+	CALL SUBOPT_0x15
 ;}
 	JMP  _0x20A0005
 ;void m_90(unsigned char rychlost){
@@ -2312,16 +2219,16 @@ _m_90:
 	CALL SUBOPT_0x0
 	ST   -Y,R31
 	ST   -Y,R30
-	CALL SUBOPT_0x15
+	CALL SUBOPT_0x12
 ;motor2(-rychlost);
-	CALL SUBOPT_0x14
-	CALL SUBOPT_0x16
+	CALL SUBOPT_0x11
+	CALL SUBOPT_0x13
 ;motor3(-rychlost);
-	CALL SUBOPT_0x14
+	CALL SUBOPT_0x11
 	RCALL _motor3
 ;motor4(rychlost);
 	CALL SUBOPT_0x0
-	CALL SUBOPT_0x18
+	CALL SUBOPT_0x15
 ;}
 	JMP  _0x20A0005
 ;void m_135(unsigned char rychlost){
@@ -2331,12 +2238,12 @@ _m_135:
 	CALL SUBOPT_0x0
 	ST   -Y,R31
 	ST   -Y,R30
-	CALL SUBOPT_0x1B
+	CALL SUBOPT_0x18
 ;motor2(0);
-	CALL SUBOPT_0x16
+	CALL SUBOPT_0x13
 ;motor3(-rychlost);
-	CALL SUBOPT_0x14
-	CALL SUBOPT_0x1C
+	CALL SUBOPT_0x11
+	CALL SUBOPT_0x19
 ;motor4(0);
 ;}
 	JMP  _0x20A0005
@@ -2347,17 +2254,17 @@ _m_180:
 	CALL SUBOPT_0x0
 	ST   -Y,R31
 	ST   -Y,R30
-	CALL SUBOPT_0x15
+	CALL SUBOPT_0x12
 ;motor2(rychlost);
 	ST   -Y,R31
 	ST   -Y,R30
-	CALL SUBOPT_0x16
+	CALL SUBOPT_0x13
 ;motor3(-rychlost);
-	CALL SUBOPT_0x14
+	CALL SUBOPT_0x11
 	RCALL _motor3
 ;motor4(-rychlost);
 	CALL SUBOPT_0x0
-	CALL SUBOPT_0x14
+	CALL SUBOPT_0x11
 	RCALL _motor4
 ;}
 	JMP  _0x20A0005
@@ -2365,15 +2272,15 @@ _m_180:
 _m_225:
 ;motor1(0);
 ;	rychlost -> Y+0
-	CALL SUBOPT_0x19
-	CALL SUBOPT_0x15
+	CALL SUBOPT_0x16
+	CALL SUBOPT_0x12
 ;motor2(rychlost);
 	ST   -Y,R31
 	ST   -Y,R30
-	CALL SUBOPT_0x1A
+	CALL SUBOPT_0x17
 ;motor3(0);
 ;motor4(-rychlost);
-	CALL SUBOPT_0x14
+	CALL SUBOPT_0x11
 	RCALL _motor4
 ;}
 	JMP  _0x20A0005
@@ -2382,16 +2289,16 @@ _m_270:
 ;motor1(-rychlost);
 ;	rychlost -> Y+0
 	CALL SUBOPT_0x0
-	CALL SUBOPT_0x14
-	CALL SUBOPT_0x15
+	CALL SUBOPT_0x11
+	CALL SUBOPT_0x12
 ;motor2(rychlost);
 	ST   -Y,R31
 	ST   -Y,R30
-	CALL SUBOPT_0x16
+	CALL SUBOPT_0x13
 ;motor3(rychlost);
-	CALL SUBOPT_0x17
-;motor4(-rychlost);
 	CALL SUBOPT_0x14
+;motor4(-rychlost);
+	CALL SUBOPT_0x11
 	RCALL _motor4
 ;}
 	JMP  _0x20A0005
@@ -2400,14 +2307,14 @@ _m_315:
 ;motor1(-rychlost);
 ;	rychlost -> Y+0
 	CALL SUBOPT_0x0
-	CALL SUBOPT_0x14
-	CALL SUBOPT_0x1B
+	CALL SUBOPT_0x11
+	CALL SUBOPT_0x18
 ;motor2(0);
-	CALL SUBOPT_0x16
+	CALL SUBOPT_0x13
 ;motor3(rychlost);
 	ST   -Y,R31
 	ST   -Y,R30
-	CALL SUBOPT_0x1C
+	CALL SUBOPT_0x19
 ;motor4(0);
 ;}
 	JMP  _0x20A0005
@@ -2421,27 +2328,27 @@ _m_ot:
 	ST   -Y,R30
 	RCALL _motor1
 ;motor2(rychlost/3);
-	CALL SUBOPT_0x1D
+	CALL SUBOPT_0x1A
 	RCALL _motor2
 ;motor3(rychlost/3);
-	CALL SUBOPT_0x1D
+	CALL SUBOPT_0x1A
 	RCALL _motor3
 ;motor4(rychlost);
 	LD   R30,Y
 	LDD  R31,Y+1
-	CALL SUBOPT_0x18
+	CALL SUBOPT_0x15
 ;}
-	RJMP _0x20A0007
+	RJMP _0x20A0006
 ;void m_vyp(){
 _m_vyp:
 ;motor1(0);
-	CALL SUBOPT_0x19
-	CALL SUBOPT_0x1B
+	CALL SUBOPT_0x16
+	CALL SUBOPT_0x18
 ;motor2(0);
 	RCALL _motor2
 ;motor3(0);
+	CALL SUBOPT_0x16
 	CALL SUBOPT_0x19
-	CALL SUBOPT_0x1C
 ;motor4(0);
 ;}
 	RET
@@ -2463,298 +2370,297 @@ _m_vyp:
 ;unsigned int x1;
 ;unsigned char rychlost=200;
 ;unsigned char rychl;
-;eeprom char on = 0;
 ;//---------------------------------
 ;//inicializacia procesoru
 ;//---------------------------------
 ;void init_8535(){
-; 0000 004B void init_8535(){
+; 0000 004A void init_8535(){
 _init_8535:
-; 0000 004C // Input/Output Ports initialization
-; 0000 004D // Port A initialization
-; 0000 004E // Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
-; 0000 004F // State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T
-; 0000 0050 PORTA=0x00;
+; 0000 004B // Input/Output Ports initialization
+; 0000 004C // Port A initialization
+; 0000 004D // Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
+; 0000 004E // State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T
+; 0000 004F PORTA=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x1B,R30
-; 0000 0051 DDRA=0x00;
+; 0000 0050 DDRA=0x00;
 	OUT  0x1A,R30
-; 0000 0052 
-; 0000 0053 // Port B initialization
-; 0000 0054 // Func7=Out Func6=Out Func5=Out Func4=Out Func3=Out Func2=Out Func1=Out Func0=Out
-; 0000 0055 // State7=0 State6=0 State5=0 State4=0 State3=0 State2=0 State1=0 State0=0
-; 0000 0056 PORTB=0x20;
+; 0000 0051 
+; 0000 0052 // Port B initialization
+; 0000 0053 // Func7=Out Func6=Out Func5=Out Func4=Out Func3=Out Func2=Out Func1=Out Func0=Out
+; 0000 0054 // State7=0 State6=0 State5=0 State4=0 State3=0 State2=0 State1=0 State0=0
+; 0000 0055 PORTB=0x20;
 	LDI  R30,LOW(32)
 	OUT  0x18,R30
-; 0000 0057 DDRB=0x1F;
+; 0000 0056 DDRB=0x1F;
 	LDI  R30,LOW(31)
 	OUT  0x17,R30
-; 0000 0058 
-; 0000 0059 // Port C initialization
-; 0000 005A // Func7=Out Func6=Out Func5=Out Func4=Out Func3=Out Func2=Out Func1=Out Func0=Out
-; 0000 005B // State7=0 State6=0 State5=0 State4=0 State3=0 State2=0 State1=0 State0=0
-; 0000 005C PORTC=0x00;
+; 0000 0057 
+; 0000 0058 // Port C initialization
+; 0000 0059 // Func7=Out Func6=Out Func5=Out Func4=Out Func3=Out Func2=Out Func1=Out Func0=Out
+; 0000 005A // State7=0 State6=0 State5=0 State4=0 State3=0 State2=0 State1=0 State0=0
+; 0000 005B PORTC=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x15,R30
-; 0000 005D DDRC=0xFF;
+; 0000 005C DDRC=0xFF;
 	LDI  R30,LOW(255)
 	OUT  0x14,R30
-; 0000 005E 
-; 0000 005F // Port D initialization
-; 0000 0060 // Func7=Out Func6=Out Func5=Out Func4=Out Func3=In Func2=In Func1=In Func0=In
-; 0000 0061 // State7=0 State6=0 State5=0 State4=0 State3=T State2=T State1=T State0=T
-; 0000 0062 PORTD=0x00;
+; 0000 005D 
+; 0000 005E // Port D initialization
+; 0000 005F // Func7=Out Func6=Out Func5=Out Func4=Out Func3=In Func2=In Func1=In Func0=In
+; 0000 0060 // State7=0 State6=0 State5=0 State4=0 State3=T State2=T State1=T State0=T
+; 0000 0061 PORTD=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x12,R30
-; 0000 0063 DDRD=0xF0;
+; 0000 0062 DDRD=0xF0;
 	LDI  R30,LOW(240)
 	OUT  0x11,R30
-; 0000 0064 
-; 0000 0065 // Timer/Counter 0 initialization
-; 0000 0066 // Clock source: System Clock
-; 0000 0067 // Clock value: 1382,400 kHz
-; 0000 0068 // Mode: Fast PWM top=FFh
-; 0000 0069 // OC0 output: Non-Inverted PWM
-; 0000 006A TCCR0=0x6A;
+; 0000 0063 
+; 0000 0064 // Timer/Counter 0 initialization
+; 0000 0065 // Clock source: System Clock
+; 0000 0066 // Clock value: 1382,400 kHz
+; 0000 0067 // Mode: Fast PWM top=FFh
+; 0000 0068 // OC0 output: Non-Inverted PWM
+; 0000 0069 TCCR0=0x6A;
 	LDI  R30,LOW(106)
 	OUT  0x33,R30
-; 0000 006B TCNT0=0x00;
+; 0000 006A TCNT0=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x32,R30
-; 0000 006C OCR0=0x00;
+; 0000 006B OCR0=0x00;
 	OUT  0x3C,R30
-; 0000 006D 
-; 0000 006E // Timer/Counter 1 initialization
-; 0000 006F // Clock source: System Clock
-; 0000 0070 // Clock value: 1382,400 kHz
-; 0000 0071 // Mode: Fast PWM top=00FFh
-; 0000 0072 // OC1A output: Non-Inv.
-; 0000 0073 // OC1B output: Non-Inv.
-; 0000 0074 // Noise Canceler: Off
-; 0000 0075 // Input Capture on Falling Edge
-; 0000 0076 // Timer 1 Overflow Interrupt: Off
-; 0000 0077 // Input Capture Interrupt: Off
-; 0000 0078 // Compare A Match Interrupt: Off
-; 0000 0079 // Compare B Match Interrupt: Off
-; 0000 007A TCCR1A=0xA1;
+; 0000 006C 
+; 0000 006D // Timer/Counter 1 initialization
+; 0000 006E // Clock source: System Clock
+; 0000 006F // Clock value: 1382,400 kHz
+; 0000 0070 // Mode: Fast PWM top=00FFh
+; 0000 0071 // OC1A output: Non-Inv.
+; 0000 0072 // OC1B output: Non-Inv.
+; 0000 0073 // Noise Canceler: Off
+; 0000 0074 // Input Capture on Falling Edge
+; 0000 0075 // Timer 1 Overflow Interrupt: Off
+; 0000 0076 // Input Capture Interrupt: Off
+; 0000 0077 // Compare A Match Interrupt: Off
+; 0000 0078 // Compare B Match Interrupt: Off
+; 0000 0079 TCCR1A=0xA1;
 	LDI  R30,LOW(161)
 	OUT  0x2F,R30
-; 0000 007B TCCR1B=0x0A;
+; 0000 007A TCCR1B=0x0A;
 	LDI  R30,LOW(10)
 	OUT  0x2E,R30
-; 0000 007C TCNT1H=0x00;
+; 0000 007B TCNT1H=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x2D,R30
-; 0000 007D TCNT1L=0x00;
+; 0000 007C TCNT1L=0x00;
 	OUT  0x2C,R30
-; 0000 007E ICR1H=0x00;
+; 0000 007D ICR1H=0x00;
 	OUT  0x27,R30
-; 0000 007F ICR1L=0x00;
+; 0000 007E ICR1L=0x00;
 	OUT  0x26,R30
-; 0000 0080 OCR1AH=0x00;
+; 0000 007F OCR1AH=0x00;
 	OUT  0x2B,R30
-; 0000 0081 OCR1AL=0x00;
+; 0000 0080 OCR1AL=0x00;
 	OUT  0x2A,R30
-; 0000 0082 OCR1BH=0x00;
+; 0000 0081 OCR1BH=0x00;
 	OUT  0x29,R30
-; 0000 0083 OCR1BL=0x00;
+; 0000 0082 OCR1BL=0x00;
 	OUT  0x28,R30
-; 0000 0084 
-; 0000 0085 // Timer/Counter 2 initialization
-; 0000 0086 // Clock source: System Clock
-; 0000 0087 // Clock value: 1382,400 kHz
-; 0000 0088 // Mode: Fast PWM top=FFh
-; 0000 0089 // OC2 output: Non-Inverted PWM
-; 0000 008A ASSR=0x00;
+; 0000 0083 
+; 0000 0084 // Timer/Counter 2 initialization
+; 0000 0085 // Clock source: System Clock
+; 0000 0086 // Clock value: 1382,400 kHz
+; 0000 0087 // Mode: Fast PWM top=FFh
+; 0000 0088 // OC2 output: Non-Inverted PWM
+; 0000 0089 ASSR=0x00;
 	OUT  0x22,R30
-; 0000 008B TCCR2=0x6A;
+; 0000 008A TCCR2=0x6A;
 	LDI  R30,LOW(106)
 	OUT  0x25,R30
-; 0000 008C TCNT2=0x00;
+; 0000 008B TCNT2=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x24,R30
-; 0000 008D OCR2=0x00;
+; 0000 008C OCR2=0x00;
 	OUT  0x23,R30
-; 0000 008E 
-; 0000 008F // External Interrupt(s) initialization
-; 0000 0090 // INT0: Off
-; 0000 0091 // INT1: Off
-; 0000 0092 // INT2: Off
-; 0000 0093 MCUCR=0x00;
+; 0000 008D 
+; 0000 008E // External Interrupt(s) initialization
+; 0000 008F // INT0: Off
+; 0000 0090 // INT1: Off
+; 0000 0091 // INT2: Off
+; 0000 0092 MCUCR=0x00;
 	OUT  0x35,R30
-; 0000 0094 MCUCSR=0x00;
+; 0000 0093 MCUCSR=0x00;
 	OUT  0x34,R30
-; 0000 0095 
-; 0000 0096 // Timer(s)/Counter(s) Interrupt(s) initialization
-; 0000 0097 TIMSK=0x00;
+; 0000 0094 
+; 0000 0095 // Timer(s)/Counter(s) Interrupt(s) initialization
+; 0000 0096 TIMSK=0x00;
 	OUT  0x39,R30
-; 0000 0098 
-; 0000 0099 // USART initialization
-; 0000 009A // Communication Parameters: 8 Data, 1 Stop, No Parity
-; 0000 009B // USART Receiver: On
-; 0000 009C // USART Transmitter: On
-; 0000 009D // USART Mode: Asynchronous
-; 0000 009E // USART Baud Rate: 115200
-; 0000 009F UCSRA=0x00;
+; 0000 0097 
+; 0000 0098 // USART initialization
+; 0000 0099 // Communication Parameters: 8 Data, 1 Stop, No Parity
+; 0000 009A // USART Receiver: On
+; 0000 009B // USART Transmitter: On
+; 0000 009C // USART Mode: Asynchronous
+; 0000 009D // USART Baud Rate: 115200
+; 0000 009E UCSRA=0x00;
 	OUT  0xB,R30
-; 0000 00A0 UCSRB=0x18;
+; 0000 009F UCSRB=0x18;
 	LDI  R30,LOW(24)
 	OUT  0xA,R30
-; 0000 00A1 UCSRC=0x86;
+; 0000 00A0 UCSRC=0x86;
 	LDI  R30,LOW(134)
 	OUT  0x20,R30
-; 0000 00A2 UBRRH=0x00;
+; 0000 00A1 UBRRH=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x20,R30
-; 0000 00A3 UBRRL=0x05;
+; 0000 00A2 UBRRL=0x05;
 	LDI  R30,LOW(5)
 	OUT  0x9,R30
-; 0000 00A4 
-; 0000 00A5 // Analog Comparator initialization
-; 0000 00A6 // Analog Comparator: Off
-; 0000 00A7 // Analog Comparator Input Capture by Timer/Counter 1: Off
-; 0000 00A8 ACSR=0x80;
+; 0000 00A3 
+; 0000 00A4 // Analog Comparator initialization
+; 0000 00A5 // Analog Comparator: Off
+; 0000 00A6 // Analog Comparator Input Capture by Timer/Counter 1: Off
+; 0000 00A7 ACSR=0x80;
 	LDI  R30,LOW(128)
 	OUT  0x8,R30
-; 0000 00A9 SFIOR=0x00;
+; 0000 00A8 SFIOR=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x30,R30
-; 0000 00AA 
-; 0000 00AB // ADC initialization
-; 0000 00AC // ADC Clock frequency: 691,200 kHz
-; 0000 00AD // ADC Voltage Reference: AVCC pin
-; 0000 00AE // ADC High Speed Mode: On
-; 0000 00AF // ADC Auto Trigger Source: None
-; 0000 00B0 // Only the 8 most significant bits of
-; 0000 00B1 // the AD conversion result are used
-; 0000 00B2 ADMUX=ADC_VREF_TYPE & 0xff;
+; 0000 00A9 
+; 0000 00AA // ADC initialization
+; 0000 00AB // ADC Clock frequency: 691,200 kHz
+; 0000 00AC // ADC Voltage Reference: AVCC pin
+; 0000 00AD // ADC High Speed Mode: On
+; 0000 00AE // ADC Auto Trigger Source: None
+; 0000 00AF // Only the 8 most significant bits of
+; 0000 00B0 // the AD conversion result are used
+; 0000 00B1 ADMUX=ADC_VREF_TYPE & 0xff;
 	LDI  R30,LOW(96)
 	OUT  0x7,R30
-; 0000 00B3 ADCSRA=0x84;
+; 0000 00B2 ADCSRA=0x84;
 	LDI  R30,LOW(132)
 	OUT  0x6,R30
-; 0000 00B4 SFIOR&=0xEF;
+; 0000 00B3 SFIOR&=0xEF;
 	IN   R30,0x30
 	LDI  R31,0
 	ANDI R30,LOW(0xEF)
 	ANDI R31,HIGH(0xEF)
 	OUT  0x30,R30
-; 0000 00B5 SFIOR|=0x10;
+; 0000 00B4 SFIOR|=0x10;
 	IN   R30,0x30
 	LDI  R31,0
 	ORI  R30,0x10
 	OUT  0x30,R30
-; 0000 00B6 
-; 0000 00B7 // I2C Bus initialization
-; 0000 00B8 i2c_init();
+; 0000 00B5 
+; 0000 00B6 // I2C Bus initialization
+; 0000 00B7 i2c_init();
 	CALL _i2c_init
-; 0000 00B9 }
+; 0000 00B8 }
 	RET
 ;//---------------------------------
 ;//------------------------------
 ;//kicker
 ;//------------------------------
 ;void kick(){
-; 0000 00BE void kick(){
-; 0000 00BF int senzory;
-; 0000 00C0 if (Kick_sens == 0){
+; 0000 00BD void kick(){
+; 0000 00BE     int senzory;
+; 0000 00BF     if (Kick_sens == 0){
 ;	senzory -> R16,R17
-; 0000 00C1     m_vyp();
-; 0000 00C2     Kick = 1;
-; 0000 00C3     LED = 0;
-; 0000 00C4     delay_ms(200);
-; 0000 00C5     while (Kick_sens == 0);
-; 0000 00C6     Kick = 0;
-; 0000 00C7     LED = 1;
-; 0000 00C8     x1 = 400;
-; 0000 00C9     while(x1 != 0 ){
-; 0000 00CA         senzory = maxx(200);
-; 0000 00CB         if (maxh < 75){
-; 0000 00CC         switch (senzory){
-; 0000 00CD             case 1: m_0(rychlost_presunu);          break;
-; 0000 00CE     //---------------------------------------------------------------------
-; 0000 00CF             case 2: m_90(rychlost_presunu);              break;
-; 0000 00D0             case 3: m_135(rychlost_presunu);                 break;
-; 0000 00D1             case 4: m_135(rychlost_presunu);                 break;
-; 0000 00D2             case 5: m_180(rychlost_presunu);                 break;  //stvrtina z kruhu
-; 0000 00D3     //---------------------------------------------------------------------
-; 0000 00D4             case 6: m_225(rychlost_presunu);                 break;
-; 0000 00D5             case 7: m_225(rychlost_presunu);                break;
-; 0000 00D6             case 8: m_270(rychlost_presunu);                 break;
-; 0000 00D7             case 9: m_270(rychlost_presunu);                 break;  //polovica kruhu
-; 0000 00D8     //----------------------------------------------------------------------
-; 0000 00D9             case 10: m_90(rychlost_presunu);               break;
-; 0000 00DA             case 11: m_135(rychlost_presunu);                break;
-; 0000 00DB             case 12: m_135(rychlost_presunu);                break;
-; 0000 00DC             case 13: m_180(rychlost_presunu);                 break;  //tretina kruhu
-; 0000 00DD     //----------------------------------------------------------------------
-; 0000 00DE             case 14: m_225(rychlost_presunu);                break;
-; 0000 00DF             case 15: m_225(rychlost_presunu);                break;
-; 0000 00E0             case 16: m_270(rychlost_presunu);             break;  //cely kruh
-; 0000 00E1     //----------------------------------------------------------------------
-; 0000 00E2             case 17: m_vyp();                                break;
-; 0000 00E3         }
-; 0000 00E4     }
-; 0000 00E5         else{
-; 0000 00E6        switch (senzory){
-; 0000 00E7             case 1: m_0(rychlost_presunu);        break;
-; 0000 00E8     //---------------------------------------------------------------------
-; 0000 00E9             case 2: m_90(rychlost_presunu);              break;
-; 0000 00EA             case 3: m_90(rychlost_presunu);                 break;
-; 0000 00EB             case 4: m_90(rychlost_presunu);                 break;
-; 0000 00EC             case 5: m_90(rychlost_presunu);                 break;  //stvrtina z kruhu
-; 0000 00ED     //---------------------------------------------------------------------
-; 0000 00EE             case 6: m_135(rychlost_presunu);                 break;
-; 0000 00EF             case 7: m_135(rychlost_presunu);                break;
-; 0000 00F0             case 8: m_135(rychlost_presunu);                 break;
-; 0000 00F1             case 9: m_180(rychlost_presunu);                 break;  //polovica kruhu
-; 0000 00F2     //----------------------------------------------------------------------
-; 0000 00F3             case 10: m_225(rychlost_presunu);               break;
-; 0000 00F4             case 11: m_225(rychlost_presunu);                break;
-; 0000 00F5             case 12: m_225(rychlost_presunu);                break;
-; 0000 00F6             case 13: m_270(rychlost_presunu);                 break;  //tretina kruhu
-; 0000 00F7     //----------------------------------------------------------------------
-; 0000 00F8             case 14: m_315(rychlost_presunu);                break;
-; 0000 00F9             case 15: m_315(rychlost_presunu);                break;
-; 0000 00FA             case 16: m_315(rychlost_presunu);             break;  //cely kruh
-; 0000 00FB     //----------------------------------------------------------------------
-; 0000 00FC             case 17: m_vyp();                                break;
-; 0000 00FD         }
-; 0000 00FE     }
-; 0000 00FF         x1=x1-1;
-; 0000 0100         delay_ms(2);
-; 0000 0101         }
-; 0000 0102     }
-; 0000 0103 else{
-; 0000 0104     Kick = 0;
+; 0000 00C0     m_vyp();
+; 0000 00C1     Kick = 1;
+; 0000 00C2     LED = 0;
+; 0000 00C3     delay_ms(200);
+; 0000 00C4     while (Kick_sens == 0);
+; 0000 00C5     Kick = 0;
+; 0000 00C6     LED = 1;
+; 0000 00C7     x1 = 400;
+; 0000 00C8     while(x1 != 0 ){
+; 0000 00C9         senzory = maxx(200);
+; 0000 00CA         if (maxh < 75){
+; 0000 00CB         switch (senzory){
+; 0000 00CC             case 1: m_0(rychlost_presunu);          break;
+; 0000 00CD     //---------------------------------------------------------------------
+; 0000 00CE             case 2: m_90(rychlost_presunu);              break;
+; 0000 00CF             case 3: m_135(rychlost_presunu);                 break;
+; 0000 00D0             case 4: m_135(rychlost_presunu);                 break;
+; 0000 00D1             case 5: m_180(rychlost_presunu);                 break;  //stvrtina z kruhu
+; 0000 00D2     //---------------------------------------------------------------------
+; 0000 00D3             case 6: m_225(rychlost_presunu);                 break;
+; 0000 00D4             case 7: m_225(rychlost_presunu);                break;
+; 0000 00D5             case 8: m_270(rychlost_presunu);                 break;
+; 0000 00D6             case 9: m_270(rychlost_presunu);                 break;  //polovica kruhu
+; 0000 00D7     //----------------------------------------------------------------------
+; 0000 00D8             case 10: m_90(rychlost_presunu);               break;
+; 0000 00D9             case 11: m_135(rychlost_presunu);                break;
+; 0000 00DA             case 12: m_135(rychlost_presunu);                break;
+; 0000 00DB             case 13: m_180(rychlost_presunu);                 break;  //tretina kruhu
+; 0000 00DC     //----------------------------------------------------------------------
+; 0000 00DD             case 14: m_225(rychlost_presunu);                break;
+; 0000 00DE             case 15: m_225(rychlost_presunu);                break;
+; 0000 00DF             case 16: m_270(rychlost_presunu);             break;  //cely kruh
+; 0000 00E0     //----------------------------------------------------------------------
+; 0000 00E1             case 17: m_vyp();                                break;
+; 0000 00E2         }
+; 0000 00E3     }
+; 0000 00E4         else{
+; 0000 00E5        switch (senzory){
+; 0000 00E6             case 1: m_0(rychlost_presunu);        break;
+; 0000 00E7     //---------------------------------------------------------------------
+; 0000 00E8             case 2: m_90(rychlost_presunu);              break;
+; 0000 00E9             case 3: m_90(rychlost_presunu);                 break;
+; 0000 00EA             case 4: m_90(rychlost_presunu);                 break;
+; 0000 00EB             case 5: m_90(rychlost_presunu);                 break;  //stvrtina z kruhu
+; 0000 00EC     //---------------------------------------------------------------------
+; 0000 00ED             case 6: m_135(rychlost_presunu);                 break;
+; 0000 00EE             case 7: m_135(rychlost_presunu);                break;
+; 0000 00EF             case 8: m_135(rychlost_presunu);                 break;
+; 0000 00F0             case 9: m_180(rychlost_presunu);                 break;  //polovica kruhu
+; 0000 00F1     //----------------------------------------------------------------------
+; 0000 00F2             case 10: m_225(rychlost_presunu);               break;
+; 0000 00F3             case 11: m_225(rychlost_presunu);                break;
+; 0000 00F4             case 12: m_225(rychlost_presunu);                break;
+; 0000 00F5             case 13: m_270(rychlost_presunu);                 break;  //tretina kruhu
+; 0000 00F6     //----------------------------------------------------------------------
+; 0000 00F7             case 14: m_315(rychlost_presunu);                break;
+; 0000 00F8             case 15: m_315(rychlost_presunu);                break;
+; 0000 00F9             case 16: m_315(rychlost_presunu);             break;  //cely kruh
+; 0000 00FA     //----------------------------------------------------------------------
+; 0000 00FB             case 17: m_vyp();                                break;
+; 0000 00FC         }
+; 0000 00FD     }
+; 0000 00FE         x1--;
+; 0000 00FF         delay_ms(2);
+; 0000 0100         }
+; 0000 0101     }
+; 0000 0102     else{
+; 0000 0103     Kick = 0;
+; 0000 0104 }
 ; 0000 0105 }
-; 0000 0106 }
 ;void kick_no(){
-; 0000 0107 void kick_no(){
+; 0000 0106 void kick_no(){
 _kick_no:
-; 0000 0108     Kick = 1;
+; 0000 0107     Kick = 1;
 	SBI  0x18,0
-; 0000 0109     LED = 0;
+; 0000 0108     LED = 0;
 	CBI  0x18,4
-; 0000 010A     delay_ms(200);
-	CALL SUBOPT_0x1E
-; 0000 010B     while (Kick_sens == 0);
+; 0000 0109     delay_ms(200);
+	CALL SUBOPT_0x1B
+; 0000 010A     while (Kick_sens == 0);
 _0xE8:
 	SBIS 0x16,5
 	RJMP _0xE8
-; 0000 010C     Kick = 0;
+; 0000 010B     Kick = 0;
 	CBI  0x18,0
-; 0000 010D     LED = 1;
+; 0000 010C     LED = 1;
 	SBI  0x18,4
-; 0000 010E }
+; 0000 010D }
 	RET
 ;//------------------------------
 ;//------------------------------
 ;int nastav_podla_kompasu(int kompas){             //prepocetcompasu(branka,1)*0.71
-; 0000 0111 int nastav_podla_kompasu(int kompas){
+; 0000 0110 int nastav_podla_kompasu(int kompas){
 _nastav_podla_kompasu:
-; 0000 0112     int komp_ret = 0;
-; 0000 0113     if (kompas > 180)
+; 0000 0111     int komp_ret = 0;
+; 0000 0112     if (kompas > 180)
 	ST   -Y,R17
 	ST   -Y,R16
 ;	kompas -> Y+2
@@ -2766,13 +2672,13 @@ _nastav_podla_kompasu:
 	LDI  R30,HIGH(0xB5)
 	CPC  R27,R30
 	BRLT _0xEF
-; 0000 0114         kompas = 180;
+; 0000 0113         kompas = 180;
 	LDI  R30,LOW(180)
 	LDI  R31,HIGH(180)
 	STD  Y+2,R30
 	STD  Y+2+1,R31
-; 0000 0115     //prepocet rychlost kolies pre kompas------------------
-; 0000 0116     if (kompas < 90){
+; 0000 0114     //prepocet rychlost kolies pre kompas------------------
+; 0000 0115     if (kompas < 90){
 _0xEF:
 	LDD  R26,Y+2
 	LDD  R27,Y+2+1
@@ -2780,100 +2686,102 @@ _0xEF:
 	LDI  R30,HIGH(0x5A)
 	CPC  R27,R30
 	BRGE _0xF0
-; 0000 0117         rychl = kompas + 100;
+; 0000 0116         rychl = kompas + 100;
 	LDD  R30,Y+2
 	LDD  R31,Y+2+1
-	RJMP _0x196
-; 0000 0118     }
-; 0000 0119     else{
+	RJMP _0x194
+; 0000 0117     }
+; 0000 0118     else{
 _0xF0:
-; 0000 011A         rychl = (180 - kompas) + 100;
+; 0000 0119         rychl = (180 - kompas) + 100;
 	LDD  R26,Y+2
 	LDD  R27,Y+2+1
 	LDI  R30,LOW(180)
 	LDI  R31,HIGH(180)
 	SUB  R30,R26
 	SBC  R31,R27
-_0x196:
+_0x194:
 	SUBI R30,LOW(-100)
 	SBCI R31,HIGH(-100)
 	MOV  R12,R30
-; 0000 011B     }
-; 0000 011C     //------------------------------------------------------
-; 0000 011D     if (kompas <= 10){
+; 0000 011A     }
+; 0000 011B     //------------------------------------------------------
+; 0000 011C     if (kompas <= 10){
 	LDD  R26,Y+2
 	LDD  R27,Y+2+1
 	SBIW R26,11
-	BRLT _0x197
-; 0000 011E         LED = 1;
-; 0000 011F         komp_ret = 1;
-; 0000 0120     }
-; 0000 0121     else{
-; 0000 0122         if( kompas <= 90){
+	BRLT _0x195
+; 0000 011D         LED = 1;
+; 0000 011E         komp_ret = 1;
+; 0000 011F     }
+; 0000 0120     else{
+; 0000 0121         if( kompas <= 90){
 	LDD  R26,Y+2
 	LDD  R27,Y+2+1
 	CPI  R26,LOW(0x5B)
 	LDI  R30,HIGH(0x5B)
 	CPC  R27,R30
 	BRGE _0xF6
-; 0000 0123             LED = 0;
+; 0000 0122             LED = 0;
 	CBI  0x18,4
-; 0000 0124             m_ot(-rychl);
+; 0000 0123             m_ot(-rychl);
 	MOV  R30,R12
 	LDI  R31,0
-	CALL SUBOPT_0x14
+	CALL SUBOPT_0x11
 	RCALL _m_ot
-; 0000 0125         }
-; 0000 0126         else{
+; 0000 0124         }
+; 0000 0125         else{
 	RJMP _0xF9
 _0xF6:
-; 0000 0127             if (kompas <= 170){
+; 0000 0126             if (kompas <= 170){
 	LDD  R26,Y+2
 	LDD  R27,Y+2+1
 	CPI  R26,LOW(0xAB)
 	LDI  R30,HIGH(0xAB)
 	CPC  R27,R30
 	BRGE _0xFA
-; 0000 0128                 LED = 0;
+; 0000 0127                 LED = 0;
 	CBI  0x18,4
-; 0000 0129                 m_ot(rychl);
+; 0000 0128                 m_ot(rychl);
 	MOV  R30,R12
-	CALL SUBOPT_0x1F
+	LDI  R31,0
+	ST   -Y,R31
+	ST   -Y,R30
 	RCALL _m_ot
-; 0000 012A             }
-; 0000 012B             else {
+; 0000 0129             }
+; 0000 012A             else {
 	RJMP _0xFD
 _0xFA:
-; 0000 012C                 LED = 1;
-_0x197:
+; 0000 012B                 LED = 1;
+_0x195:
 	SBI  0x18,4
-; 0000 012D                 komp_ret = 1;
+; 0000 012C                 komp_ret = 1;
 	__GETWRN 16,17,1
-; 0000 012E             }
+; 0000 012D             }
 _0xFD:
-; 0000 012F         }
+; 0000 012E         }
 _0xF9:
-; 0000 0130     }
-; 0000 0131     return komp_ret;
+; 0000 012F     }
+; 0000 0130     return komp_ret;
 	MOVW R30,R16
 	LDD  R17,Y+1
 	LDD  R16,Y+0
 	ADIW R28,4
 	RET
-; 0000 0132 }
+; 0000 0131 }
 ;void obchadzanie(int senzory){
-; 0000 0133 void obchadzanie(int senzory){
+; 0000 0132 void obchadzanie(int senzory){
 _obchadzanie:
-; 0000 0134     if (maxh < 80){
+; 0000 0133     if (maxh < 80){
 ;	senzory -> Y+0
 	LDI  R30,LOW(80)
 	CP   R5,R30
 	BRLO PC+3
 	JMP _0x100
-; 0000 0135             switch (senzory){
+; 0000 0134             switch (senzory){
 	LD   R30,Y
 	LDD  R31,Y+1
-; 0000 0136                 case 1: m_0(rychlost_presunu);          break;
+; 0000 0135                 case 1: m_0(rychlost_presunu);          break;
 	CPI  R30,LOW(0x1)
 	LDI  R26,HIGH(0x1)
 	CPC  R31,R26
@@ -2881,17 +2789,17 @@ _obchadzanie:
 	ST   -Y,R4
 	RCALL _m_0
 	RJMP _0x103
-; 0000 0137         //---------------------------------------------------------------------
-; 0000 0138                 case 2: m_90(rychlost_presunu-10);              break;
+; 0000 0136         //---------------------------------------------------------------------
+; 0000 0137                 case 2: m_90(rychlost_presunu-10);              break;
 _0x104:
 	CPI  R30,LOW(0x2)
 	LDI  R26,HIGH(0x2)
 	CPC  R31,R26
 	BRNE _0x105
-	CALL SUBOPT_0x20
+	CALL SUBOPT_0x1C
 	RCALL _m_90
 	RJMP _0x103
-; 0000 0139                 case 3: m_135(rychlost_presunu);                break;
+; 0000 0138                 case 3: m_135(rychlost_presunu);                break;
 _0x105:
 	CPI  R30,LOW(0x3)
 	LDI  R26,HIGH(0x3)
@@ -2900,7 +2808,7 @@ _0x105:
 	ST   -Y,R4
 	RCALL _m_135
 	RJMP _0x103
-; 0000 013A                 case 4: m_135(rychlost_presunu);                break;
+; 0000 0139                 case 4: m_135(rychlost_presunu);                break;
 _0x106:
 	CPI  R30,LOW(0x4)
 	LDI  R26,HIGH(0x4)
@@ -2909,7 +2817,7 @@ _0x106:
 	ST   -Y,R4
 	RCALL _m_135
 	RJMP _0x103
-; 0000 013B                 case 5: m_180(rychlost_presunu);                break;
+; 0000 013A                 case 5: m_180(rychlost_presunu);                break;
 _0x107:
 	CPI  R30,LOW(0x5)
 	LDI  R26,HIGH(0x5)
@@ -2918,8 +2826,8 @@ _0x107:
 	ST   -Y,R4
 	RCALL _m_180
 	RJMP _0x103
-; 0000 013C         //---------------------------------------------------------------------
-; 0000 013D                 case 6: m_225(rychlost_presunu_vzad);           break;
+; 0000 013B         //---------------------------------------------------------------------
+; 0000 013C                 case 6: m_225(rychlost_presunu_vzad);           break;
 _0x108:
 	CPI  R30,LOW(0x6)
 	LDI  R26,HIGH(0x6)
@@ -2928,7 +2836,7 @@ _0x108:
 	ST   -Y,R6
 	RCALL _m_225
 	RJMP _0x103
-; 0000 013E                 case 7: m_225(rychlost_presunu_vzad);           break;
+; 0000 013D                 case 7: m_225(rychlost_presunu_vzad);           break;
 _0x109:
 	CPI  R30,LOW(0x7)
 	LDI  R26,HIGH(0x7)
@@ -2937,7 +2845,7 @@ _0x109:
 	ST   -Y,R6
 	RCALL _m_225
 	RJMP _0x103
-; 0000 013F                 case 8: m_270(rychlost_presunu_vzad);           break;
+; 0000 013E                 case 8: m_270(rychlost_presunu_vzad);           break;
 _0x10A:
 	CPI  R30,LOW(0x8)
 	LDI  R26,HIGH(0x8)
@@ -2946,7 +2854,7 @@ _0x10A:
 	ST   -Y,R6
 	RCALL _m_270
 	RJMP _0x103
-; 0000 0140                 case 9: m_270(rychlost_presunu_vzad);           break;
+; 0000 013F                 case 9: m_270(rychlost_presunu_vzad);           break;
 _0x10B:
 	CPI  R30,LOW(0x9)
 	LDI  R26,HIGH(0x9)
@@ -2955,7 +2863,7 @@ _0x10B:
 	ST   -Y,R6
 	RCALL _m_270
 	RJMP _0x103
-; 0000 0141                 case 10: m_90(rychlost_presunu_vzad);           break;
+; 0000 0140                 case 10: m_90(rychlost_presunu_vzad);           break;
 _0x10C:
 	CPI  R30,LOW(0xA)
 	LDI  R26,HIGH(0xA)
@@ -2964,7 +2872,7 @@ _0x10C:
 	ST   -Y,R6
 	RCALL _m_90
 	RJMP _0x103
-; 0000 0142                 case 11: m_135(rychlost_presunu_vzad);          break;
+; 0000 0141                 case 11: m_135(rychlost_presunu_vzad);          break;
 _0x10D:
 	CPI  R30,LOW(0xB)
 	LDI  R26,HIGH(0xB)
@@ -2973,7 +2881,7 @@ _0x10D:
 	ST   -Y,R6
 	RCALL _m_135
 	RJMP _0x103
-; 0000 0143                 case 12: m_135(rychlost_presunu_vzad);          break;
+; 0000 0142                 case 12: m_135(rychlost_presunu_vzad);          break;
 _0x10E:
 	CPI  R30,LOW(0xC)
 	LDI  R26,HIGH(0xC)
@@ -2982,8 +2890,8 @@ _0x10E:
 	ST   -Y,R6
 	RCALL _m_135
 	RJMP _0x103
-; 0000 0144         //----------------------------------------------------------------------
-; 0000 0145                 case 13: m_180(rychlost_presunu);               break;
+; 0000 0143         //----------------------------------------------------------------------
+; 0000 0144                 case 13: m_180(rychlost_presunu);               break;
 _0x10F:
 	CPI  R30,LOW(0xD)
 	LDI  R26,HIGH(0xD)
@@ -2992,7 +2900,7 @@ _0x10F:
 	ST   -Y,R4
 	RCALL _m_180
 	RJMP _0x103
-; 0000 0146                 case 14: m_225(rychlost_presunu);               break;
+; 0000 0145                 case 14: m_225(rychlost_presunu);               break;
 _0x110:
 	CPI  R30,LOW(0xE)
 	LDI  R26,HIGH(0xE)
@@ -3001,7 +2909,7 @@ _0x110:
 	ST   -Y,R4
 	RCALL _m_225
 	RJMP _0x103
-; 0000 0147                 case 15: m_225(rychlost_presunu);               break;
+; 0000 0146                 case 15: m_225(rychlost_presunu);               break;
 _0x111:
 	CPI  R30,LOW(0xF)
 	LDI  R26,HIGH(0xF)
@@ -3010,33 +2918,33 @@ _0x111:
 	ST   -Y,R4
 	RCALL _m_225
 	RJMP _0x103
-; 0000 0148                 case 16: m_270(rychlost_presunu-10);            break;
+; 0000 0147                 case 16: m_270(rychlost_presunu-10);            break;
 _0x112:
 	CPI  R30,LOW(0x10)
 	LDI  R26,HIGH(0x10)
 	CPC  R31,R26
 	BRNE _0x113
-	CALL SUBOPT_0x20
+	CALL SUBOPT_0x1C
 	RCALL _m_270
 	RJMP _0x103
-; 0000 0149         //----------------------------------------------------------------------
-; 0000 014A                 case 17: m_vyp();                               break;
+; 0000 0148         //----------------------------------------------------------------------
+; 0000 0149                 case 17: m_vyp();                               break;
 _0x113:
 	CPI  R30,LOW(0x11)
 	LDI  R26,HIGH(0x11)
 	CPC  R31,R26
 	BRNE _0x103
 	RCALL _m_vyp
-; 0000 014B             }
+; 0000 014A             }
 _0x103:
-; 0000 014C        }
-; 0000 014D     else{
+; 0000 014B        }
+; 0000 014C     else{
 	RJMP _0x115
 _0x100:
-; 0000 014E            switch (senzory){
+; 0000 014D            switch (senzory){
 	LD   R30,Y
 	LDD  R31,Y+1
-; 0000 014F                 case 1: m_0(rychlost_presunu_zrychlene);         break;
+; 0000 014E                 case 1: m_0(rychlost_presunu_zrychlene);         break;
 	CPI  R30,LOW(0x1)
 	LDI  R26,HIGH(0x1)
 	CPC  R31,R26
@@ -3044,8 +2952,8 @@ _0x100:
 	ST   -Y,R7
 	RCALL _m_0
 	RJMP _0x118
-; 0000 0150         //---------------------------------------------------------------------
-; 0000 0151                 case 2: m_45(rychlost_presunu_zrychlene);                 break;
+; 0000 014F         //---------------------------------------------------------------------
+; 0000 0150                 case 2: m_45(rychlost_presunu_zrychlene);                 break;
 _0x119:
 	CPI  R30,LOW(0x2)
 	LDI  R26,HIGH(0x2)
@@ -3054,7 +2962,7 @@ _0x119:
 	ST   -Y,R7
 	RCALL _m_45
 	RJMP _0x118
-; 0000 0152                 case 3: m_45(rychlost_presunu_zrychlene);                 break;
+; 0000 0151                 case 3: m_45(rychlost_presunu_zrychlene);                 break;
 _0x11A:
 	CPI  R30,LOW(0x3)
 	LDI  R26,HIGH(0x3)
@@ -3063,7 +2971,7 @@ _0x11A:
 	ST   -Y,R7
 	RCALL _m_45
 	RJMP _0x118
-; 0000 0153                 case 4: m_90(rychlost_presunu_zrychlene);                 break;
+; 0000 0152                 case 4: m_90(rychlost_presunu_zrychlene);                 break;
 _0x11B:
 	CPI  R30,LOW(0x4)
 	LDI  R26,HIGH(0x4)
@@ -3072,7 +2980,7 @@ _0x11B:
 	ST   -Y,R7
 	RCALL _m_90
 	RJMP _0x118
-; 0000 0154                 case 5: m_90(rychlost_presunu_zrychlene);                 break;
+; 0000 0153                 case 5: m_90(rychlost_presunu_zrychlene);                 break;
 _0x11C:
 	CPI  R30,LOW(0x5)
 	LDI  R26,HIGH(0x5)
@@ -3081,8 +2989,8 @@ _0x11C:
 	ST   -Y,R7
 	RCALL _m_90
 	RJMP _0x118
-; 0000 0155         //---------------------------------------------------------------------
-; 0000 0156                 case 6: m_135(rychlost_presunu);                     break;
+; 0000 0154         //---------------------------------------------------------------------
+; 0000 0155                 case 6: m_135(rychlost_presunu);                     break;
 _0x11D:
 	CPI  R30,LOW(0x6)
 	LDI  R26,HIGH(0x6)
@@ -3091,7 +2999,7 @@ _0x11D:
 	ST   -Y,R4
 	RCALL _m_135
 	RJMP _0x118
-; 0000 0157                 case 7: m_135(rychlost_presunu);                     break;
+; 0000 0156                 case 7: m_135(rychlost_presunu);                     break;
 _0x11E:
 	CPI  R30,LOW(0x7)
 	LDI  R26,HIGH(0x7)
@@ -3100,7 +3008,7 @@ _0x11E:
 	ST   -Y,R4
 	RCALL _m_135
 	RJMP _0x118
-; 0000 0158                 case 8: m_135(rychlost_presunu);                          break;
+; 0000 0157                 case 8: m_135(rychlost_presunu);                          break;
 _0x11F:
 	CPI  R30,LOW(0x8)
 	LDI  R26,HIGH(0x8)
@@ -3109,7 +3017,7 @@ _0x11F:
 	ST   -Y,R4
 	RCALL _m_135
 	RJMP _0x118
-; 0000 0159                 case 9: m_180(rychlost_presunu);                          break;
+; 0000 0158                 case 9: m_180(rychlost_presunu);                          break;
 _0x120:
 	CPI  R30,LOW(0x9)
 	LDI  R26,HIGH(0x9)
@@ -3118,7 +3026,7 @@ _0x120:
 	ST   -Y,R4
 	RCALL _m_180
 	RJMP _0x118
-; 0000 015A                 case 10: m_225(rychlost_presunu);                         break;
+; 0000 0159                 case 10: m_225(rychlost_presunu);                         break;
 _0x121:
 	CPI  R30,LOW(0xA)
 	LDI  R26,HIGH(0xA)
@@ -3127,7 +3035,7 @@ _0x121:
 	ST   -Y,R4
 	RCALL _m_225
 	RJMP _0x118
-; 0000 015B                 case 11: m_225(rychlost_presunu);                         break;
+; 0000 015A                 case 11: m_225(rychlost_presunu);                         break;
 _0x122:
 	CPI  R30,LOW(0xB)
 	LDI  R26,HIGH(0xB)
@@ -3136,7 +3044,7 @@ _0x122:
 	ST   -Y,R4
 	RCALL _m_225
 	RJMP _0x118
-; 0000 015C                 case 12: m_225(rychlost_presunu);                         break;
+; 0000 015B                 case 12: m_225(rychlost_presunu);                         break;
 _0x123:
 	CPI  R30,LOW(0xC)
 	LDI  R26,HIGH(0xC)
@@ -3145,8 +3053,8 @@ _0x123:
 	ST   -Y,R4
 	RCALL _m_225
 	RJMP _0x118
-; 0000 015D         //----------------------------------------------------------------------
-; 0000 015E                 case 13: m_270(rychlost_presunu_zrychlene);               break;
+; 0000 015C         //----------------------------------------------------------------------
+; 0000 015D                 case 13: m_270(rychlost_presunu_zrychlene);               break;
 _0x124:
 	CPI  R30,LOW(0xD)
 	LDI  R26,HIGH(0xD)
@@ -3155,7 +3063,7 @@ _0x124:
 	ST   -Y,R7
 	RCALL _m_270
 	RJMP _0x118
-; 0000 015F                 case 14: m_270(rychlost_presunu_zrychlene);               break;
+; 0000 015E                 case 14: m_270(rychlost_presunu_zrychlene);               break;
 _0x125:
 	CPI  R30,LOW(0xE)
 	LDI  R26,HIGH(0xE)
@@ -3164,7 +3072,7 @@ _0x125:
 	ST   -Y,R7
 	RCALL _m_270
 	RJMP _0x118
-; 0000 0160                 case 15: m_315(rychlost_presunu_zrychlene);               break;
+; 0000 015F                 case 15: m_315(rychlost_presunu_zrychlene);               break;
 _0x126:
 	CPI  R30,LOW(0xF)
 	LDI  R26,HIGH(0xF)
@@ -3173,7 +3081,7 @@ _0x126:
 	ST   -Y,R7
 	RCALL _m_315
 	RJMP _0x118
-; 0000 0161                 case 16: m_315(rychlost_presunu_zrychlene);               break;
+; 0000 0160                 case 16: m_315(rychlost_presunu_zrychlene);               break;
 _0x127:
 	CPI  R30,LOW(0x10)
 	LDI  R26,HIGH(0x10)
@@ -3182,283 +3090,457 @@ _0x127:
 	ST   -Y,R7
 	RCALL _m_315
 	RJMP _0x118
-; 0000 0162         //----------------------------------------------------------------------
-; 0000 0163                 case 17: m_vyp();                                         break;
+; 0000 0161         //----------------------------------------------------------------------
+; 0000 0162                 case 17: m_vyp();                                         break;
 _0x128:
 	CPI  R30,LOW(0x11)
 	LDI  R26,HIGH(0x11)
 	CPC  R31,R26
 	BRNE _0x118
 	RCALL _m_vyp
-; 0000 0164         }
+; 0000 0163         }
 _0x118:
-; 0000 0165     }
+; 0000 0164     }
 _0x115:
-; 0000 0166 }
-_0x20A0007:
+; 0000 0165 }
+_0x20A0006:
 	ADIW R28,2
 	RET
 ;//------------------------------
 ;//------------------------------
 ;//odosielanie do PC
 ;//------------------------------
-;char bolo_nacita = 0;
 ;void odosli_dataPC(){
-; 0000 016C void odosli_dataPC(){
+; 0000 016A void odosli_dataPC(){
 _odosli_dataPC:
-; 0000 016D     char data[12];
-; 0000 016E     int test;
-; 0000 016F //--prijem_dat------------------------
-; 0000 0170     prijem_dat();
-	SBIW R28,12
-	ST   -Y,R17
-	ST   -Y,R16
-;	data -> Y+2
-;	test -> R16,R17
-	RCALL _prijem_dat
-; 0000 0171 //------------------------------------
-; 0000 0172 //printf("test\n");
-; 0000 0173 //spracovanie dat---------------------
-; 0000 0174 //------------------------------------
-; 0000 0175     if (strcmpf(datax[0],"data") == 0){
-	CALL SUBOPT_0x10
+; 0000 016B //--prijem_dat------------------------
+; 0000 016C     char str[20];
+; 0000 016D     scanf ("%s",str);
+	CALL SUBOPT_0x1D
+;	str -> Y+0
+; 0000 016E //------------------------------------
+; 0000 016F //spracovanie dat---------------------
+; 0000 0170 //------------------------------------
+; 0000 0171     if (strcmpf(str,"data") == 0){
 	__POINTW1FN _0x0,3
-	CALL SUBOPT_0x21
+	CALL SUBOPT_0x1E
 	BRNE _0x12A
-; 0000 0176         data[0] = Senzor_1;
+; 0000 0172         char data[12];
+; 0000 0173         data[0] = Senzor_1;
+	SBIW R28,12
+;	str -> Y+12
+;	data -> Y+0
 	LDI  R30,LOW(7)
 	ST   -Y,R30
 	RCALL _read_adc
-	STD  Y+2,R30
-; 0000 0177         data[1] = Senzor_2;
+	ST   Y,R30
+; 0000 0174         data[1] = Senzor_2;
 	LDI  R30,LOW(6)
 	ST   -Y,R30
 	RCALL _read_adc
-	STD  Y+3,R30
-; 0000 0178         data[2] = Senzor_3;
+	STD  Y+1,R30
+; 0000 0175         data[2] = Senzor_3;
 	LDI  R30,LOW(5)
 	ST   -Y,R30
 	RCALL _read_adc
-	STD  Y+4,R30
-; 0000 0179         data[3] = Senzor_4;
+	STD  Y+2,R30
+; 0000 0176         data[3] = Senzor_4;
 	LDI  R30,LOW(4)
 	ST   -Y,R30
 	RCALL _read_adc
-	STD  Y+5,R30
-; 0000 017A         data[4] = Senzor_5;
+	STD  Y+3,R30
+; 0000 0177         data[4] = Senzor_5;
 	LDI  R30,LOW(0)
 	ST   -Y,R30
 	RCALL _read_adc
-	STD  Y+6,R30
-; 0000 017B         data[5] = Senzor_6;
+	STD  Y+4,R30
+; 0000 0178         data[5] = Senzor_6;
 	LDI  R30,LOW(1)
 	ST   -Y,R30
 	RCALL _read_adc
-	STD  Y+7,R30
-; 0000 017C         data[6] = Senzor_7;
+	STD  Y+5,R30
+; 0000 0179         data[6] = Senzor_7;
 	LDI  R30,LOW(2)
 	ST   -Y,R30
 	RCALL _read_adc
-	STD  Y+8,R30
-; 0000 017D         data[7] = Senzor_8;
+	STD  Y+6,R30
+; 0000 017A         data[7] = Senzor_8;
 	LDI  R30,LOW(3)
 	ST   -Y,R30
 	RCALL _read_adc
+	STD  Y+7,R30
+; 0000 017B         data[8] = maxx(200);
+	LDI  R30,LOW(200)
+	ST   -Y,R30
+	RCALL _maxx
+	STD  Y+8,R30
+; 0000 017C         data[9] = (int)(prepocetcompasu(branka,1)*0.71);
+	CALL SUBOPT_0x1F
+	CLR  R22
+	CLR  R23
 	STD  Y+9,R30
-; 0000 017E         data[8] = maxx(200);
-	CALL SUBOPT_0x22
-	STD  Y+10,R30
-; 0000 017F         data[9] = Kick_sens+20;
+; 0000 017D         data[10] = Kick_sens;
 	LDI  R30,0
 	SBIC 0x16,5
 	LDI  R30,1
-	SUBI R30,-LOW(20)
-	STD  Y+11,R30
-; 0000 0180         data[10] = (int)(prepocetcompasu(branka,1)*0.71);
-	CALL SUBOPT_0x23
-	CLR  R22
-	CLR  R23
-	STD  Y+12,R30
-; 0000 0181         puts(data);
-	CALL SUBOPT_0x11
+	STD  Y+10,R30
+; 0000 017E         puts(data);
+	CALL SUBOPT_0x20
 	CALL _puts
-; 0000 0182         bolo_nacita = 1;
-	LDI  R30,LOW(1)
-	STS  _bolo_nacita,R30
-; 0000 0183         }
-; 0000 0184     else if (strcmpf(datax[0],"kick") == 0)     kick_no();
+; 0000 017F         }
+	ADIW R28,12
+; 0000 0180     else if (strcmpf(str,"kick") == 0)     kick_no();
 	RJMP _0x12B
 _0x12A:
-	CALL SUBOPT_0x10
+	CALL SUBOPT_0x20
 	__POINTW1FN _0x0,8
-	CALL SUBOPT_0x21
+	CALL SUBOPT_0x1E
 	BRNE _0x12C
 	RCALL _kick_no
-; 0000 0185     else if (strcmpf(datax[0],"L1ed") == 0){     on = 1; }
+; 0000 0181     else if (strcmpf(str,"LED0") == 0)     LED = 1;
 	RJMP _0x12D
 _0x12C:
-	CALL SUBOPT_0x10
+	CALL SUBOPT_0x20
 	__POINTW1FN _0x0,13
-	CALL SUBOPT_0x21
+	CALL SUBOPT_0x1E
 	BRNE _0x12E
-	LDI  R26,LOW(_on)
-	LDI  R27,HIGH(_on)
-	LDI  R30,LOW(1)
-	CALL __EEPROMWRB
-; 0000 0186     else if (strcmpf(datax[0],"L0ed") == 0){      on = 0;}
-	RJMP _0x12F
-_0x12E:
-	CALL SUBOPT_0x10
-	__POINTW1FN _0x0,18
-	CALL SUBOPT_0x21
-	BRNE _0x130
-	LDI  R26,LOW(_on)
-	LDI  R27,HIGH(_on)
-	LDI  R30,LOW(0)
-	CALL __EEPROMWRB
-; 0000 0187     else if (strcmpf(datax[0],"LED0") == 0)     LED = 1;
-	RJMP _0x131
-_0x130:
-	CALL SUBOPT_0x10
-	__POINTW1FN _0x0,23
-	CALL SUBOPT_0x21
-	BRNE _0x132
 	SBI  0x18,4
-; 0000 0188     else if (strcmpf(datax[0],"LED1") == 0)     LED = 0;
+; 0000 0182     else if (strcmpf(str,"LED1") == 0)     LED = 0;
+	RJMP _0x131
+_0x12E:
+	CALL SUBOPT_0x20
+	__POINTW1FN _0x0,18
+	CALL SUBOPT_0x1E
+	BRNE _0x132
+	CBI  0x18,4
+; 0000 0183     else if (strcmpf(str,"blik") == 0)    {
 	RJMP _0x135
 _0x132:
-	CALL SUBOPT_0x10
-	__POINTW1FN _0x0,28
-	CALL SUBOPT_0x21
+	CALL SUBOPT_0x20
+	__POINTW1FN _0x0,23
+	CALL SUBOPT_0x1E
 	BRNE _0x136
+; 0000 0184         int pocet;
+; 0000 0185         char str1[20];
+; 0000 0186         scanf ("%s",str1);
+	SBIW R28,22
+;	str -> Y+22
+;	pocet -> Y+20
+;	str1 -> Y+0
+	__POINTW1FN _0x0,0
+	ST   -Y,R31
+	ST   -Y,R30
+	MOVW R30,R28
+	ADIW R30,2
+	CLR  R22
+	CLR  R23
+	CALL __PUTPARD1
+	LDI  R24,4
+	CALL _scanf
+	ADIW R28,6
+; 0000 0187         for(pocet = atoi(str1);pocet!=0;pocet--){
+	CALL SUBOPT_0x20
+	CALL _atoi
+	STD  Y+20,R30
+	STD  Y+20+1,R31
+_0x138:
+	LDD  R30,Y+20
+	LDD  R31,Y+20+1
+	SBIW R30,0
+	BREQ _0x139
+; 0000 0188             LED = 0;
 	CBI  0x18,4
-; 0000 0189     else if (strcmpf(datax[0],"smer") == 0)    {
-	RJMP _0x139
-_0x136:
-	CALL SUBOPT_0x10
-	__POINTW1FN _0x0,33
+; 0000 0189             delay_ms(500);
 	CALL SUBOPT_0x21
+; 0000 018A             LED = 1;
+	SBI  0x18,4
+; 0000 018B             delay_ms(500);
+	CALL SUBOPT_0x21
+; 0000 018C             }
+	LDD  R30,Y+20
+	LDD  R31,Y+20+1
+	SBIW R30,1
+	STD  Y+20,R30
+	STD  Y+20+1,R31
+	RJMP _0x138
+_0x139:
+; 0000 018D     }
+	ADIW R28,22
+; 0000 018E     else if (strcmpf(str,"smer") == 0)    {
+	RJMP _0x13E
+_0x136:
+	CALL SUBOPT_0x20
+	__POINTW1FN _0x0,28
+	CALL SUBOPT_0x1E
 	BREQ PC+3
-	JMP _0x13A
-; 0000 018A         smer = atoi(datax[1]);
-	CALL SUBOPT_0x24
+	JMP _0x13F
+; 0000 018F         char str1[20];
+; 0000 0190         scanf ("%s",str1);
+	CALL SUBOPT_0x1D
+;	str -> Y+20
+;	str1 -> Y+0
+; 0000 0191         smer = atoi(str1);
+	CALL _atoi
 	MOV  R8,R30
-; 0000 018B         switch(smer){
+; 0000 0192         switch(smer){
 	MOV  R30,R8
 	LDI  R31,0
-; 0000 018C             case 0:
+; 0000 0193             case 0:
 	SBIW R30,0
-	BRNE _0x13E
-; 0000 018D                 m_vyp();
+	BRNE _0x143
+; 0000 0194                 m_vyp();
 	RCALL _m_vyp
-; 0000 018E                 break;
-	RJMP _0x13D
-; 0000 018F             case 1:
-_0x13E:
+; 0000 0195                 break;
+	RJMP _0x142
+; 0000 0196             case 1:
+_0x143:
 	CPI  R30,LOW(0x1)
 	LDI  R26,HIGH(0x1)
 	CPC  R31,R26
-	BRNE _0x13F
-; 0000 0190                 m_0(rychlost);
+	BRNE _0x144
+; 0000 0197                 m_0(rychlost);
 	ST   -Y,R13
 	RCALL _m_0
-; 0000 0191                 break;
-	RJMP _0x13D
-; 0000 0192             case 2:
-_0x13F:
+; 0000 0198                 break;
+	RJMP _0x142
+; 0000 0199             case 2:
+_0x144:
 	CPI  R30,LOW(0x2)
 	LDI  R26,HIGH(0x2)
 	CPC  R31,R26
-	BRNE _0x140
-; 0000 0193                 m_45(rychlost);
+	BRNE _0x145
+; 0000 019A                 m_45(rychlost);
 	ST   -Y,R13
 	RCALL _m_45
-; 0000 0194                 break;
-	RJMP _0x13D
-; 0000 0195             case 3:
-_0x140:
+; 0000 019B                 break;
+	RJMP _0x142
+; 0000 019C             case 3:
+_0x145:
 	CPI  R30,LOW(0x3)
 	LDI  R26,HIGH(0x3)
 	CPC  R31,R26
-	BRNE _0x141
-; 0000 0196                 m_90(rychlost);
+	BRNE _0x146
+; 0000 019D                 m_90(rychlost);
 	ST   -Y,R13
 	RCALL _m_90
-; 0000 0197                 break;
-	RJMP _0x13D
-; 0000 0198             case 4:
-_0x141:
+; 0000 019E                 break;
+	RJMP _0x142
+; 0000 019F             case 4:
+_0x146:
 	CPI  R30,LOW(0x4)
 	LDI  R26,HIGH(0x4)
 	CPC  R31,R26
-	BRNE _0x142
-; 0000 0199                 m_135(rychlost);
+	BRNE _0x147
+; 0000 01A0                 m_135(rychlost);
 	ST   -Y,R13
 	RCALL _m_135
-; 0000 019A                 break;
-	RJMP _0x13D
-; 0000 019B             case 5:
-_0x142:
+; 0000 01A1                 break;
+	RJMP _0x142
+; 0000 01A2             case 5:
+_0x147:
 	CPI  R30,LOW(0x5)
 	LDI  R26,HIGH(0x5)
 	CPC  R31,R26
-	BRNE _0x143
-; 0000 019C                 m_180(rychlost);
+	BRNE _0x148
+; 0000 01A3                 m_180(rychlost);
 	ST   -Y,R13
 	RCALL _m_180
-; 0000 019D                 break;
-	RJMP _0x13D
-; 0000 019E             case 6:
-_0x143:
+; 0000 01A4                 break;
+	RJMP _0x142
+; 0000 01A5             case 6:
+_0x148:
 	CPI  R30,LOW(0x6)
 	LDI  R26,HIGH(0x6)
 	CPC  R31,R26
-	BRNE _0x144
-; 0000 019F                 m_225(rychlost);
+	BRNE _0x149
+; 0000 01A6                 m_225(rychlost);
 	ST   -Y,R13
 	RCALL _m_225
-; 0000 01A0                 break;
-	RJMP _0x13D
-; 0000 01A1             case 7:
-_0x144:
+; 0000 01A7                 break;
+	RJMP _0x142
+; 0000 01A8             case 7:
+_0x149:
 	CPI  R30,LOW(0x7)
 	LDI  R26,HIGH(0x7)
 	CPC  R31,R26
-	BRNE _0x145
-; 0000 01A2                 m_270(rychlost);
+	BRNE _0x14A
+; 0000 01A9                 m_270(rychlost);
 	ST   -Y,R13
 	RCALL _m_270
-; 0000 01A3                 break;
-	RJMP _0x13D
-; 0000 01A4             case 8:
-_0x145:
+; 0000 01AA                 break;
+	RJMP _0x142
+; 0000 01AB             case 8:
+_0x14A:
 	CPI  R30,LOW(0x8)
 	LDI  R26,HIGH(0x8)
 	CPC  R31,R26
-	BRNE _0x146
-; 0000 01A5                 m_315(rychlost);
+	BRNE _0x14B
+; 0000 01AC                 m_315(rychlost);
 	ST   -Y,R13
 	RCALL _m_315
-; 0000 01A6                 break;
-	RJMP _0x13D
-; 0000 01A7             case 10:
-_0x146:
+; 0000 01AD                 break;
+	RJMP _0x142
+; 0000 01AE             case 10:
+_0x14B:
 	CPI  R30,LOW(0xA)
 	LDI  R26,HIGH(0xA)
 	CPC  R31,R26
-	BRNE _0x147
-; 0000 01A8                 m_ot(170);
+	BRNE _0x14C
+; 0000 01AF                 m_ot(170);
 	LDI  R30,LOW(170)
 	LDI  R31,HIGH(170)
-	RJMP _0x198
-; 0000 01A9                 break;
-; 0000 01AA             case 9:
-_0x147:
+	RJMP _0x196
+; 0000 01B0                 break;
+; 0000 01B1             case 9:
+_0x14C:
 	CPI  R30,LOW(0x9)
 	LDI  R26,HIGH(0x9)
 	CPC  R31,R26
-	BRNE _0x13D
-; 0000 01AB                 m_ot(-170);
+	BRNE _0x142
+; 0000 01B2                 m_ot(-170);
+	LDI  R30,LOW(65366)
+	LDI  R31,HIGH(65366)
+	SER  R31
+_0x196:
+	ST   -Y,R31
+	ST   -Y,R30
+	RCALL _m_ot
+; 0000 01B3                 break;
+; 0000 01B4             }
+_0x142:
+; 0000 01B5         }
+	RJMP _0x197
+; 0000 01B6     else if (strcmpf(str,"rych") == 0)    {
+_0x13F:
+	CALL SUBOPT_0x20
+	__POINTW1FN _0x0,33
+	CALL SUBOPT_0x1E
+	BREQ PC+3
+	JMP _0x14F
+; 0000 01B7         char str1[20];
+; 0000 01B8         scanf ("%s",str1);
+	CALL SUBOPT_0x1D
+;	str -> Y+20
+;	str1 -> Y+0
+; 0000 01B9         rychlost = atoi(str1);
+	CALL _atoi
+	MOV  R13,R30
+; 0000 01BA         switch(smer){
+	MOV  R30,R8
+	LDI  R31,0
+; 0000 01BB             case 0:
+	SBIW R30,0
+	BRNE _0x153
+; 0000 01BC                 m_vyp();
+	RCALL _m_vyp
+; 0000 01BD                 break;
+	RJMP _0x152
+; 0000 01BE             case 1:
+_0x153:
+	CPI  R30,LOW(0x1)
+	LDI  R26,HIGH(0x1)
+	CPC  R31,R26
+	BRNE _0x154
+; 0000 01BF                 m_0(rychlost);
+	ST   -Y,R13
+	RCALL _m_0
+; 0000 01C0                 break;
+	RJMP _0x152
+; 0000 01C1             case 2:
+_0x154:
+	CPI  R30,LOW(0x2)
+	LDI  R26,HIGH(0x2)
+	CPC  R31,R26
+	BRNE _0x155
+; 0000 01C2                 m_45(rychlost);
+	ST   -Y,R13
+	RCALL _m_45
+; 0000 01C3                 break;
+	RJMP _0x152
+; 0000 01C4             case 3:
+_0x155:
+	CPI  R30,LOW(0x3)
+	LDI  R26,HIGH(0x3)
+	CPC  R31,R26
+	BRNE _0x156
+; 0000 01C5                 m_90(rychlost);
+	ST   -Y,R13
+	RCALL _m_90
+; 0000 01C6                 break;
+	RJMP _0x152
+; 0000 01C7             case 4:
+_0x156:
+	CPI  R30,LOW(0x4)
+	LDI  R26,HIGH(0x4)
+	CPC  R31,R26
+	BRNE _0x157
+; 0000 01C8                 m_135(rychlost);
+	ST   -Y,R13
+	RCALL _m_135
+; 0000 01C9                 break;
+	RJMP _0x152
+; 0000 01CA             case 5:
+_0x157:
+	CPI  R30,LOW(0x5)
+	LDI  R26,HIGH(0x5)
+	CPC  R31,R26
+	BRNE _0x158
+; 0000 01CB                 m_180(rychlost);
+	ST   -Y,R13
+	RCALL _m_180
+; 0000 01CC                 break;
+	RJMP _0x152
+; 0000 01CD             case 6:
+_0x158:
+	CPI  R30,LOW(0x6)
+	LDI  R26,HIGH(0x6)
+	CPC  R31,R26
+	BRNE _0x159
+; 0000 01CE                 m_225(rychlost);
+	ST   -Y,R13
+	RCALL _m_225
+; 0000 01CF                 break;
+	RJMP _0x152
+; 0000 01D0             case 7:
+_0x159:
+	CPI  R30,LOW(0x7)
+	LDI  R26,HIGH(0x7)
+	CPC  R31,R26
+	BRNE _0x15A
+; 0000 01D1                 m_270(rychlost);
+	ST   -Y,R13
+	RCALL _m_270
+; 0000 01D2                 break;
+	RJMP _0x152
+; 0000 01D3             case 8:
+_0x15A:
+	CPI  R30,LOW(0x8)
+	LDI  R26,HIGH(0x8)
+	CPC  R31,R26
+	BRNE _0x15B
+; 0000 01D4                 m_315(rychlost);
+	ST   -Y,R13
+	RCALL _m_315
+; 0000 01D5                 break;
+	RJMP _0x152
+; 0000 01D6             case 10:
+_0x15B:
+	CPI  R30,LOW(0xA)
+	LDI  R26,HIGH(0xA)
+	CPC  R31,R26
+	BRNE _0x15C
+; 0000 01D7                 m_ot(170);
+	LDI  R30,LOW(170)
+	LDI  R31,HIGH(170)
+	RJMP _0x198
+; 0000 01D8                 break;
+; 0000 01D9             case 9:
+_0x15C:
+	CPI  R30,LOW(0x9)
+	LDI  R26,HIGH(0x9)
+	CPC  R31,R26
+	BRNE _0x152
+; 0000 01DA                 m_ot(-170);
 	LDI  R30,LOW(65366)
 	LDI  R31,HIGH(65366)
 	SER  R31
@@ -3466,337 +3548,121 @@ _0x198:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _m_ot
-; 0000 01AC                 break;
-; 0000 01AD             }
-_0x13D:
-; 0000 01AE         }
-; 0000 01AF     else if (strcmpf(datax[0],"rych") == 0)    {
-	RJMP _0x149
-_0x13A:
-	CALL SUBOPT_0x10
-	__POINTW1FN _0x0,38
-	CALL SUBOPT_0x21
-	BREQ PC+3
-	JMP _0x14A
-; 0000 01B0         rychlost = atoi(datax[1]);
-	CALL SUBOPT_0x24
-	MOV  R13,R30
-; 0000 01B1         switch(smer){
-	MOV  R30,R8
-	LDI  R31,0
-; 0000 01B2             case 0:
-	SBIW R30,0
-	BRNE _0x14E
-; 0000 01B3                 m_vyp();
-	RCALL _m_vyp
-; 0000 01B4                 break;
-	RJMP _0x14D
-; 0000 01B5             case 1:
-_0x14E:
-	CPI  R30,LOW(0x1)
-	LDI  R26,HIGH(0x1)
-	CPC  R31,R26
-	BRNE _0x14F
-; 0000 01B6                 m_0(rychlost);
-	ST   -Y,R13
-	RCALL _m_0
-; 0000 01B7                 break;
-	RJMP _0x14D
-; 0000 01B8             case 2:
-_0x14F:
-	CPI  R30,LOW(0x2)
-	LDI  R26,HIGH(0x2)
-	CPC  R31,R26
-	BRNE _0x150
-; 0000 01B9                 m_45(rychlost);
-	ST   -Y,R13
-	RCALL _m_45
-; 0000 01BA                 break;
-	RJMP _0x14D
-; 0000 01BB             case 3:
-_0x150:
-	CPI  R30,LOW(0x3)
-	LDI  R26,HIGH(0x3)
-	CPC  R31,R26
-	BRNE _0x151
-; 0000 01BC                 m_90(rychlost);
-	ST   -Y,R13
-	RCALL _m_90
-; 0000 01BD                 break;
-	RJMP _0x14D
-; 0000 01BE             case 4:
-_0x151:
-	CPI  R30,LOW(0x4)
-	LDI  R26,HIGH(0x4)
-	CPC  R31,R26
-	BRNE _0x152
-; 0000 01BF                 m_135(rychlost);
-	ST   -Y,R13
-	RCALL _m_135
-; 0000 01C0                 break;
-	RJMP _0x14D
-; 0000 01C1             case 5:
+; 0000 01DB                 break;
+; 0000 01DC             }
 _0x152:
-	CPI  R30,LOW(0x5)
-	LDI  R26,HIGH(0x5)
-	CPC  R31,R26
-	BRNE _0x153
-; 0000 01C2                 m_180(rychlost);
-	ST   -Y,R13
-	RCALL _m_180
-; 0000 01C3                 break;
-	RJMP _0x14D
-; 0000 01C4             case 6:
-_0x153:
-	CPI  R30,LOW(0x6)
-	LDI  R26,HIGH(0x6)
-	CPC  R31,R26
-	BRNE _0x154
-; 0000 01C5                 m_225(rychlost);
-	ST   -Y,R13
-	RCALL _m_225
-; 0000 01C6                 break;
-	RJMP _0x14D
-; 0000 01C7             case 7:
-_0x154:
-	CPI  R30,LOW(0x7)
-	LDI  R26,HIGH(0x7)
-	CPC  R31,R26
-	BRNE _0x155
-; 0000 01C8                 m_270(rychlost);
-	ST   -Y,R13
-	RCALL _m_270
-; 0000 01C9                 break;
-	RJMP _0x14D
-; 0000 01CA             case 8:
-_0x155:
-	CPI  R30,LOW(0x8)
-	LDI  R26,HIGH(0x8)
-	CPC  R31,R26
-	BRNE _0x156
-; 0000 01CB                 m_315(rychlost);
-	ST   -Y,R13
-	RCALL _m_315
-; 0000 01CC                 break;
-	RJMP _0x14D
-; 0000 01CD             case 10:
-_0x156:
-	CPI  R30,LOW(0xA)
-	LDI  R26,HIGH(0xA)
-	CPC  R31,R26
-	BRNE _0x157
-; 0000 01CE                 m_ot(170);
-	LDI  R30,LOW(170)
-	LDI  R31,HIGH(170)
-	RJMP _0x199
-; 0000 01CF                 break;
-; 0000 01D0             case 9:
-_0x157:
-	CPI  R30,LOW(0x9)
-	LDI  R26,HIGH(0x9)
-	CPC  R31,R26
-	BRNE _0x14D
-; 0000 01D1                 m_ot(-170);
-	LDI  R30,LOW(65366)
-	LDI  R31,HIGH(65366)
-	SER  R31
-_0x199:
-	ST   -Y,R31
-	ST   -Y,R30
-	RCALL _m_ot
-; 0000 01D2                 break;
-; 0000 01D3             }
-_0x14D:
-; 0000 01D4         }
-; 0000 01D5     else if (strcmpf(datax[0],"obch") == 0)     obchadzanie(maxx(200));
-	RJMP _0x159
-_0x14A:
-	CALL SUBOPT_0x10
-	__POINTW1FN _0x0,43
-	CALL SUBOPT_0x21
-	BRNE _0x15A
-	CALL SUBOPT_0x22
-	CALL SUBOPT_0x1F
-	RCALL _obchadzanie
-; 0000 01D6     else{
-	RJMP _0x15B
-_0x15A:
-; 0000 01D7         data[0] = 0;
-	LDI  R30,LOW(0)
-	STD  Y+2,R30
-; 0000 01D8         data[1] = 0;
-	STD  Y+3,R30
-; 0000 01D9         data[2] = 0;
-	STD  Y+4,R30
-; 0000 01DA         data[3] = 0;
-	STD  Y+5,R30
-; 0000 01DB         data[4] = 0;
-	STD  Y+6,R30
-; 0000 01DC         data[5] = 0;
-	STD  Y+7,R30
-; 0000 01DD         data[6] = 0;
-	STD  Y+8,R30
-; 0000 01DE         data[7] = 0;
-	STD  Y+9,R30
-; 0000 01DF         data[8] = 0;
-	STD  Y+10,R30
-; 0000 01E0         data[9] = 0;
-	STD  Y+11,R30
-; 0000 01E1         data[10] = 0;
-	STD  Y+12,R30
-; 0000 01E2         puts(data);
-	CALL SUBOPT_0x11
-	CALL _puts
-; 0000 01E3     }
-_0x15B:
-_0x159:
-_0x149:
-_0x139:
+; 0000 01DD         }
+_0x197:
+	ADIW R28,20
+; 0000 01DE     }
+_0x14F:
+_0x13E:
 _0x135:
 _0x131:
-_0x12F:
 _0x12D:
 _0x12B:
-; 0000 01E4         if (on == 1){
-	LDI  R26,LOW(_on)
-	LDI  R27,HIGH(_on)
-	CALL __EEPROMRDB
-	CPI  R30,LOW(0x1)
-	BRNE _0x15C
-; 0000 01E5             if (bolo_nacita == 1){
-	LDS  R26,_bolo_nacita
-	CPI  R26,LOW(0x1)
-	BRNE _0x15D
-; 0000 01E6             if (0 != nastav_podla_kompasu(data[10])){
-	LDD  R30,Y+12
-	CALL SUBOPT_0x1F
-	RCALL _nastav_podla_kompasu
-	SBIW R30,0
-	BREQ _0x15E
-; 0000 01E7                 obchadzanie(data[8]);
-	LDD  R30,Y+10
-	CALL SUBOPT_0x1F
-	RCALL _obchadzanie
-; 0000 01E8             }
-; 0000 01E9            }
-_0x15E:
-; 0000 01EA            else{
-	RJMP _0x15F
-_0x15D:
-; 0000 01EB                 obchadzanie(maxx(200));
-	CALL SUBOPT_0x22
-	CALL SUBOPT_0x1F
-	RCALL _obchadzanie
-; 0000 01EC            }
-_0x15F:
-; 0000 01ED         }
-; 0000 01EE     }
-_0x15C:
-	LDD  R17,Y+1
-	LDD  R16,Y+0
-_0x20A0006:
-	ADIW R28,14
+	ADIW R28,20
 	RET
 ;//---------------------------------
 ;void kalibracia_kompas(unsigned char mode){
-; 0000 01F0 void kalibracia_kompas(unsigned char mode){
+; 0000 01E0 void kalibracia_kompas(unsigned char mode){
 _kalibracia_kompas:
-; 0000 01F1     int kompas;
-; 0000 01F2     if (mode == 1){
+; 0000 01E1     int kompas;
+; 0000 01E2     if (mode == 1){
 	CALL SUBOPT_0xB
 ;	mode -> Y+2
 ;	kompas -> R16,R17
-	BRNE _0x160
-; 0000 01F3         if (Kick_sens == 0){
+	BRNE _0x15E
+; 0000 01E3         if (Kick_sens == 0){
 	SBIC 0x16,5
-	RJMP _0x161
-; 0000 01F4         while (Kick_sens == 0){
-_0x162:
+	RJMP _0x15F
+; 0000 01E4         while (Kick_sens == 0){
+_0x160:
 	SBIC 0x16,5
-	RJMP _0x164
-; 0000 01F5             delay_ms(20);
+	RJMP _0x162
+; 0000 01E5             delay_ms(20);
 	LDI  R30,LOW(20)
 	LDI  R31,HIGH(20)
-	CALL SUBOPT_0x25
-; 0000 01F6             branka = cmps03_read(1);
+	CALL SUBOPT_0x22
+; 0000 01E6             branka = cmps03_read(1);
 	LDI  R30,LOW(1)
-	CALL SUBOPT_0x26
-; 0000 01F7                     }
-	RJMP _0x162
-_0x164:
-; 0000 01F8         while(1){
-_0x165:
-; 0000 01F9             kompas = prepocetcompasu(branka,1)*0.71;
 	CALL SUBOPT_0x23
+; 0000 01E7                     }
+	RJMP _0x160
+_0x162:
+; 0000 01E8         while(1){
+_0x163:
+; 0000 01E9             kompas = prepocetcompasu(branka,1)*0.71;
+	CALL SUBOPT_0x1F
 	MOVW R16,R30
-; 0000 01FA             if (kompas > 180)
+; 0000 01EA             if (kompas > 180)
 	__CPWRN 16,17,181
-	BRLT _0x168
-; 0000 01FB                 kompas = 180;
+	BRLT _0x166
+; 0000 01EB                 kompas = 180;
 	__GETWRN 16,17,180
-; 0000 01FC             if (kompas < 20){
-_0x168:
+; 0000 01EC             if (kompas < 20){
+_0x166:
 	__CPWRN 16,17,20
-	BRLT _0x19A
-; 0000 01FD                 LED = 0;
-; 0000 01FE             }
-; 0000 01FF             else{
-; 0000 0200                 if( kompas < 90){
+	BRLT _0x199
+; 0000 01ED                 LED = 0;
+; 0000 01EE             }
+; 0000 01EF             else{
+; 0000 01F0                 if( kompas < 90){
 	__CPWRN 16,17,90
-	BRGE _0x16D
-; 0000 0201                     LED = 1;
+	BRGE _0x16B
+; 0000 01F1                     LED = 1;
 	SBI  0x18,4
-; 0000 0202                 }
-; 0000 0203                 else
-	RJMP _0x170
-_0x16D:
-; 0000 0204                 {
-; 0000 0205                     if (kompas < 160){
+; 0000 01F2                 }
+; 0000 01F3                 else
+	RJMP _0x16E
+_0x16B:
+; 0000 01F4                 {
+; 0000 01F5                     if (kompas < 160){
 	__CPWRN 16,17,160
-	BRGE _0x171
-; 0000 0206                         LED = 1;
+	BRGE _0x16F
+; 0000 01F6                         LED = 1;
 	SBI  0x18,4
-; 0000 0207                     }
-; 0000 0208                     else {
-	RJMP _0x174
-_0x171:
-; 0000 0209                         LED = 0;
-_0x19A:
+; 0000 01F7                     }
+; 0000 01F8                     else {
+	RJMP _0x172
+_0x16F:
+; 0000 01F9                         LED = 0;
+_0x199:
 	CBI  0x18,4
-; 0000 020A                         }
-_0x174:
-; 0000 020B                 }
-_0x170:
-; 0000 020C             }
-; 0000 020D         }
-	RJMP _0x165
-; 0000 020E         }
-; 0000 020F         }
-_0x161:
-; 0000 0210     else{
-	RJMP _0x177
-_0x160:
-; 0000 0211          while (Kick_sens == 0){
-_0x178:
+; 0000 01FA                         }
+_0x172:
+; 0000 01FB                 }
+_0x16E:
+; 0000 01FC             }
+; 0000 01FD         }
+	RJMP _0x163
+; 0000 01FE         }
+; 0000 01FF         }
+_0x15F:
+; 0000 0200     else{
+	RJMP _0x175
+_0x15E:
+; 0000 0201          while (Kick_sens == 0){
+_0x176:
 	SBIC 0x16,5
-	RJMP _0x17A
-; 0000 0212                     branka = cmps03_read(2);
+	RJMP _0x178
+; 0000 0202                     branka = cmps03_read(2);
 	LDI  R30,LOW(2)
-	CALL SUBOPT_0x26
-; 0000 0213                     delay_ms(10);
+	CALL SUBOPT_0x23
+; 0000 0203                     delay_ms(10);
 	LDI  R30,LOW(10)
 	LDI  R31,HIGH(10)
-	CALL SUBOPT_0x25
-; 0000 0214                             }
-	RJMP _0x178
-_0x17A:
-; 0000 0215          delay_ms(1000);
+	CALL SUBOPT_0x22
+; 0000 0204                             }
+	RJMP _0x176
+_0x178:
+; 0000 0205          delay_ms(1000);
 	LDI  R30,LOW(1000)
 	LDI  R31,HIGH(1000)
-	CALL SUBOPT_0x25
-; 0000 0216          while(1){
-_0x17B:
-; 0000 0217                     kompas = prepocetcompasu(branka,2);
+	CALL SUBOPT_0x22
+; 0000 0206          while(1){
+_0x179:
+; 0000 0207                     kompas = prepocetcompasu(branka,2);
 	LDI  R26,LOW(_branka)
 	LDI  R27,HIGH(_branka)
 	CALL __EEPROMRDW
@@ -3806,143 +3672,147 @@ _0x17B:
 	ST   -Y,R30
 	RCALL _prepocetcompasu
 	MOVW R16,R30
-; 0000 0218                     if (kompas < 200){
+; 0000 0208                     if (kompas < 200){
 	__CPWRN 16,17,200
-	BRLT _0x19B
-; 0000 0219                         LED = 0;
-; 0000 021A                     }
-; 0000 021B                     else{
-; 0000 021C                         if( kompas < 1800){
+	BRLT _0x19A
+; 0000 0209                         LED = 0;
+; 0000 020A                     }
+; 0000 020B                     else{
+; 0000 020C                         if( kompas < 1800){
 	__CPWRN 16,17,1800
-	BRGE _0x182
-; 0000 021D                             LED = 1;
+	BRGE _0x180
+; 0000 020D                             LED = 1;
 	SBI  0x18,4
-; 0000 021E                         }
-; 0000 021F                         else
-	RJMP _0x185
-_0x182:
-; 0000 0220                         {
-; 0000 0221                             if (kompas < 3400){
+; 0000 020E                         }
+; 0000 020F                         else
+	RJMP _0x183
+_0x180:
+; 0000 0210                         {
+; 0000 0211                             if (kompas < 3400){
 	__CPWRN 16,17,3400
-	BRGE _0x186
-; 0000 0222                                 LED = 1;
+	BRGE _0x184
+; 0000 0212                                 LED = 1;
 	SBI  0x18,4
-; 0000 0223                             }
-; 0000 0224                             else {
-	RJMP _0x189
-_0x186:
-; 0000 0225                                 LED = 0;
-_0x19B:
+; 0000 0213                             }
+; 0000 0214                             else {
+	RJMP _0x187
+_0x184:
+; 0000 0215                                 LED = 0;
+_0x19A:
 	CBI  0x18,4
-; 0000 0226                                 }
-_0x189:
-; 0000 0227                         }
-_0x185:
-; 0000 0228                     }
-; 0000 0229                 }
-	RJMP _0x17B
-; 0000 022A     }
-_0x177:
-; 0000 022B }
+; 0000 0216                                 }
+_0x187:
+; 0000 0217                         }
+_0x183:
+; 0000 0218                     }
+; 0000 0219                 }
+	RJMP _0x179
+; 0000 021A     }
+_0x175:
+; 0000 021B }
 	LDD  R17,Y+1
 	LDD  R16,Y+0
 	JMP  _0x20A0004
 ;//--------------------------------------------------
 ;void main(void)
-; 0000 022E {
+; 0000 021E {
 _main:
-; 0000 022F init_8535();
+; 0000 021F init_8535();
 	RCALL _init_8535
-; 0000 0230 // pre odosielanie do pc nastav 1
-; 0000 0231 prog = 1;
+; 0000 0220 // pre odosielanie do pc nastav 1
+; 0000 0221 prog = 1;
 	LDI  R30,LOW(1)
 	MOV  R9,R30
-; 0000 0232 //kompas reset, nastavenie rychlosti na 33ms
-; 0000 0233 cmps03_reset();
+; 0000 0222 //kompas reset, nastavenie rychlosti na 33ms
+; 0000 0223 cmps03_reset();
 	RCALL _cmps03_reset
-; 0000 0234 cmps03_scanmode(3);
+; 0000 0224 cmps03_scanmode(3);
 	LDI  R30,LOW(3)
 	ST   -Y,R30
 	RCALL _cmps03_scanmode
-; 0000 0235 //-----------------------------------
-; 0000 0236 delay_ms(200);
-	CALL SUBOPT_0x1E
-; 0000 0237 kalibracia_kompas(1);
+; 0000 0225 //-----------------------------------
+; 0000 0226 delay_ms(200);
+	CALL SUBOPT_0x1B
+; 0000 0227 kalibracia_kompas(1);
 	LDI  R30,LOW(1)
 	ST   -Y,R30
 	RCALL _kalibracia_kompas
-; 0000 0238 //-----------------------------------
-; 0000 0239 testmotor:
-_0x18C:
-; 0000 023A     while(1){
-; 0000 023B     /*
-; 0000 023C         if (Mot_sens == 1)  {
-; 0000 023D           goto zaciatok;
-; 0000 023E         }
-; 0000 023F         else{
-; 0000 0240             switch (senzory){
-; 0000 0241                 case 1:     goto zaciatok;                  break;
-; 0000 0242         //---------------------------------------------------------------------
-; 0000 0243                 case 2:     m_0(255);          break;
-; 0000 0244                 case 3:     m_0(255);          break;
-; 0000 0245                 case 4:     m_45(255);          break;
-; 0000 0246                 case 5:     m_45(255);         break;
-; 0000 0247         //---------------------------------------------------------------------
-; 0000 0248                 case 6:     m_vyp();                        break;
-; 0000 0249                 case 7:     m_vyp();                        break;
-; 0000 024A                 case 8:     m_vyp();                        break;
-; 0000 024B                 case 9:     m_vyp();                        break;
-; 0000 024C                 case 10:    m_vyp();                        break;
-; 0000 024D                 case 11:    m_vyp();                        break;
-; 0000 024E                 case 12:    m_vyp();                        break;
-; 0000 024F         //----------------------------------------------------------------------
-; 0000 0250                 case 13:    m_315(255);        break;
-; 0000 0251                 case 14:    m_315(255);          break;
-; 0000 0252                 case 15:    m_0(255);          break;
-; 0000 0253                 case 16:    m_0(255);          break;
-; 0000 0254         //----------------------------------------------------------------------
-; 0000 0255                 case 17:    m_vyp();                        break;
-; 0000 0256             }
-; 0000 0257             if (senzory != 1){
-; 0000 0258                 delay_ms(400);
-; 0000 0259             }
-; 0000 025A         }
-; 0000 025B         */
-; 0000 025C //        while(1){
-; 0000 025D           odosli_dataPC();
+; 0000 0228 //-----------------------------------
+; 0000 0229 testmotor:
+_0x18A:
+; 0000 022A     while(1){
+; 0000 022B     /*
+; 0000 022C         if (Mot_sens == 1)  {
+; 0000 022D           goto zaciatok;
+; 0000 022E         }
+; 0000 022F         else{
+; 0000 0230             switch (senzory){
+; 0000 0231                 case 1:     goto zaciatok;                  break;
+; 0000 0232         //---------------------------------------------------------------------
+; 0000 0233                 case 2:     m_0(255);          break;
+; 0000 0234                 case 3:     m_0(255);          break;
+; 0000 0235                 case 4:     m_45(255);          break;
+; 0000 0236                 case 5:     m_45(255);         break;
+; 0000 0237         //---------------------------------------------------------------------
+; 0000 0238                 case 6:     m_vyp();                        break;
+; 0000 0239                 case 7:     m_vyp();                        break;
+; 0000 023A                 case 8:     m_vyp();                        break;
+; 0000 023B                 case 9:     m_vyp();                        break;
+; 0000 023C                 case 10:    m_vyp();                        break;
+; 0000 023D                 case 11:    m_vyp();                        break;
+; 0000 023E                 case 12:    m_vyp();                        break;
+; 0000 023F         //----------------------------------------------------------------------
+; 0000 0240                 case 13:    m_315(255);        break;
+; 0000 0241                 case 14:    m_315(255);          break;
+; 0000 0242                 case 15:    m_0(255);          break;
+; 0000 0243                 case 16:    m_0(255);          break;
+; 0000 0244         //----------------------------------------------------------------------
+; 0000 0245                 case 17:    m_vyp();                        break;
+; 0000 0246             }
+; 0000 0247             if (senzory != 1){
+; 0000 0248                 delay_ms(400);
+; 0000 0249             }
+; 0000 024A         }
+; 0000 024B         */
+; 0000 024C //        while(1){
+; 0000 024D           odosli_dataPC();
 	RCALL _odosli_dataPC
-; 0000 025E     //    }
-; 0000 025F goto testmotor;
-	RJMP _0x18C
-; 0000 0260 goto zaciatok;
-; 0000 0261 }
-; 0000 0262 //-----------------------------------
-; 0000 0263 zaciatok:
-; 0000 0264     while (1){
-_0x191:
-; 0000 0265         if (0 != nastav_podla_kompasu((int)(prepocetcompasu(branka,1)*0.71))){
-	CALL SUBOPT_0x23
+; 0000 024E     //    }
+; 0000 024F goto testmotor;
+	RJMP _0x18A
+; 0000 0250 goto zaciatok;
+; 0000 0251 }
+; 0000 0252 //-----------------------------------
+; 0000 0253 zaciatok:
+; 0000 0254     while (1){
+_0x18F:
+; 0000 0255         if (0 != nastav_podla_kompasu((int)(prepocetcompasu(branka,1)*0.71))){
+	CALL SUBOPT_0x1F
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _nastav_podla_kompasu
 	SBIW R30,0
-	BREQ _0x194
-; 0000 0266             obchadzanie(maxx(200));
-	CALL SUBOPT_0x22
-	CALL SUBOPT_0x1F
+	BREQ _0x192
+; 0000 0256             obchadzanie(maxx(200));
+	LDI  R30,LOW(200)
+	ST   -Y,R30
+	RCALL _maxx
+	LDI  R31,0
+	ST   -Y,R31
+	ST   -Y,R30
 	RCALL _obchadzanie
-; 0000 0267         }
-; 0000 0268         delay_ms(30);
-_0x194:
+; 0000 0257         }
+; 0000 0258         delay_ms(30);
+_0x192:
 	LDI  R30,LOW(30)
 	LDI  R31,HIGH(30)
-	CALL SUBOPT_0x25
-; 0000 0269 };
-	RJMP _0x191
-; 0000 026A //-----------------------------------
-; 0000 026B }
-_0x195:
-	RJMP _0x195
+	CALL SUBOPT_0x22
+; 0000 0259 };
+	RJMP _0x18F
+; 0000 025A //-----------------------------------
+; 0000 025B }
+_0x193:
+	RJMP _0x193
 	#ifndef __SLEEP_DEFINED__
 	#define __SLEEP_DEFINED__
 	.EQU __se_bit=0x80
@@ -4048,7 +3918,7 @@ _0x2000078:
 	CPI  R30,0
 	BRNE PC+3
 	JMP _0x200007A
-	CALL SUBOPT_0x27
+	CALL SUBOPT_0x24
 	BREQ _0x200007B
 _0x200007C:
 	IN   R30,SPL
@@ -4056,12 +3926,12 @@ _0x200007C:
 	ST   -Y,R31
 	ST   -Y,R30
 	PUSH R20
-	CALL SUBOPT_0x28
+	CALL SUBOPT_0x25
 	POP  R20
 	MOV  R19,R30
 	CPI  R30,0
 	BREQ _0x200007F
-	CALL SUBOPT_0x27
+	CALL SUBOPT_0x24
 	BRNE _0x2000080
 _0x200007F:
 	RJMP _0x200007E
@@ -4097,7 +3967,7 @@ _0x2000086:
 	MOV  R21,R30
 	MOV  R22,R21
 	CLR  R23
-	CALL SUBOPT_0x29
+	CALL SUBOPT_0x26
 	LDI  R30,LOW(48)
 	LDI  R31,HIGH(48)
 	CALL __SWAPW12
@@ -4118,7 +3988,7 @@ _0x200008A:
 	ST   -Y,R31
 	ST   -Y,R30
 	PUSH R20
-	CALL SUBOPT_0x28
+	CALL SUBOPT_0x25
 	POP  R20
 	MOV  R18,R30
 	ST   -Y,R30
@@ -4134,18 +4004,18 @@ _0x200008D:
 	BRNE _0x200008F
 	LDI  R21,LOW(255)
 _0x200008F:
-	CALL SUBOPT_0x2A
+	CALL SUBOPT_0x27
 	CPI  R30,LOW(0x63)
 	LDI  R26,HIGH(0x63)
 	CPC  R31,R26
 	BRNE _0x2000093
-	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x28
 	IN   R30,SPL
 	IN   R31,SPH
 	ST   -Y,R31
 	ST   -Y,R30
 	PUSH R20
-	CALL SUBOPT_0x28
+	CALL SUBOPT_0x25
 	POP  R20
 	MOVW R26,R16
 	ST   X,R30
@@ -4155,7 +4025,7 @@ _0x2000093:
 	LDI  R26,HIGH(0x73)
 	CPC  R31,R26
 	BRNE _0x200009B
-	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x28
 _0x2000095:
 	MOV  R30,R21
 	SUBI R21,1
@@ -4166,12 +4036,12 @@ _0x2000095:
 	ST   -Y,R31
 	ST   -Y,R30
 	PUSH R20
-	CALL SUBOPT_0x28
+	CALL SUBOPT_0x25
 	POP  R20
 	MOV  R19,R30
 	CPI  R30,0
 	BREQ _0x2000099
-	CALL SUBOPT_0x27
+	CALL SUBOPT_0x24
 	BREQ _0x2000098
 _0x2000099:
 	RJMP _0x2000097
@@ -4192,7 +4062,7 @@ _0x2000097:
 _0x200009B:
 	LDI  R30,LOW(1)
 	STD  Y+8,R30
-	CALL SUBOPT_0x2A
+	CALL SUBOPT_0x27
 	CPI  R30,LOW(0x64)
 	LDI  R26,HIGH(0x64)
 	CPC  R31,R26
@@ -4243,7 +4113,7 @@ _0x20000A8:
 	ST   -Y,R31
 	ST   -Y,R30
 	PUSH R20
-	CALL SUBOPT_0x28
+	CALL SUBOPT_0x25
 	POP  R20
 	MOV  R19,R30
 	CPI  R30,LOW(0x21)
@@ -4279,19 +4149,19 @@ _0x20000B3:
 _0x20000B2:
 	CPI  R19,97
 	BRLO _0x20000B4
-	CALL SUBOPT_0x29
+	CALL SUBOPT_0x26
 	LDI  R30,LOW(87)
 	LDI  R31,HIGH(87)
 	RJMP _0x20000C0
 _0x20000B4:
 	CPI  R19,65
 	BRLO _0x20000B6
-	CALL SUBOPT_0x29
+	CALL SUBOPT_0x26
 	LDI  R30,LOW(55)
 	LDI  R31,HIGH(55)
 	RJMP _0x20000C0
 _0x20000B6:
-	CALL SUBOPT_0x29
+	CALL SUBOPT_0x26
 	LDI  R30,LOW(48)
 	LDI  R31,HIGH(48)
 _0x20000C0:
@@ -4304,14 +4174,14 @@ _0x20000C0:
 	LDD  R27,Y+6+1
 	CALL __MULW12U
 	MOVW R26,R30
-	CALL SUBOPT_0x2A
+	CALL SUBOPT_0x27
 	ADD  R30,R26
 	ADC  R31,R27
 	STD  Y+6,R30
 	STD  Y+6+1,R31
 	RJMP _0x20000A8
 _0x20000AA:
-	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x28
 	LDD  R30,Y+8
 	LDI  R31,0
 	SBRC R30,7
@@ -4334,7 +4204,7 @@ _0x20000A6:
 	ST   -Y,R31
 	ST   -Y,R30
 	PUSH R20
-	CALL SUBOPT_0x28
+	CALL SUBOPT_0x25
 	POP  R20
 	CP   R30,R19
 	BREQ _0x20000B9
@@ -4527,12 +4397,8 @@ _datax:
 	.ESEG
 _branka:
 	.DW  0x0
-_on:
-	.DB  0x0
 
 	.DSEG
-_bolo_nacita:
-	.BYTE 0x1
 __seed_G101:
 	.BYTE 0x4
 _p_S1020024:
@@ -4694,40 +4560,15 @@ SUBOPT_0xE:
 	MOVW R16,R26
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0xF:
-	MOVW R30,R16
-	LDD  R26,Y+10
-	LDD  R27,Y+10+1
-	ADD  R26,R30
-	ADC  R27,R31
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 10 TIMES, CODE SIZE REDUCTION:15 WORDS
-SUBOPT_0x10:
-	LDI  R30,LOW(_datax)
-	LDI  R31,HIGH(_datax)
-	ST   -Y,R31
-	ST   -Y,R30
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x11:
-	MOVW R30,R28
-	ADIW R30,2
-	ST   -Y,R31
-	ST   -Y,R30
-	RET
-
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x12:
+SUBOPT_0xF:
 	LD   R26,Y
 	LDD  R27,Y+1
 	CALL __CPW02
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:15 WORDS
-SUBOPT_0x13:
+SUBOPT_0x10:
 	LD   R26,Y
 	LDD  R27,Y+1
 	LDI  R30,LOW(65535)
@@ -4738,37 +4579,37 @@ SUBOPT_0x13:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 13 TIMES, CODE SIZE REDUCTION:21 WORDS
-SUBOPT_0x14:
+SUBOPT_0x11:
 	CALL __ANEGW1
 	ST   -Y,R31
 	ST   -Y,R30
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 6 TIMES, CODE SIZE REDUCTION:7 WORDS
-SUBOPT_0x15:
+SUBOPT_0x12:
 	CALL _motor1
 	RJMP SUBOPT_0x0
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 6 TIMES, CODE SIZE REDUCTION:7 WORDS
-SUBOPT_0x16:
+SUBOPT_0x13:
 	CALL _motor2
 	RJMP SUBOPT_0x0
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:9 WORDS
-SUBOPT_0x17:
+SUBOPT_0x14:
 	ST   -Y,R31
 	ST   -Y,R30
 	CALL _motor3
 	RJMP SUBOPT_0x0
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 7 TIMES, CODE SIZE REDUCTION:9 WORDS
-SUBOPT_0x18:
+SUBOPT_0x15:
 	ST   -Y,R31
 	ST   -Y,R30
 	JMP  _motor4
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 7 TIMES, CODE SIZE REDUCTION:9 WORDS
-SUBOPT_0x19:
+SUBOPT_0x16:
 	LDI  R30,LOW(0)
 	LDI  R31,HIGH(0)
 	ST   -Y,R31
@@ -4776,26 +4617,26 @@ SUBOPT_0x19:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x1A:
+SUBOPT_0x17:
 	CALL _motor2
 	LDI  R30,LOW(0)
 	LDI  R31,HIGH(0)
-	RJMP SUBOPT_0x17
+	RJMP SUBOPT_0x14
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x1B:
+SUBOPT_0x18:
 	CALL _motor1
-	RJMP SUBOPT_0x19
+	RJMP SUBOPT_0x16
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0x1C:
+SUBOPT_0x19:
 	CALL _motor3
 	LDI  R30,LOW(0)
 	LDI  R31,HIGH(0)
-	RJMP SUBOPT_0x18
+	RJMP SUBOPT_0x15
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x1D:
+SUBOPT_0x1A:
 	LD   R26,Y
 	LDD  R27,Y+1
 	LDI  R30,LOW(3)
@@ -4806,22 +4647,15 @@ SUBOPT_0x1D:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x1E:
+SUBOPT_0x1B:
 	LDI  R30,LOW(200)
 	LDI  R31,HIGH(200)
 	ST   -Y,R31
 	ST   -Y,R30
 	JMP  _delay_ms
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 6 TIMES, CODE SIZE REDUCTION:12 WORDS
-SUBOPT_0x1F:
-	LDI  R31,0
-	ST   -Y,R31
-	ST   -Y,R30
-	RET
-
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:6 WORDS
-SUBOPT_0x20:
+SUBOPT_0x1C:
 	MOV  R26,R4
 	LDI  R27,0
 	LDI  R30,LOW(10)
@@ -4832,22 +4666,35 @@ SUBOPT_0x20:
 	ST   -Y,R30
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 9 TIMES, CODE SIZE REDUCTION:21 WORDS
-SUBOPT_0x21:
+;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:31 WORDS
+SUBOPT_0x1D:
+	SBIW R28,20
+	__POINTW1FN _0x0,0
+	ST   -Y,R31
+	ST   -Y,R30
+	MOVW R30,R28
+	ADIW R30,2
+	CLR  R22
+	CLR  R23
+	CALL __PUTPARD1
+	LDI  R24,4
+	CALL _scanf
+	ADIW R28,6
+	MOVW R30,R28
+	ST   -Y,R31
+	ST   -Y,R30
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 7 TIMES, CODE SIZE REDUCTION:15 WORDS
+SUBOPT_0x1E:
 	ST   -Y,R31
 	ST   -Y,R30
 	CALL _strcmpf
 	CPI  R30,0
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x22:
-	LDI  R30,LOW(200)
-	ST   -Y,R30
-	JMP  _maxx
-
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:37 WORDS
-SUBOPT_0x23:
+SUBOPT_0x1F:
 	LDI  R26,LOW(_branka)
 	LDI  R27,HIGH(_branka)
 	CALL __EEPROMRDW
@@ -4863,21 +4710,29 @@ SUBOPT_0x23:
 	CALL __CFD1
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x24:
-	__POINTW1MN _datax,10
+;OPTIMIZER ADDED SUBROUTINE, CALLED 8 TIMES, CODE SIZE REDUCTION:11 WORDS
+SUBOPT_0x20:
+	MOVW R30,R28
 	ST   -Y,R31
 	ST   -Y,R30
-	JMP  _atoi
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x21:
+	LDI  R30,LOW(500)
+	LDI  R31,HIGH(500)
+	ST   -Y,R31
+	ST   -Y,R30
+	JMP  _delay_ms
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x25:
+SUBOPT_0x22:
 	ST   -Y,R31
 	ST   -Y,R30
 	JMP  _delay_ms
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x26:
+SUBOPT_0x23:
 	ST   -Y,R30
 	CALL _cmps03_read
 	LDI  R26,LOW(_branka)
@@ -4886,14 +4741,14 @@ SUBOPT_0x26:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x27:
+SUBOPT_0x24:
 	ST   -Y,R19
 	CALL _isspace
 	CPI  R30,0
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 6 TIMES, CODE SIZE REDUCTION:17 WORDS
-SUBOPT_0x28:
+SUBOPT_0x25:
 	LDD  R30,Y+12
 	LDD  R31,Y+12+1
 	ST   -Y,R31
@@ -4901,19 +4756,19 @@ SUBOPT_0x28:
 	JMP  __get_G100
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x29:
+SUBOPT_0x26:
 	MOV  R26,R19
 	LDI  R27,0
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x2A:
+SUBOPT_0x27:
 	MOV  R30,R19
 	LDI  R31,0
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:13 WORDS
-SUBOPT_0x2B:
+SUBOPT_0x28:
 	LDD  R30,Y+12
 	LDD  R31,Y+12+1
 	SBIW R30,4

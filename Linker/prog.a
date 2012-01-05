@@ -1286,16 +1286,18 @@
 ;PCODE: $0000037D VOL: 0
 ;PCODE: $0000037E VOL: 0
 ;PCODE: $0000037F VOL: 0
-;}
+;    return posun;
 ;PCODE: $00000380 VOL: 0
 ;PCODE: $00000381 VOL: 0
 ;PCODE: $00000382 VOL: 0
 ;PCODE: $00000383 VOL: 0
+;}
+;PCODE: $00000384 VOL: 0
 ;//data_vystup je multiarray = vystupne rozkodovane data
 ;//data_vstup je char = zakodovane data v klastrovom protokole
 ;int dekoduj(char data_vystup[][char_for_array],char data_vstup[]){
-;PCODE: $00000384 VOL: 0
 ;PCODE: $00000385 VOL: 0
+;PCODE: $00000386 VOL: 0
 ;    int posun=0;
 ;    int size=0;
 ;    int poc_znakov=0;
@@ -1303,7 +1305,6 @@
 ;    int z=0;
 ;//nacita pocet dat--------------------
 ;    size=data_vstup[posun];
-;PCODE: $00000386 VOL: 0
 ;PCODE: $00000387 VOL: 0
 ;PCODE: $00000388 VOL: 0
 ;PCODE: $00000389 VOL: 0
@@ -1313,6 +1314,7 @@
 ;PCODE: $0000038D VOL: 0
 ;PCODE: $0000038E VOL: 0
 ;PCODE: $0000038F VOL: 0
+;PCODE: $00000390 VOL: 0
 ;	data_vystup -> Y+12
 ;	data_vstup -> Y+10
 ;	posun -> R16,R17
@@ -1320,7 +1322,6 @@
 ;	poc_znakov -> R20,R21
 ;	i -> Y+8
 ;	z -> Y+6
-;PCODE: $00000390 VOL: 0
 ;PCODE: $00000391 VOL: 0
 ;PCODE: $00000392 VOL: 0
 ;PCODE: $00000393 VOL: 0
@@ -1331,12 +1332,12 @@
 ;PCODE: $00000398 VOL: 0
 ;PCODE: $00000399 VOL: 0
 ;PCODE: $0000039A VOL: 0
-;    posun++;
 ;PCODE: $0000039B VOL: 0
+;    posun++;
 ;PCODE: $0000039C VOL: 0
+;PCODE: $0000039D VOL: 0
 ;//------------------------------------
 ;    for(i=0;i < size;i++){
-;PCODE: $0000039D VOL: 0
 ;PCODE: $0000039E VOL: 0
 ;PCODE: $0000039F VOL: 0
 ;PCODE: $000003A0 VOL: 0
@@ -1345,19 +1346,19 @@
 ;PCODE: $000003A3 VOL: 0
 ;PCODE: $000003A4 VOL: 0
 ;PCODE: $000003A5 VOL: 0
+;PCODE: $000003A6 VOL: 0
 ;//------------------------------------
 ;        poc_znakov=data_vstup[posun];
-;PCODE: $000003A6 VOL: 0
 ;PCODE: $000003A7 VOL: 0
 ;PCODE: $000003A8 VOL: 0
 ;PCODE: $000003A9 VOL: 0
 ;PCODE: $000003AA VOL: 0
-;        posun++;
 ;PCODE: $000003AB VOL: 0
+;        posun++;
 ;PCODE: $000003AC VOL: 0
+;PCODE: $000003AD VOL: 0
 ;//prijma znaky----------------------
 ;        for(z=0;z< poc_znakov;z++){
-;PCODE: $000003AD VOL: 0
 ;PCODE: $000003AE VOL: 0
 ;PCODE: $000003AF VOL: 0
 ;PCODE: $000003B0 VOL: 0
@@ -1366,8 +1367,8 @@
 ;PCODE: $000003B3 VOL: 0
 ;PCODE: $000003B4 VOL: 0
 ;PCODE: $000003B5 VOL: 0
-;            data_vystup[i][z] = data_vstup[posun];
 ;PCODE: $000003B6 VOL: 0
+;            data_vystup[i][z] = data_vstup[posun];
 ;PCODE: $000003B7 VOL: 0
 ;PCODE: $000003B8 VOL: 0
 ;PCODE: $000003B9 VOL: 0
@@ -1382,64 +1383,65 @@
 ;PCODE: $000003C2 VOL: 0
 ;PCODE: $000003C3 VOL: 0
 ;PCODE: $000003C4 VOL: 0
-;            posun++;
 ;PCODE: $000003C5 VOL: 0
+;            posun++;
 ;PCODE: $000003C6 VOL: 0
-;        }
 ;PCODE: $000003C7 VOL: 0
+;        }
 ;PCODE: $000003C8 VOL: 0
 ;PCODE: $000003C9 VOL: 0
 ;PCODE: $000003CA VOL: 0
 ;PCODE: $000003CB VOL: 0
 ;PCODE: $000003CC VOL: 0
+;PCODE: $000003CD VOL: 0
 ;//------------------------------------------
 ;    }
-;PCODE: $000003CD VOL: 0
 ;PCODE: $000003CE VOL: 0
 ;PCODE: $000003CF VOL: 0
 ;PCODE: $000003D0 VOL: 0
 ;PCODE: $000003D1 VOL: 0
 ;PCODE: $000003D2 VOL: 0
-;}
 ;PCODE: $000003D3 VOL: 0
+;    return posun;
 ;PCODE: $000003D4 VOL: 0
 ;PCODE: $000003D5 VOL: 0
 ;PCODE: $000003D6 VOL: 0
-;void odosli_data_beagle(char data[][char_for_array],int pocet_dat){
 ;PCODE: $000003D7 VOL: 0
+;}
 ;PCODE: $000003D8 VOL: 0
+;void odosli_data_beagle(char data[][char_for_array],int pocet_dat){
+;PCODE: $000003D9 VOL: 0
+;PCODE: $000003DA VOL: 0
 ;    char buffer[128];
 ;    zakoduj(buffer,data,pocet_dat);
-;PCODE: $000003D9 VOL: 0
+;PCODE: $000003DB VOL: 0
 ;	data -> Y+130
 ;	pocet_dat -> Y+128
 ;	buffer -> Y+0
-;PCODE: $000003DA VOL: 0
-;PCODE: $000003DB VOL: 0
 ;PCODE: $000003DC VOL: 0
 ;PCODE: $000003DD VOL: 0
 ;PCODE: $000003DE VOL: 0
 ;PCODE: $000003DF VOL: 0
 ;PCODE: $000003E0 VOL: 0
-;    puts(buffer);
 ;PCODE: $000003E1 VOL: 0
 ;PCODE: $000003E2 VOL: 0
+;    puts(buffer);
 ;PCODE: $000003E3 VOL: 0
-;}
 ;PCODE: $000003E4 VOL: 0
 ;PCODE: $000003E5 VOL: 0
+;}
 ;PCODE: $000003E6 VOL: 0
-;char datax[5][char_for_array];
-;void prijem_dat(){
 ;PCODE: $000003E7 VOL: 0
 ;PCODE: $000003E8 VOL: 0
+;char datax[5][char_for_array];
+;void prijem_dat(){
+;PCODE: $000003E9 VOL: 0
+;PCODE: $000003EA VOL: 0
 ;//---------------------------
 ;    char str[128];
 ;    scanf ("%s",str);
-;PCODE: $000003E9 VOL: 0
-;	str -> Y+0
-;PCODE: $000003EA VOL: 0
 ;PCODE: $000003EB VOL: 0
+;	str -> Y+0
 ;PCODE: $000003EC VOL: 0
 ;PCODE: $000003ED VOL: 0
 ;PCODE: $000003EE VOL: 0
@@ -1448,16 +1450,18 @@
 ;PCODE: $000003F1 VOL: 0
 ;PCODE: $000003F2 VOL: 0
 ;PCODE: $000003F3 VOL: 0
-;    dekoduj(datax,str);
 ;PCODE: $000003F4 VOL: 0
 ;PCODE: $000003F5 VOL: 0
+;    dekoduj(datax,str);
 ;PCODE: $000003F6 VOL: 0
 ;PCODE: $000003F7 VOL: 0
 ;PCODE: $000003F8 VOL: 0
-;}
 ;PCODE: $000003F9 VOL: 0
 ;PCODE: $000003FA VOL: 0
+;}
 ;PCODE: $000003FB VOL: 0
+;PCODE: $000003FC VOL: 0
+;PCODE: $000003FD VOL: 0
 ;//------------------------------
 ;//------------------------------
 ;#include "library_motor.c"
@@ -1465,491 +1469,491 @@
 ;//---------------------------------
 ;void motor1(int rychlost ){
 ; 0000 0035 void motor1(int rychlost ){
-;PCODE: $000003FC VOL: 0
-;PCODE: $000003FD VOL: 0
-;    if (rychlost > 0){
-;	rychlost -> Y+0
 ;PCODE: $000003FE VOL: 0
 ;PCODE: $000003FF VOL: 0
+;    if (rychlost > 0){
+;	rychlost -> Y+0
 ;PCODE: $00000400 VOL: 0
-;        PORTC.3 = 1;
 ;PCODE: $00000401 VOL: 0
 ;PCODE: $00000402 VOL: 0
-;        PORTC.4 = 0;
+;        PORTC.3 = 1;
 ;PCODE: $00000403 VOL: 0
 ;PCODE: $00000404 VOL: 0
-;    }
-;    else if(rychlost == 0){
+;        PORTC.4 = 0;
 ;PCODE: $00000405 VOL: 0
 ;PCODE: $00000406 VOL: 0
+;    }
+;    else if(rychlost == 0){
 ;PCODE: $00000407 VOL: 0
 ;PCODE: $00000408 VOL: 0
 ;PCODE: $00000409 VOL: 0
-;        PORTC.3 = 0;
 ;PCODE: $0000040A VOL: 0
 ;PCODE: $0000040B VOL: 0
-;        PORTC.4 = 0;
+;        PORTC.3 = 0;
 ;PCODE: $0000040C VOL: 0
 ;PCODE: $0000040D VOL: 0
-;    }
-;    else{
+;        PORTC.4 = 0;
 ;PCODE: $0000040E VOL: 0
 ;PCODE: $0000040F VOL: 0
-;        PORTC.3 = 0;
+;    }
+;    else{
 ;PCODE: $00000410 VOL: 0
 ;PCODE: $00000411 VOL: 0
-;        PORTC.4 = 1;
+;        PORTC.3 = 0;
 ;PCODE: $00000412 VOL: 0
 ;PCODE: $00000413 VOL: 0
-;        rychlost = rychlost*(-1);
+;        PORTC.4 = 1;
 ;PCODE: $00000414 VOL: 0
 ;PCODE: $00000415 VOL: 0
+;        rychlost = rychlost*(-1);
 ;PCODE: $00000416 VOL: 0
 ;PCODE: $00000417 VOL: 0
-;    }
 ;PCODE: $00000418 VOL: 0
 ;PCODE: $00000419 VOL: 0
-;    OCR1B = rychlost;
+;    }
 ;PCODE: $0000041A VOL: 0
 ;PCODE: $0000041B VOL: 0
-;}
+;    OCR1B = rychlost;
 ;PCODE: $0000041C VOL: 0
 ;PCODE: $0000041D VOL: 0
+;}
 ;PCODE: $0000041E VOL: 0
-;void motor3(int rychlost){
 ;PCODE: $0000041F VOL: 0
 ;PCODE: $00000420 VOL: 0
-;    if (rychlost > 0){
-;	rychlost -> Y+0
+;void motor3(int rychlost){
 ;PCODE: $00000421 VOL: 0
 ;PCODE: $00000422 VOL: 0
+;    if (rychlost > 0){
+;	rychlost -> Y+0
 ;PCODE: $00000423 VOL: 0
-;        PORTC.2 = 0;
 ;PCODE: $00000424 VOL: 0
 ;PCODE: $00000425 VOL: 0
-;        PORTD.6 = 1;
+;        PORTC.2 = 0;
 ;PCODE: $00000426 VOL: 0
 ;PCODE: $00000427 VOL: 0
-;    }
-;    else if(rychlost == 0){
+;        PORTD.6 = 1;
 ;PCODE: $00000428 VOL: 0
 ;PCODE: $00000429 VOL: 0
+;    }
+;    else if(rychlost == 0){
 ;PCODE: $0000042A VOL: 0
 ;PCODE: $0000042B VOL: 0
 ;PCODE: $0000042C VOL: 0
-;        PORTC.2 = 0;
 ;PCODE: $0000042D VOL: 0
 ;PCODE: $0000042E VOL: 0
-;        PORTD.6 = 0;
+;        PORTC.2 = 0;
 ;PCODE: $0000042F VOL: 0
 ;PCODE: $00000430 VOL: 0
-;    }
-;    else{
+;        PORTD.6 = 0;
 ;PCODE: $00000431 VOL: 0
 ;PCODE: $00000432 VOL: 0
-;        PORTC.2 = 1;
+;    }
+;    else{
 ;PCODE: $00000433 VOL: 0
 ;PCODE: $00000434 VOL: 0
-;        PORTD.6 = 0;
+;        PORTC.2 = 1;
 ;PCODE: $00000435 VOL: 0
 ;PCODE: $00000436 VOL: 0
-;        rychlost = rychlost*(-1);
+;        PORTD.6 = 0;
 ;PCODE: $00000437 VOL: 0
 ;PCODE: $00000438 VOL: 0
+;        rychlost = rychlost*(-1);
 ;PCODE: $00000439 VOL: 0
 ;PCODE: $0000043A VOL: 0
-;    }
 ;PCODE: $0000043B VOL: 0
 ;PCODE: $0000043C VOL: 0
-;    OCR1A = rychlost;
+;    }
 ;PCODE: $0000043D VOL: 0
 ;PCODE: $0000043E VOL: 0
-;}
+;    OCR1A = rychlost;
 ;PCODE: $0000043F VOL: 0
 ;PCODE: $00000440 VOL: 0
+;}
 ;PCODE: $00000441 VOL: 0
-;void motor2(int rychlost){
 ;PCODE: $00000442 VOL: 0
 ;PCODE: $00000443 VOL: 0
-;    if (rychlost > 0){
-;	rychlost -> Y+0
+;void motor2(int rychlost){
 ;PCODE: $00000444 VOL: 0
 ;PCODE: $00000445 VOL: 0
+;    if (rychlost > 0){
+;	rychlost -> Y+0
 ;PCODE: $00000446 VOL: 0
-;        PORTC.1 = 1;
 ;PCODE: $00000447 VOL: 0
 ;PCODE: $00000448 VOL: 0
-;        PORTC.0 = 0;
+;        PORTC.1 = 1;
 ;PCODE: $00000449 VOL: 0
 ;PCODE: $0000044A VOL: 0
-;    }
-;    else if(rychlost == 0){
+;        PORTC.0 = 0;
 ;PCODE: $0000044B VOL: 0
 ;PCODE: $0000044C VOL: 0
+;    }
+;    else if(rychlost == 0){
 ;PCODE: $0000044D VOL: 0
 ;PCODE: $0000044E VOL: 0
 ;PCODE: $0000044F VOL: 0
-;        PORTC.1 = 0;
 ;PCODE: $00000450 VOL: 0
 ;PCODE: $00000451 VOL: 0
-;        PORTC.0 = 0;
+;        PORTC.1 = 0;
 ;PCODE: $00000452 VOL: 0
 ;PCODE: $00000453 VOL: 0
-;    }
-;    else{
+;        PORTC.0 = 0;
 ;PCODE: $00000454 VOL: 0
 ;PCODE: $00000455 VOL: 0
-;        PORTC.1 = 0;
+;    }
+;    else{
 ;PCODE: $00000456 VOL: 0
 ;PCODE: $00000457 VOL: 0
-;        PORTC.0 = 1;
+;        PORTC.1 = 0;
 ;PCODE: $00000458 VOL: 0
 ;PCODE: $00000459 VOL: 0
-;        rychlost = rychlost*(-1);
+;        PORTC.0 = 1;
 ;PCODE: $0000045A VOL: 0
 ;PCODE: $0000045B VOL: 0
+;        rychlost = rychlost*(-1);
 ;PCODE: $0000045C VOL: 0
 ;PCODE: $0000045D VOL: 0
-;    }
 ;PCODE: $0000045E VOL: 0
 ;PCODE: $0000045F VOL: 0
-;    OCR2 = rychlost;
+;    }
 ;PCODE: $00000460 VOL: 0
 ;PCODE: $00000461 VOL: 0
-;}
+;    OCR2 = rychlost;
 ;PCODE: $00000462 VOL: 0
 ;PCODE: $00000463 VOL: 0
+;}
 ;PCODE: $00000464 VOL: 0
-;void motor4(int rychlost){
 ;PCODE: $00000465 VOL: 0
 ;PCODE: $00000466 VOL: 0
-;    if (rychlost > 0){
-;	rychlost -> Y+0
+;void motor4(int rychlost){
 ;PCODE: $00000467 VOL: 0
 ;PCODE: $00000468 VOL: 0
+;    if (rychlost > 0){
+;	rychlost -> Y+0
 ;PCODE: $00000469 VOL: 0
-;        PORTB.1 = 0;
 ;PCODE: $0000046A VOL: 0
 ;PCODE: $0000046B VOL: 0
-;        PORTB.2 = 1;
+;        PORTB.1 = 0;
 ;PCODE: $0000046C VOL: 0
 ;PCODE: $0000046D VOL: 0
-;    }
-;    else if(rychlost == 0){
+;        PORTB.2 = 1;
 ;PCODE: $0000046E VOL: 0
 ;PCODE: $0000046F VOL: 0
+;    }
+;    else if(rychlost == 0){
 ;PCODE: $00000470 VOL: 0
 ;PCODE: $00000471 VOL: 0
 ;PCODE: $00000472 VOL: 0
-;        PORTB.1 = 0;
 ;PCODE: $00000473 VOL: 0
 ;PCODE: $00000474 VOL: 0
-;        PORTB.2 = 0;
+;        PORTB.1 = 0;
 ;PCODE: $00000475 VOL: 0
 ;PCODE: $00000476 VOL: 0
-;    }
-;    else{
+;        PORTB.2 = 0;
 ;PCODE: $00000477 VOL: 0
 ;PCODE: $00000478 VOL: 0
-;        PORTB.1 = 1;
+;    }
+;    else{
 ;PCODE: $00000479 VOL: 0
 ;PCODE: $0000047A VOL: 0
-;        PORTB.2 = 0;
+;        PORTB.1 = 1;
 ;PCODE: $0000047B VOL: 0
 ;PCODE: $0000047C VOL: 0
-;        rychlost = rychlost*(-1);
+;        PORTB.2 = 0;
 ;PCODE: $0000047D VOL: 0
 ;PCODE: $0000047E VOL: 0
+;        rychlost = rychlost*(-1);
 ;PCODE: $0000047F VOL: 0
 ;PCODE: $00000480 VOL: 0
-;    }
 ;PCODE: $00000481 VOL: 0
 ;PCODE: $00000482 VOL: 0
-;    OCR0 = rychlost;
+;    }
 ;PCODE: $00000483 VOL: 0
 ;PCODE: $00000484 VOL: 0
-;}
+;    OCR0 = rychlost;
 ;PCODE: $00000485 VOL: 0
 ;PCODE: $00000486 VOL: 0
+;}
 ;PCODE: $00000487 VOL: 0
-;void m_0(unsigned char rychlost){
 ;PCODE: $00000488 VOL: 0
 ;PCODE: $00000489 VOL: 0
-;motor1(-rychlost);
-;	rychlost -> Y+0
+;void m_0(unsigned char rychlost){
 ;PCODE: $0000048A VOL: 0
 ;PCODE: $0000048B VOL: 0
+;motor1(-rychlost);
+;	rychlost -> Y+0
 ;PCODE: $0000048C VOL: 0
 ;PCODE: $0000048D VOL: 0
 ;PCODE: $0000048E VOL: 0
-;motor2(-rychlost);
 ;PCODE: $0000048F VOL: 0
 ;PCODE: $00000490 VOL: 0
+;motor2(-rychlost);
 ;PCODE: $00000491 VOL: 0
 ;PCODE: $00000492 VOL: 0
 ;PCODE: $00000493 VOL: 0
-;motor3(rychlost);
 ;PCODE: $00000494 VOL: 0
 ;PCODE: $00000495 VOL: 0
+;motor3(rychlost);
 ;PCODE: $00000496 VOL: 0
 ;PCODE: $00000497 VOL: 0
-;motor4(rychlost);
 ;PCODE: $00000498 VOL: 0
 ;PCODE: $00000499 VOL: 0
+;motor4(rychlost);
 ;PCODE: $0000049A VOL: 0
 ;PCODE: $0000049B VOL: 0
-;}
 ;PCODE: $0000049C VOL: 0
 ;PCODE: $0000049D VOL: 0
+;}
 ;PCODE: $0000049E VOL: 0
-;void m_45(unsigned char rychlost){
 ;PCODE: $0000049F VOL: 0
 ;PCODE: $000004A0 VOL: 0
-;motor1(0);
-;	rychlost -> Y+0
+;void m_45(unsigned char rychlost){
 ;PCODE: $000004A1 VOL: 0
 ;PCODE: $000004A2 VOL: 0
+;motor1(0);
+;	rychlost -> Y+0
 ;PCODE: $000004A3 VOL: 0
-;motor2(-rychlost);
 ;PCODE: $000004A4 VOL: 0
 ;PCODE: $000004A5 VOL: 0
+;motor2(-rychlost);
 ;PCODE: $000004A6 VOL: 0
 ;PCODE: $000004A7 VOL: 0
 ;PCODE: $000004A8 VOL: 0
-;motor3(0);
 ;PCODE: $000004A9 VOL: 0
 ;PCODE: $000004AA VOL: 0
+;motor3(0);
 ;PCODE: $000004AB VOL: 0
-;motor4(rychlost);
 ;PCODE: $000004AC VOL: 0
 ;PCODE: $000004AD VOL: 0
+;motor4(rychlost);
 ;PCODE: $000004AE VOL: 0
 ;PCODE: $000004AF VOL: 0
-;}
 ;PCODE: $000004B0 VOL: 0
 ;PCODE: $000004B1 VOL: 0
+;}
 ;PCODE: $000004B2 VOL: 0
-;void m_90(unsigned char rychlost){
 ;PCODE: $000004B3 VOL: 0
 ;PCODE: $000004B4 VOL: 0
-;motor1(rychlost);
-;	rychlost -> Y+0
+;void m_90(unsigned char rychlost){
 ;PCODE: $000004B5 VOL: 0
 ;PCODE: $000004B6 VOL: 0
+;motor1(rychlost);
+;	rychlost -> Y+0
 ;PCODE: $000004B7 VOL: 0
 ;PCODE: $000004B8 VOL: 0
-;motor2(-rychlost);
 ;PCODE: $000004B9 VOL: 0
 ;PCODE: $000004BA VOL: 0
+;motor2(-rychlost);
 ;PCODE: $000004BB VOL: 0
 ;PCODE: $000004BC VOL: 0
 ;PCODE: $000004BD VOL: 0
-;motor3(-rychlost);
 ;PCODE: $000004BE VOL: 0
 ;PCODE: $000004BF VOL: 0
+;motor3(-rychlost);
 ;PCODE: $000004C0 VOL: 0
 ;PCODE: $000004C1 VOL: 0
 ;PCODE: $000004C2 VOL: 0
-;motor4(rychlost);
 ;PCODE: $000004C3 VOL: 0
 ;PCODE: $000004C4 VOL: 0
+;motor4(rychlost);
 ;PCODE: $000004C5 VOL: 0
 ;PCODE: $000004C6 VOL: 0
-;}
 ;PCODE: $000004C7 VOL: 0
 ;PCODE: $000004C8 VOL: 0
+;}
 ;PCODE: $000004C9 VOL: 0
-;void m_135(unsigned char rychlost){
 ;PCODE: $000004CA VOL: 0
 ;PCODE: $000004CB VOL: 0
-;motor1(rychlost);
-;	rychlost -> Y+0
+;void m_135(unsigned char rychlost){
 ;PCODE: $000004CC VOL: 0
 ;PCODE: $000004CD VOL: 0
+;motor1(rychlost);
+;	rychlost -> Y+0
 ;PCODE: $000004CE VOL: 0
 ;PCODE: $000004CF VOL: 0
-;motor2(0);
 ;PCODE: $000004D0 VOL: 0
 ;PCODE: $000004D1 VOL: 0
+;motor2(0);
 ;PCODE: $000004D2 VOL: 0
-;motor3(-rychlost);
 ;PCODE: $000004D3 VOL: 0
 ;PCODE: $000004D4 VOL: 0
+;motor3(-rychlost);
 ;PCODE: $000004D5 VOL: 0
 ;PCODE: $000004D6 VOL: 0
 ;PCODE: $000004D7 VOL: 0
-;motor4(0);
 ;PCODE: $000004D8 VOL: 0
 ;PCODE: $000004D9 VOL: 0
+;motor4(0);
 ;PCODE: $000004DA VOL: 0
-;}
 ;PCODE: $000004DB VOL: 0
 ;PCODE: $000004DC VOL: 0
+;}
 ;PCODE: $000004DD VOL: 0
-;void m_180(unsigned char rychlost){
 ;PCODE: $000004DE VOL: 0
 ;PCODE: $000004DF VOL: 0
-;motor1(rychlost);
-;	rychlost -> Y+0
+;void m_180(unsigned char rychlost){
 ;PCODE: $000004E0 VOL: 0
 ;PCODE: $000004E1 VOL: 0
+;motor1(rychlost);
+;	rychlost -> Y+0
 ;PCODE: $000004E2 VOL: 0
 ;PCODE: $000004E3 VOL: 0
-;motor2(rychlost);
 ;PCODE: $000004E4 VOL: 0
 ;PCODE: $000004E5 VOL: 0
+;motor2(rychlost);
 ;PCODE: $000004E6 VOL: 0
 ;PCODE: $000004E7 VOL: 0
-;motor3(-rychlost);
 ;PCODE: $000004E8 VOL: 0
 ;PCODE: $000004E9 VOL: 0
+;motor3(-rychlost);
 ;PCODE: $000004EA VOL: 0
 ;PCODE: $000004EB VOL: 0
 ;PCODE: $000004EC VOL: 0
-;motor4(-rychlost);
 ;PCODE: $000004ED VOL: 0
 ;PCODE: $000004EE VOL: 0
+;motor4(-rychlost);
 ;PCODE: $000004EF VOL: 0
 ;PCODE: $000004F0 VOL: 0
 ;PCODE: $000004F1 VOL: 0
-;}
 ;PCODE: $000004F2 VOL: 0
 ;PCODE: $000004F3 VOL: 0
+;}
 ;PCODE: $000004F4 VOL: 0
-;void m_225(unsigned char rychlost){
 ;PCODE: $000004F5 VOL: 0
 ;PCODE: $000004F6 VOL: 0
-;motor1(0);
-;	rychlost -> Y+0
+;void m_225(unsigned char rychlost){
 ;PCODE: $000004F7 VOL: 0
 ;PCODE: $000004F8 VOL: 0
+;motor1(0);
+;	rychlost -> Y+0
 ;PCODE: $000004F9 VOL: 0
-;motor2(rychlost);
 ;PCODE: $000004FA VOL: 0
 ;PCODE: $000004FB VOL: 0
+;motor2(rychlost);
 ;PCODE: $000004FC VOL: 0
 ;PCODE: $000004FD VOL: 0
-;motor3(0);
 ;PCODE: $000004FE VOL: 0
 ;PCODE: $000004FF VOL: 0
+;motor3(0);
 ;PCODE: $00000500 VOL: 0
-;motor4(-rychlost);
 ;PCODE: $00000501 VOL: 0
 ;PCODE: $00000502 VOL: 0
+;motor4(-rychlost);
 ;PCODE: $00000503 VOL: 0
 ;PCODE: $00000504 VOL: 0
 ;PCODE: $00000505 VOL: 0
-;}
 ;PCODE: $00000506 VOL: 0
 ;PCODE: $00000507 VOL: 0
+;}
 ;PCODE: $00000508 VOL: 0
-;void m_270(unsigned char rychlost){
 ;PCODE: $00000509 VOL: 0
 ;PCODE: $0000050A VOL: 0
-;motor1(-rychlost);
-;	rychlost -> Y+0
+;void m_270(unsigned char rychlost){
 ;PCODE: $0000050B VOL: 0
 ;PCODE: $0000050C VOL: 0
+;motor1(-rychlost);
+;	rychlost -> Y+0
 ;PCODE: $0000050D VOL: 0
 ;PCODE: $0000050E VOL: 0
 ;PCODE: $0000050F VOL: 0
-;motor2(rychlost);
 ;PCODE: $00000510 VOL: 0
 ;PCODE: $00000511 VOL: 0
+;motor2(rychlost);
 ;PCODE: $00000512 VOL: 0
 ;PCODE: $00000513 VOL: 0
-;motor3(rychlost);
 ;PCODE: $00000514 VOL: 0
 ;PCODE: $00000515 VOL: 0
+;motor3(rychlost);
 ;PCODE: $00000516 VOL: 0
 ;PCODE: $00000517 VOL: 0
-;motor4(-rychlost);
 ;PCODE: $00000518 VOL: 0
 ;PCODE: $00000519 VOL: 0
+;motor4(-rychlost);
 ;PCODE: $0000051A VOL: 0
 ;PCODE: $0000051B VOL: 0
 ;PCODE: $0000051C VOL: 0
-;}
 ;PCODE: $0000051D VOL: 0
 ;PCODE: $0000051E VOL: 0
+;}
 ;PCODE: $0000051F VOL: 0
-;void m_315(unsigned char rychlost){
 ;PCODE: $00000520 VOL: 0
 ;PCODE: $00000521 VOL: 0
-;motor1(-rychlost);
-;	rychlost -> Y+0
+;void m_315(unsigned char rychlost){
 ;PCODE: $00000522 VOL: 0
 ;PCODE: $00000523 VOL: 0
+;motor1(-rychlost);
+;	rychlost -> Y+0
 ;PCODE: $00000524 VOL: 0
 ;PCODE: $00000525 VOL: 0
 ;PCODE: $00000526 VOL: 0
-;motor2(0);
 ;PCODE: $00000527 VOL: 0
 ;PCODE: $00000528 VOL: 0
+;motor2(0);
 ;PCODE: $00000529 VOL: 0
-;motor3(rychlost);
 ;PCODE: $0000052A VOL: 0
 ;PCODE: $0000052B VOL: 0
+;motor3(rychlost);
 ;PCODE: $0000052C VOL: 0
 ;PCODE: $0000052D VOL: 0
-;motor4(0);
 ;PCODE: $0000052E VOL: 0
 ;PCODE: $0000052F VOL: 0
+;motor4(0);
 ;PCODE: $00000530 VOL: 0
-;}
 ;PCODE: $00000531 VOL: 0
 ;PCODE: $00000532 VOL: 0
+;}
 ;PCODE: $00000533 VOL: 0
-;void m_ot(int rychlost){
 ;PCODE: $00000534 VOL: 0
 ;PCODE: $00000535 VOL: 0
-;motor1(rychlost);
-;	rychlost -> Y+0
+;void m_ot(int rychlost){
 ;PCODE: $00000536 VOL: 0
 ;PCODE: $00000537 VOL: 0
+;motor1(rychlost);
+;	rychlost -> Y+0
 ;PCODE: $00000538 VOL: 0
-;motor2(rychlost/3);
 ;PCODE: $00000539 VOL: 0
 ;PCODE: $0000053A VOL: 0
+;motor2(rychlost/3);
 ;PCODE: $0000053B VOL: 0
 ;PCODE: $0000053C VOL: 0
 ;PCODE: $0000053D VOL: 0
-;motor3(rychlost/3);
 ;PCODE: $0000053E VOL: 0
 ;PCODE: $0000053F VOL: 0
+;motor3(rychlost/3);
 ;PCODE: $00000540 VOL: 0
 ;PCODE: $00000541 VOL: 0
 ;PCODE: $00000542 VOL: 0
-;motor4(rychlost);
 ;PCODE: $00000543 VOL: 0
 ;PCODE: $00000544 VOL: 0
+;motor4(rychlost);
 ;PCODE: $00000545 VOL: 0
-;}
 ;PCODE: $00000546 VOL: 0
 ;PCODE: $00000547 VOL: 0
+;}
 ;PCODE: $00000548 VOL: 0
-;void m_vyp(){
 ;PCODE: $00000549 VOL: 0
 ;PCODE: $0000054A VOL: 0
-;motor1(0);
+;void m_vyp(){
 ;PCODE: $0000054B VOL: 0
 ;PCODE: $0000054C VOL: 0
+;motor1(0);
 ;PCODE: $0000054D VOL: 0
-;motor2(0);
 ;PCODE: $0000054E VOL: 0
 ;PCODE: $0000054F VOL: 0
+;motor2(0);
 ;PCODE: $00000550 VOL: 0
-;motor3(0);
 ;PCODE: $00000551 VOL: 0
 ;PCODE: $00000552 VOL: 0
+;motor3(0);
 ;PCODE: $00000553 VOL: 0
-;motor4(0);
 ;PCODE: $00000554 VOL: 0
 ;PCODE: $00000555 VOL: 0
+;motor4(0);
 ;PCODE: $00000556 VOL: 0
-;}
 ;PCODE: $00000557 VOL: 0
 ;PCODE: $00000558 VOL: 0
+;}
+;PCODE: $00000559 VOL: 0
+;PCODE: $0000055A VOL: 0
 ;//------------------------------
 ;//--------------------------------
 ;//Definovanie
@@ -1968,712 +1972,709 @@
 ;unsigned int x1;
 ;unsigned char rychlost=200;
 ;unsigned char rychl;
-;eeprom char on = 0;
 ;//---------------------------------
 ;//inicializacia procesoru
 ;//---------------------------------
 ;void init_8535(){
-; 0000 004B void init_8535(){
-;PCODE: $00000559 VOL: 0
-;PCODE: $0000055A VOL: 0
-; 0000 004C // Input/Output Ports initialization
-; 0000 004D // Port A initialization
-; 0000 004E // Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
-; 0000 004F // State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T
-; 0000 0050 PORTA=0x00;
+; 0000 004A void init_8535(){
 ;PCODE: $0000055B VOL: 0
 ;PCODE: $0000055C VOL: 0
-; 0000 0051 DDRA=0x00;
+; 0000 004B // Input/Output Ports initialization
+; 0000 004C // Port A initialization
+; 0000 004D // Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
+; 0000 004E // State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T
+; 0000 004F PORTA=0x00;
 ;PCODE: $0000055D VOL: 0
 ;PCODE: $0000055E VOL: 0
-; 0000 0052 
-; 0000 0053 // Port B initialization
-; 0000 0054 // Func7=Out Func6=Out Func5=Out Func4=Out Func3=Out Func2=Out Func1=Out Func0=Out
-; 0000 0055 // State7=0 State6=0 State5=0 State4=0 State3=0 State2=0 State1=0 State0=0
-; 0000 0056 PORTB=0x20;
+; 0000 0050 DDRA=0x00;
 ;PCODE: $0000055F VOL: 0
 ;PCODE: $00000560 VOL: 0
-; 0000 0057 DDRB=0x1F;
+; 0000 0051 
+; 0000 0052 // Port B initialization
+; 0000 0053 // Func7=Out Func6=Out Func5=Out Func4=Out Func3=Out Func2=Out Func1=Out Func0=Out
+; 0000 0054 // State7=0 State6=0 State5=0 State4=0 State3=0 State2=0 State1=0 State0=0
+; 0000 0055 PORTB=0x20;
 ;PCODE: $00000561 VOL: 0
 ;PCODE: $00000562 VOL: 0
-; 0000 0058 
-; 0000 0059 // Port C initialization
-; 0000 005A // Func7=Out Func6=Out Func5=Out Func4=Out Func3=Out Func2=Out Func1=Out Func0=Out
-; 0000 005B // State7=0 State6=0 State5=0 State4=0 State3=0 State2=0 State1=0 State0=0
-; 0000 005C PORTC=0x00;
+; 0000 0056 DDRB=0x1F;
 ;PCODE: $00000563 VOL: 0
 ;PCODE: $00000564 VOL: 0
-; 0000 005D DDRC=0xFF;
+; 0000 0057 
+; 0000 0058 // Port C initialization
+; 0000 0059 // Func7=Out Func6=Out Func5=Out Func4=Out Func3=Out Func2=Out Func1=Out Func0=Out
+; 0000 005A // State7=0 State6=0 State5=0 State4=0 State3=0 State2=0 State1=0 State0=0
+; 0000 005B PORTC=0x00;
 ;PCODE: $00000565 VOL: 0
 ;PCODE: $00000566 VOL: 0
-; 0000 005E 
-; 0000 005F // Port D initialization
-; 0000 0060 // Func7=Out Func6=Out Func5=Out Func4=Out Func3=In Func2=In Func1=In Func0=In
-; 0000 0061 // State7=0 State6=0 State5=0 State4=0 State3=T State2=T State1=T State0=T
-; 0000 0062 PORTD=0x00;
+; 0000 005C DDRC=0xFF;
 ;PCODE: $00000567 VOL: 0
 ;PCODE: $00000568 VOL: 0
-; 0000 0063 DDRD=0xF0;
+; 0000 005D 
+; 0000 005E // Port D initialization
+; 0000 005F // Func7=Out Func6=Out Func5=Out Func4=Out Func3=In Func2=In Func1=In Func0=In
+; 0000 0060 // State7=0 State6=0 State5=0 State4=0 State3=T State2=T State1=T State0=T
+; 0000 0061 PORTD=0x00;
 ;PCODE: $00000569 VOL: 0
 ;PCODE: $0000056A VOL: 0
-; 0000 0064 
-; 0000 0065 // Timer/Counter 0 initialization
-; 0000 0066 // Clock source: System Clock
-; 0000 0067 // Clock value: 1382,400 kHz
-; 0000 0068 // Mode: Fast PWM top=FFh
-; 0000 0069 // OC0 output: Non-Inverted PWM
-; 0000 006A TCCR0=0x6A;
+; 0000 0062 DDRD=0xF0;
 ;PCODE: $0000056B VOL: 0
 ;PCODE: $0000056C VOL: 0
-; 0000 006B TCNT0=0x00;
+; 0000 0063 
+; 0000 0064 // Timer/Counter 0 initialization
+; 0000 0065 // Clock source: System Clock
+; 0000 0066 // Clock value: 1382,400 kHz
+; 0000 0067 // Mode: Fast PWM top=FFh
+; 0000 0068 // OC0 output: Non-Inverted PWM
+; 0000 0069 TCCR0=0x6A;
 ;PCODE: $0000056D VOL: 0
 ;PCODE: $0000056E VOL: 0
-; 0000 006C OCR0=0x00;
+; 0000 006A TCNT0=0x00;
 ;PCODE: $0000056F VOL: 0
 ;PCODE: $00000570 VOL: 0
-; 0000 006D 
-; 0000 006E // Timer/Counter 1 initialization
-; 0000 006F // Clock source: System Clock
-; 0000 0070 // Clock value: 1382,400 kHz
-; 0000 0071 // Mode: Fast PWM top=00FFh
-; 0000 0072 // OC1A output: Non-Inv.
-; 0000 0073 // OC1B output: Non-Inv.
-; 0000 0074 // Noise Canceler: Off
-; 0000 0075 // Input Capture on Falling Edge
-; 0000 0076 // Timer 1 Overflow Interrupt: Off
-; 0000 0077 // Input Capture Interrupt: Off
-; 0000 0078 // Compare A Match Interrupt: Off
-; 0000 0079 // Compare B Match Interrupt: Off
-; 0000 007A TCCR1A=0xA1;
+; 0000 006B OCR0=0x00;
 ;PCODE: $00000571 VOL: 0
 ;PCODE: $00000572 VOL: 0
-; 0000 007B TCCR1B=0x0A;
+; 0000 006C 
+; 0000 006D // Timer/Counter 1 initialization
+; 0000 006E // Clock source: System Clock
+; 0000 006F // Clock value: 1382,400 kHz
+; 0000 0070 // Mode: Fast PWM top=00FFh
+; 0000 0071 // OC1A output: Non-Inv.
+; 0000 0072 // OC1B output: Non-Inv.
+; 0000 0073 // Noise Canceler: Off
+; 0000 0074 // Input Capture on Falling Edge
+; 0000 0075 // Timer 1 Overflow Interrupt: Off
+; 0000 0076 // Input Capture Interrupt: Off
+; 0000 0077 // Compare A Match Interrupt: Off
+; 0000 0078 // Compare B Match Interrupt: Off
+; 0000 0079 TCCR1A=0xA1;
 ;PCODE: $00000573 VOL: 0
 ;PCODE: $00000574 VOL: 0
-; 0000 007C TCNT1H=0x00;
+; 0000 007A TCCR1B=0x0A;
 ;PCODE: $00000575 VOL: 0
 ;PCODE: $00000576 VOL: 0
-; 0000 007D TCNT1L=0x00;
+; 0000 007B TCNT1H=0x00;
 ;PCODE: $00000577 VOL: 0
 ;PCODE: $00000578 VOL: 0
-; 0000 007E ICR1H=0x00;
+; 0000 007C TCNT1L=0x00;
 ;PCODE: $00000579 VOL: 0
 ;PCODE: $0000057A VOL: 0
-; 0000 007F ICR1L=0x00;
+; 0000 007D ICR1H=0x00;
 ;PCODE: $0000057B VOL: 0
 ;PCODE: $0000057C VOL: 0
-; 0000 0080 OCR1AH=0x00;
+; 0000 007E ICR1L=0x00;
 ;PCODE: $0000057D VOL: 0
 ;PCODE: $0000057E VOL: 0
-; 0000 0081 OCR1AL=0x00;
+; 0000 007F OCR1AH=0x00;
 ;PCODE: $0000057F VOL: 0
 ;PCODE: $00000580 VOL: 0
-; 0000 0082 OCR1BH=0x00;
+; 0000 0080 OCR1AL=0x00;
 ;PCODE: $00000581 VOL: 0
 ;PCODE: $00000582 VOL: 0
-; 0000 0083 OCR1BL=0x00;
+; 0000 0081 OCR1BH=0x00;
 ;PCODE: $00000583 VOL: 0
 ;PCODE: $00000584 VOL: 0
-; 0000 0084 
-; 0000 0085 // Timer/Counter 2 initialization
-; 0000 0086 // Clock source: System Clock
-; 0000 0087 // Clock value: 1382,400 kHz
-; 0000 0088 // Mode: Fast PWM top=FFh
-; 0000 0089 // OC2 output: Non-Inverted PWM
-; 0000 008A ASSR=0x00;
+; 0000 0082 OCR1BL=0x00;
 ;PCODE: $00000585 VOL: 0
 ;PCODE: $00000586 VOL: 0
-; 0000 008B TCCR2=0x6A;
+; 0000 0083 
+; 0000 0084 // Timer/Counter 2 initialization
+; 0000 0085 // Clock source: System Clock
+; 0000 0086 // Clock value: 1382,400 kHz
+; 0000 0087 // Mode: Fast PWM top=FFh
+; 0000 0088 // OC2 output: Non-Inverted PWM
+; 0000 0089 ASSR=0x00;
 ;PCODE: $00000587 VOL: 0
 ;PCODE: $00000588 VOL: 0
-; 0000 008C TCNT2=0x00;
+; 0000 008A TCCR2=0x6A;
 ;PCODE: $00000589 VOL: 0
 ;PCODE: $0000058A VOL: 0
-; 0000 008D OCR2=0x00;
+; 0000 008B TCNT2=0x00;
 ;PCODE: $0000058B VOL: 0
 ;PCODE: $0000058C VOL: 0
-; 0000 008E 
-; 0000 008F // External Interrupt(s) initialization
-; 0000 0090 // INT0: Off
-; 0000 0091 // INT1: Off
-; 0000 0092 // INT2: Off
-; 0000 0093 MCUCR=0x00;
+; 0000 008C OCR2=0x00;
 ;PCODE: $0000058D VOL: 0
 ;PCODE: $0000058E VOL: 0
-; 0000 0094 MCUCSR=0x00;
+; 0000 008D 
+; 0000 008E // External Interrupt(s) initialization
+; 0000 008F // INT0: Off
+; 0000 0090 // INT1: Off
+; 0000 0091 // INT2: Off
+; 0000 0092 MCUCR=0x00;
 ;PCODE: $0000058F VOL: 0
 ;PCODE: $00000590 VOL: 0
-; 0000 0095 
-; 0000 0096 // Timer(s)/Counter(s) Interrupt(s) initialization
-; 0000 0097 TIMSK=0x00;
+; 0000 0093 MCUCSR=0x00;
 ;PCODE: $00000591 VOL: 0
 ;PCODE: $00000592 VOL: 0
-; 0000 0098 
-; 0000 0099 // USART initialization
-; 0000 009A // Communication Parameters: 8 Data, 1 Stop, No Parity
-; 0000 009B // USART Receiver: On
-; 0000 009C // USART Transmitter: On
-; 0000 009D // USART Mode: Asynchronous
-; 0000 009E // USART Baud Rate: 115200
-; 0000 009F UCSRA=0x00;
+; 0000 0094 
+; 0000 0095 // Timer(s)/Counter(s) Interrupt(s) initialization
+; 0000 0096 TIMSK=0x00;
 ;PCODE: $00000593 VOL: 0
 ;PCODE: $00000594 VOL: 0
-; 0000 00A0 UCSRB=0x18;
+; 0000 0097 
+; 0000 0098 // USART initialization
+; 0000 0099 // Communication Parameters: 8 Data, 1 Stop, No Parity
+; 0000 009A // USART Receiver: On
+; 0000 009B // USART Transmitter: On
+; 0000 009C // USART Mode: Asynchronous
+; 0000 009D // USART Baud Rate: 115200
+; 0000 009E UCSRA=0x00;
 ;PCODE: $00000595 VOL: 0
 ;PCODE: $00000596 VOL: 0
-; 0000 00A1 UCSRC=0x86;
+; 0000 009F UCSRB=0x18;
 ;PCODE: $00000597 VOL: 0
 ;PCODE: $00000598 VOL: 0
-; 0000 00A2 UBRRH=0x00;
+; 0000 00A0 UCSRC=0x86;
 ;PCODE: $00000599 VOL: 0
 ;PCODE: $0000059A VOL: 0
-; 0000 00A3 UBRRL=0x05;
+; 0000 00A1 UBRRH=0x00;
 ;PCODE: $0000059B VOL: 0
 ;PCODE: $0000059C VOL: 0
-; 0000 00A4 
-; 0000 00A5 // Analog Comparator initialization
-; 0000 00A6 // Analog Comparator: Off
-; 0000 00A7 // Analog Comparator Input Capture by Timer/Counter 1: Off
-; 0000 00A8 ACSR=0x80;
+; 0000 00A2 UBRRL=0x05;
 ;PCODE: $0000059D VOL: 0
 ;PCODE: $0000059E VOL: 0
-; 0000 00A9 SFIOR=0x00;
+; 0000 00A3 
+; 0000 00A4 // Analog Comparator initialization
+; 0000 00A5 // Analog Comparator: Off
+; 0000 00A6 // Analog Comparator Input Capture by Timer/Counter 1: Off
+; 0000 00A7 ACSR=0x80;
 ;PCODE: $0000059F VOL: 0
 ;PCODE: $000005A0 VOL: 0
-; 0000 00AA 
-; 0000 00AB // ADC initialization
-; 0000 00AC // ADC Clock frequency: 691,200 kHz
-; 0000 00AD // ADC Voltage Reference: AVCC pin
-; 0000 00AE // ADC High Speed Mode: On
-; 0000 00AF // ADC Auto Trigger Source: None
-; 0000 00B0 // Only the 8 most significant bits of
-; 0000 00B1 // the AD conversion result are used
-; 0000 00B2 ADMUX=ADC_VREF_TYPE & 0xff;
+; 0000 00A8 SFIOR=0x00;
 ;PCODE: $000005A1 VOL: 0
 ;PCODE: $000005A2 VOL: 0
-; 0000 00B3 ADCSRA=0x84;
+; 0000 00A9 
+; 0000 00AA // ADC initialization
+; 0000 00AB // ADC Clock frequency: 691,200 kHz
+; 0000 00AC // ADC Voltage Reference: AVCC pin
+; 0000 00AD // ADC High Speed Mode: On
+; 0000 00AE // ADC Auto Trigger Source: None
+; 0000 00AF // Only the 8 most significant bits of
+; 0000 00B0 // the AD conversion result are used
+; 0000 00B1 ADMUX=ADC_VREF_TYPE & 0xff;
 ;PCODE: $000005A3 VOL: 0
 ;PCODE: $000005A4 VOL: 0
-; 0000 00B4 SFIOR&=0xEF;
+; 0000 00B2 ADCSRA=0x84;
 ;PCODE: $000005A5 VOL: 0
 ;PCODE: $000005A6 VOL: 0
+; 0000 00B3 SFIOR&=0xEF;
 ;PCODE: $000005A7 VOL: 0
 ;PCODE: $000005A8 VOL: 0
-; 0000 00B5 SFIOR|=0x10;
 ;PCODE: $000005A9 VOL: 0
 ;PCODE: $000005AA VOL: 0
+; 0000 00B4 SFIOR|=0x10;
 ;PCODE: $000005AB VOL: 0
 ;PCODE: $000005AC VOL: 0
-; 0000 00B6 
-; 0000 00B7 // I2C Bus initialization
-; 0000 00B8 i2c_init();
 ;PCODE: $000005AD VOL: 0
-; 0000 00B9 }
 ;PCODE: $000005AE VOL: 0
+; 0000 00B5 
+; 0000 00B6 // I2C Bus initialization
+; 0000 00B7 i2c_init();
 ;PCODE: $000005AF VOL: 0
+; 0000 00B8 }
+;PCODE: $000005B0 VOL: 0
+;PCODE: $000005B1 VOL: 0
 ;//---------------------------------
 ;//------------------------------
 ;//kicker
 ;//------------------------------
 ;void kick(){
-; 0000 00BE void kick(){
-;PCODE: $000005B0 VOL: 0
-;PCODE: $000005B1 VOL: 0
-; 0000 00BF int senzory;
-; 0000 00C0 if (Kick_sens == 0){
+; 0000 00BD void kick(){
 ;PCODE: $000005B2 VOL: 0
 ;PCODE: $000005B3 VOL: 0
-;	senzory -> R16,R17
+; 0000 00BE     int senzory;
+; 0000 00BF     if (Kick_sens == 0){
 ;PCODE: $000005B4 VOL: 0
 ;PCODE: $000005B5 VOL: 0
+;	senzory -> R16,R17
 ;PCODE: $000005B6 VOL: 0
-; 0000 00C1     m_vyp();
 ;PCODE: $000005B7 VOL: 0
-; 0000 00C2     Kick = 1;
 ;PCODE: $000005B8 VOL: 0
+; 0000 00C0     m_vyp();
 ;PCODE: $000005B9 VOL: 0
-; 0000 00C3     LED = 0;
+; 0000 00C1     Kick = 1;
 ;PCODE: $000005BA VOL: 0
 ;PCODE: $000005BB VOL: 0
-; 0000 00C4     delay_ms(200);
+; 0000 00C2     LED = 0;
 ;PCODE: $000005BC VOL: 0
 ;PCODE: $000005BD VOL: 0
+; 0000 00C3     delay_ms(200);
 ;PCODE: $000005BE VOL: 0
-; 0000 00C5     while (Kick_sens == 0);
 ;PCODE: $000005BF VOL: 0
 ;PCODE: $000005C0 VOL: 0
+; 0000 00C4     while (Kick_sens == 0);
 ;PCODE: $000005C1 VOL: 0
 ;PCODE: $000005C2 VOL: 0
 ;PCODE: $000005C3 VOL: 0
 ;PCODE: $000005C4 VOL: 0
-; 0000 00C6     Kick = 0;
 ;PCODE: $000005C5 VOL: 0
 ;PCODE: $000005C6 VOL: 0
-; 0000 00C7     LED = 1;
+; 0000 00C5     Kick = 0;
 ;PCODE: $000005C7 VOL: 0
 ;PCODE: $000005C8 VOL: 0
-; 0000 00C8     x1 = 400;
+; 0000 00C6     LED = 1;
 ;PCODE: $000005C9 VOL: 0
 ;PCODE: $000005CA VOL: 0
-; 0000 00C9     while(x1 != 0 ){
+; 0000 00C7     x1 = 400;
 ;PCODE: $000005CB VOL: 0
 ;PCODE: $000005CC VOL: 0
+; 0000 00C8     while(x1 != 0 ){
 ;PCODE: $000005CD VOL: 0
-; 0000 00CA         senzory = maxx(200);
 ;PCODE: $000005CE VOL: 0
 ;PCODE: $000005CF VOL: 0
+; 0000 00C9         senzory = maxx(200);
 ;PCODE: $000005D0 VOL: 0
 ;PCODE: $000005D1 VOL: 0
 ;PCODE: $000005D2 VOL: 0
-; 0000 00CB         if (maxh < 75){
 ;PCODE: $000005D3 VOL: 0
 ;PCODE: $000005D4 VOL: 0
+; 0000 00CA         if (maxh < 75){
 ;PCODE: $000005D5 VOL: 0
-; 0000 00CC         switch (senzory){
 ;PCODE: $000005D6 VOL: 0
-; 0000 00CD             case 1: m_0(rychlost_presunu);          break;
 ;PCODE: $000005D7 VOL: 0
+; 0000 00CB         switch (senzory){
 ;PCODE: $000005D8 VOL: 0
+; 0000 00CC             case 1: m_0(rychlost_presunu);          break;
 ;PCODE: $000005D9 VOL: 0
 ;PCODE: $000005DA VOL: 0
 ;PCODE: $000005DB VOL: 0
-; 0000 00CE     //---------------------------------------------------------------------
-; 0000 00CF             case 2: m_90(rychlost_presunu);              break;
 ;PCODE: $000005DC VOL: 0
 ;PCODE: $000005DD VOL: 0
+; 0000 00CD     //---------------------------------------------------------------------
+; 0000 00CE             case 2: m_90(rychlost_presunu);              break;
 ;PCODE: $000005DE VOL: 0
 ;PCODE: $000005DF VOL: 0
 ;PCODE: $000005E0 VOL: 0
 ;PCODE: $000005E1 VOL: 0
-; 0000 00D0             case 3: m_135(rychlost_presunu);                 break;
 ;PCODE: $000005E2 VOL: 0
 ;PCODE: $000005E3 VOL: 0
+; 0000 00CF             case 3: m_135(rychlost_presunu);                 break;
 ;PCODE: $000005E4 VOL: 0
 ;PCODE: $000005E5 VOL: 0
 ;PCODE: $000005E6 VOL: 0
 ;PCODE: $000005E7 VOL: 0
-; 0000 00D1             case 4: m_135(rychlost_presunu);                 break;
 ;PCODE: $000005E8 VOL: 0
 ;PCODE: $000005E9 VOL: 0
+; 0000 00D0             case 4: m_135(rychlost_presunu);                 break;
 ;PCODE: $000005EA VOL: 0
 ;PCODE: $000005EB VOL: 0
 ;PCODE: $000005EC VOL: 0
 ;PCODE: $000005ED VOL: 0
-; 0000 00D2             case 5: m_180(rychlost_presunu);                 break;  //stvrtina z kruhu
 ;PCODE: $000005EE VOL: 0
 ;PCODE: $000005EF VOL: 0
+; 0000 00D1             case 5: m_180(rychlost_presunu);                 break;  //stvrtina z kruhu
 ;PCODE: $000005F0 VOL: 0
 ;PCODE: $000005F1 VOL: 0
 ;PCODE: $000005F2 VOL: 0
 ;PCODE: $000005F3 VOL: 0
-; 0000 00D3     //---------------------------------------------------------------------
-; 0000 00D4             case 6: m_225(rychlost_presunu);                 break;
 ;PCODE: $000005F4 VOL: 0
 ;PCODE: $000005F5 VOL: 0
+; 0000 00D2     //---------------------------------------------------------------------
+; 0000 00D3             case 6: m_225(rychlost_presunu);                 break;
 ;PCODE: $000005F6 VOL: 0
 ;PCODE: $000005F7 VOL: 0
 ;PCODE: $000005F8 VOL: 0
 ;PCODE: $000005F9 VOL: 0
-; 0000 00D5             case 7: m_225(rychlost_presunu);                break;
 ;PCODE: $000005FA VOL: 0
 ;PCODE: $000005FB VOL: 0
+; 0000 00D4             case 7: m_225(rychlost_presunu);                break;
 ;PCODE: $000005FC VOL: 0
 ;PCODE: $000005FD VOL: 0
 ;PCODE: $000005FE VOL: 0
 ;PCODE: $000005FF VOL: 0
-; 0000 00D6             case 8: m_270(rychlost_presunu);                 break;
 ;PCODE: $00000600 VOL: 0
 ;PCODE: $00000601 VOL: 0
+; 0000 00D5             case 8: m_270(rychlost_presunu);                 break;
 ;PCODE: $00000602 VOL: 0
 ;PCODE: $00000603 VOL: 0
 ;PCODE: $00000604 VOL: 0
 ;PCODE: $00000605 VOL: 0
-; 0000 00D7             case 9: m_270(rychlost_presunu);                 break;  //polovica kruhu
 ;PCODE: $00000606 VOL: 0
 ;PCODE: $00000607 VOL: 0
+; 0000 00D6             case 9: m_270(rychlost_presunu);                 break;  //polovica kruhu
 ;PCODE: $00000608 VOL: 0
 ;PCODE: $00000609 VOL: 0
 ;PCODE: $0000060A VOL: 0
 ;PCODE: $0000060B VOL: 0
-; 0000 00D8     //----------------------------------------------------------------------
-; 0000 00D9             case 10: m_90(rychlost_presunu);               break;
 ;PCODE: $0000060C VOL: 0
 ;PCODE: $0000060D VOL: 0
+; 0000 00D7     //----------------------------------------------------------------------
+; 0000 00D8             case 10: m_90(rychlost_presunu);               break;
 ;PCODE: $0000060E VOL: 0
 ;PCODE: $0000060F VOL: 0
 ;PCODE: $00000610 VOL: 0
 ;PCODE: $00000611 VOL: 0
-; 0000 00DA             case 11: m_135(rychlost_presunu);                break;
 ;PCODE: $00000612 VOL: 0
 ;PCODE: $00000613 VOL: 0
+; 0000 00D9             case 11: m_135(rychlost_presunu);                break;
 ;PCODE: $00000614 VOL: 0
 ;PCODE: $00000615 VOL: 0
 ;PCODE: $00000616 VOL: 0
 ;PCODE: $00000617 VOL: 0
-; 0000 00DB             case 12: m_135(rychlost_presunu);                break;
 ;PCODE: $00000618 VOL: 0
 ;PCODE: $00000619 VOL: 0
+; 0000 00DA             case 12: m_135(rychlost_presunu);                break;
 ;PCODE: $0000061A VOL: 0
 ;PCODE: $0000061B VOL: 0
 ;PCODE: $0000061C VOL: 0
 ;PCODE: $0000061D VOL: 0
-; 0000 00DC             case 13: m_180(rychlost_presunu);                 break;  //tretina kruhu
 ;PCODE: $0000061E VOL: 0
 ;PCODE: $0000061F VOL: 0
+; 0000 00DB             case 13: m_180(rychlost_presunu);                 break;  //tretina kruhu
 ;PCODE: $00000620 VOL: 0
 ;PCODE: $00000621 VOL: 0
 ;PCODE: $00000622 VOL: 0
 ;PCODE: $00000623 VOL: 0
-; 0000 00DD     //----------------------------------------------------------------------
-; 0000 00DE             case 14: m_225(rychlost_presunu);                break;
 ;PCODE: $00000624 VOL: 0
 ;PCODE: $00000625 VOL: 0
+; 0000 00DC     //----------------------------------------------------------------------
+; 0000 00DD             case 14: m_225(rychlost_presunu);                break;
 ;PCODE: $00000626 VOL: 0
 ;PCODE: $00000627 VOL: 0
 ;PCODE: $00000628 VOL: 0
 ;PCODE: $00000629 VOL: 0
-; 0000 00DF             case 15: m_225(rychlost_presunu);                break;
 ;PCODE: $0000062A VOL: 0
 ;PCODE: $0000062B VOL: 0
+; 0000 00DE             case 15: m_225(rychlost_presunu);                break;
 ;PCODE: $0000062C VOL: 0
 ;PCODE: $0000062D VOL: 0
 ;PCODE: $0000062E VOL: 0
 ;PCODE: $0000062F VOL: 0
-; 0000 00E0             case 16: m_270(rychlost_presunu);             break;  //cely kruh
 ;PCODE: $00000630 VOL: 0
 ;PCODE: $00000631 VOL: 0
+; 0000 00DF             case 16: m_270(rychlost_presunu);             break;  //cely kruh
 ;PCODE: $00000632 VOL: 0
 ;PCODE: $00000633 VOL: 0
 ;PCODE: $00000634 VOL: 0
 ;PCODE: $00000635 VOL: 0
-; 0000 00E1     //----------------------------------------------------------------------
-; 0000 00E2             case 17: m_vyp();                                break;
 ;PCODE: $00000636 VOL: 0
 ;PCODE: $00000637 VOL: 0
+; 0000 00E0     //----------------------------------------------------------------------
+; 0000 00E1             case 17: m_vyp();                                break;
 ;PCODE: $00000638 VOL: 0
 ;PCODE: $00000639 VOL: 0
 ;PCODE: $0000063A VOL: 0
-; 0000 00E3         }
 ;PCODE: $0000063B VOL: 0
-; 0000 00E4     }
-; 0000 00E5         else{
 ;PCODE: $0000063C VOL: 0
+; 0000 00E2         }
 ;PCODE: $0000063D VOL: 0
-; 0000 00E6        switch (senzory){
+; 0000 00E3     }
+; 0000 00E4         else{
 ;PCODE: $0000063E VOL: 0
-; 0000 00E7             case 1: m_0(rychlost_presunu);        break;
 ;PCODE: $0000063F VOL: 0
+; 0000 00E5        switch (senzory){
 ;PCODE: $00000640 VOL: 0
+; 0000 00E6             case 1: m_0(rychlost_presunu);        break;
 ;PCODE: $00000641 VOL: 0
 ;PCODE: $00000642 VOL: 0
 ;PCODE: $00000643 VOL: 0
-; 0000 00E8     //---------------------------------------------------------------------
-; 0000 00E9             case 2: m_90(rychlost_presunu);              break;
 ;PCODE: $00000644 VOL: 0
 ;PCODE: $00000645 VOL: 0
+; 0000 00E7     //---------------------------------------------------------------------
+; 0000 00E8             case 2: m_90(rychlost_presunu);              break;
 ;PCODE: $00000646 VOL: 0
 ;PCODE: $00000647 VOL: 0
 ;PCODE: $00000648 VOL: 0
 ;PCODE: $00000649 VOL: 0
-; 0000 00EA             case 3: m_90(rychlost_presunu);                 break;
 ;PCODE: $0000064A VOL: 0
 ;PCODE: $0000064B VOL: 0
+; 0000 00E9             case 3: m_90(rychlost_presunu);                 break;
 ;PCODE: $0000064C VOL: 0
 ;PCODE: $0000064D VOL: 0
 ;PCODE: $0000064E VOL: 0
 ;PCODE: $0000064F VOL: 0
-; 0000 00EB             case 4: m_90(rychlost_presunu);                 break;
 ;PCODE: $00000650 VOL: 0
 ;PCODE: $00000651 VOL: 0
+; 0000 00EA             case 4: m_90(rychlost_presunu);                 break;
 ;PCODE: $00000652 VOL: 0
 ;PCODE: $00000653 VOL: 0
 ;PCODE: $00000654 VOL: 0
 ;PCODE: $00000655 VOL: 0
-; 0000 00EC             case 5: m_90(rychlost_presunu);                 break;  //stvrtina z kruhu
 ;PCODE: $00000656 VOL: 0
 ;PCODE: $00000657 VOL: 0
+; 0000 00EB             case 5: m_90(rychlost_presunu);                 break;  //stvrtina z kruhu
 ;PCODE: $00000658 VOL: 0
 ;PCODE: $00000659 VOL: 0
 ;PCODE: $0000065A VOL: 0
 ;PCODE: $0000065B VOL: 0
-; 0000 00ED     //---------------------------------------------------------------------
-; 0000 00EE             case 6: m_135(rychlost_presunu);                 break;
 ;PCODE: $0000065C VOL: 0
 ;PCODE: $0000065D VOL: 0
+; 0000 00EC     //---------------------------------------------------------------------
+; 0000 00ED             case 6: m_135(rychlost_presunu);                 break;
 ;PCODE: $0000065E VOL: 0
 ;PCODE: $0000065F VOL: 0
 ;PCODE: $00000660 VOL: 0
 ;PCODE: $00000661 VOL: 0
-; 0000 00EF             case 7: m_135(rychlost_presunu);                break;
 ;PCODE: $00000662 VOL: 0
 ;PCODE: $00000663 VOL: 0
+; 0000 00EE             case 7: m_135(rychlost_presunu);                break;
 ;PCODE: $00000664 VOL: 0
 ;PCODE: $00000665 VOL: 0
 ;PCODE: $00000666 VOL: 0
 ;PCODE: $00000667 VOL: 0
-; 0000 00F0             case 8: m_135(rychlost_presunu);                 break;
 ;PCODE: $00000668 VOL: 0
 ;PCODE: $00000669 VOL: 0
+; 0000 00EF             case 8: m_135(rychlost_presunu);                 break;
 ;PCODE: $0000066A VOL: 0
 ;PCODE: $0000066B VOL: 0
 ;PCODE: $0000066C VOL: 0
 ;PCODE: $0000066D VOL: 0
-; 0000 00F1             case 9: m_180(rychlost_presunu);                 break;  //polovica kruhu
 ;PCODE: $0000066E VOL: 0
 ;PCODE: $0000066F VOL: 0
+; 0000 00F0             case 9: m_180(rychlost_presunu);                 break;  //polovica kruhu
 ;PCODE: $00000670 VOL: 0
 ;PCODE: $00000671 VOL: 0
 ;PCODE: $00000672 VOL: 0
 ;PCODE: $00000673 VOL: 0
-; 0000 00F2     //----------------------------------------------------------------------
-; 0000 00F3             case 10: m_225(rychlost_presunu);               break;
 ;PCODE: $00000674 VOL: 0
 ;PCODE: $00000675 VOL: 0
+; 0000 00F1     //----------------------------------------------------------------------
+; 0000 00F2             case 10: m_225(rychlost_presunu);               break;
 ;PCODE: $00000676 VOL: 0
 ;PCODE: $00000677 VOL: 0
 ;PCODE: $00000678 VOL: 0
 ;PCODE: $00000679 VOL: 0
-; 0000 00F4             case 11: m_225(rychlost_presunu);                break;
 ;PCODE: $0000067A VOL: 0
 ;PCODE: $0000067B VOL: 0
+; 0000 00F3             case 11: m_225(rychlost_presunu);                break;
 ;PCODE: $0000067C VOL: 0
 ;PCODE: $0000067D VOL: 0
 ;PCODE: $0000067E VOL: 0
 ;PCODE: $0000067F VOL: 0
-; 0000 00F5             case 12: m_225(rychlost_presunu);                break;
 ;PCODE: $00000680 VOL: 0
 ;PCODE: $00000681 VOL: 0
+; 0000 00F4             case 12: m_225(rychlost_presunu);                break;
 ;PCODE: $00000682 VOL: 0
 ;PCODE: $00000683 VOL: 0
 ;PCODE: $00000684 VOL: 0
 ;PCODE: $00000685 VOL: 0
-; 0000 00F6             case 13: m_270(rychlost_presunu);                 break;  //tretina kruhu
 ;PCODE: $00000686 VOL: 0
 ;PCODE: $00000687 VOL: 0
+; 0000 00F5             case 13: m_270(rychlost_presunu);                 break;  //tretina kruhu
 ;PCODE: $00000688 VOL: 0
 ;PCODE: $00000689 VOL: 0
 ;PCODE: $0000068A VOL: 0
 ;PCODE: $0000068B VOL: 0
-; 0000 00F7     //----------------------------------------------------------------------
-; 0000 00F8             case 14: m_315(rychlost_presunu);                break;
 ;PCODE: $0000068C VOL: 0
 ;PCODE: $0000068D VOL: 0
+; 0000 00F6     //----------------------------------------------------------------------
+; 0000 00F7             case 14: m_315(rychlost_presunu);                break;
 ;PCODE: $0000068E VOL: 0
 ;PCODE: $0000068F VOL: 0
 ;PCODE: $00000690 VOL: 0
 ;PCODE: $00000691 VOL: 0
-; 0000 00F9             case 15: m_315(rychlost_presunu);                break;
 ;PCODE: $00000692 VOL: 0
 ;PCODE: $00000693 VOL: 0
+; 0000 00F8             case 15: m_315(rychlost_presunu);                break;
 ;PCODE: $00000694 VOL: 0
 ;PCODE: $00000695 VOL: 0
 ;PCODE: $00000696 VOL: 0
 ;PCODE: $00000697 VOL: 0
-; 0000 00FA             case 16: m_315(rychlost_presunu);             break;  //cely kruh
 ;PCODE: $00000698 VOL: 0
 ;PCODE: $00000699 VOL: 0
+; 0000 00F9             case 16: m_315(rychlost_presunu);             break;  //cely kruh
 ;PCODE: $0000069A VOL: 0
 ;PCODE: $0000069B VOL: 0
 ;PCODE: $0000069C VOL: 0
 ;PCODE: $0000069D VOL: 0
-; 0000 00FB     //----------------------------------------------------------------------
-; 0000 00FC             case 17: m_vyp();                                break;
 ;PCODE: $0000069E VOL: 0
 ;PCODE: $0000069F VOL: 0
+; 0000 00FA     //----------------------------------------------------------------------
+; 0000 00FB             case 17: m_vyp();                                break;
 ;PCODE: $000006A0 VOL: 0
 ;PCODE: $000006A1 VOL: 0
 ;PCODE: $000006A2 VOL: 0
-; 0000 00FD         }
 ;PCODE: $000006A3 VOL: 0
-; 0000 00FE     }
 ;PCODE: $000006A4 VOL: 0
-; 0000 00FF         x1=x1-1;
+; 0000 00FC         }
 ;PCODE: $000006A5 VOL: 0
+; 0000 00FD     }
 ;PCODE: $000006A6 VOL: 0
+; 0000 00FE         x1--;
 ;PCODE: $000006A7 VOL: 0
-; 0000 0100         delay_ms(2);
 ;PCODE: $000006A8 VOL: 0
 ;PCODE: $000006A9 VOL: 0
+; 0000 00FF         delay_ms(2);
 ;PCODE: $000006AA VOL: 0
-; 0000 0101         }
 ;PCODE: $000006AB VOL: 0
 ;PCODE: $000006AC VOL: 0
-; 0000 0102     }
-; 0000 0103 else{
+; 0000 0100         }
 ;PCODE: $000006AD VOL: 0
 ;PCODE: $000006AE VOL: 0
-; 0000 0104     Kick = 0;
+; 0000 0101     }
+; 0000 0102     else{
 ;PCODE: $000006AF VOL: 0
 ;PCODE: $000006B0 VOL: 0
-; 0000 0105 }
+; 0000 0103     Kick = 0;
 ;PCODE: $000006B1 VOL: 0
-; 0000 0106 }
 ;PCODE: $000006B2 VOL: 0
+; 0000 0104 }
 ;PCODE: $000006B3 VOL: 0
+; 0000 0105 }
 ;PCODE: $000006B4 VOL: 0
-;void kick_no(){
-; 0000 0107 void kick_no(){
 ;PCODE: $000006B5 VOL: 0
 ;PCODE: $000006B6 VOL: 0
-; 0000 0108     Kick = 1;
+;void kick_no(){
+; 0000 0106 void kick_no(){
 ;PCODE: $000006B7 VOL: 0
 ;PCODE: $000006B8 VOL: 0
-; 0000 0109     LED = 0;
+; 0000 0107     Kick = 1;
 ;PCODE: $000006B9 VOL: 0
 ;PCODE: $000006BA VOL: 0
-; 0000 010A     delay_ms(200);
+; 0000 0108     LED = 0;
 ;PCODE: $000006BB VOL: 0
 ;PCODE: $000006BC VOL: 0
+; 0000 0109     delay_ms(200);
 ;PCODE: $000006BD VOL: 0
-; 0000 010B     while (Kick_sens == 0);
 ;PCODE: $000006BE VOL: 0
 ;PCODE: $000006BF VOL: 0
+; 0000 010A     while (Kick_sens == 0);
 ;PCODE: $000006C0 VOL: 0
 ;PCODE: $000006C1 VOL: 0
 ;PCODE: $000006C2 VOL: 0
 ;PCODE: $000006C3 VOL: 0
-; 0000 010C     Kick = 0;
 ;PCODE: $000006C4 VOL: 0
 ;PCODE: $000006C5 VOL: 0
-; 0000 010D     LED = 1;
+; 0000 010B     Kick = 0;
 ;PCODE: $000006C6 VOL: 0
 ;PCODE: $000006C7 VOL: 0
-; 0000 010E }
+; 0000 010C     LED = 1;
 ;PCODE: $000006C8 VOL: 0
 ;PCODE: $000006C9 VOL: 0
+; 0000 010D }
+;PCODE: $000006CA VOL: 0
+;PCODE: $000006CB VOL: 0
 ;//------------------------------
 ;//------------------------------
 ;int nastav_podla_kompasu(int kompas){             //prepocetcompasu(branka,1)*0.71
-; 0000 0111 int nastav_podla_kompasu(int kompas){
-;PCODE: $000006CA VOL: 0
-;PCODE: $000006CB VOL: 0
-; 0000 0112     int komp_ret = 0;
-; 0000 0113     if (kompas > 180)
+; 0000 0110 int nastav_podla_kompasu(int kompas){
 ;PCODE: $000006CC VOL: 0
 ;PCODE: $000006CD VOL: 0
-;	kompas -> Y+2
-;	komp_ret -> R16,R17
+; 0000 0111     int komp_ret = 0;
+; 0000 0112     if (kompas > 180)
 ;PCODE: $000006CE VOL: 0
 ;PCODE: $000006CF VOL: 0
+;	kompas -> Y+2
+;	komp_ret -> R16,R17
 ;PCODE: $000006D0 VOL: 0
 ;PCODE: $000006D1 VOL: 0
 ;PCODE: $000006D2 VOL: 0
-; 0000 0114         kompas = 180;
 ;PCODE: $000006D3 VOL: 0
 ;PCODE: $000006D4 VOL: 0
-; 0000 0115     //prepocet rychlost kolies pre kompas------------------
-; 0000 0116     if (kompas < 90){
+; 0000 0113         kompas = 180;
 ;PCODE: $000006D5 VOL: 0
 ;PCODE: $000006D6 VOL: 0
+; 0000 0114     //prepocet rychlost kolies pre kompas------------------
+; 0000 0115     if (kompas < 90){
 ;PCODE: $000006D7 VOL: 0
 ;PCODE: $000006D8 VOL: 0
-; 0000 0117         rychl = kompas + 100;
 ;PCODE: $000006D9 VOL: 0
 ;PCODE: $000006DA VOL: 0
+; 0000 0116         rychl = kompas + 100;
 ;PCODE: $000006DB VOL: 0
-; 0000 0118     }
-; 0000 0119     else{
 ;PCODE: $000006DC VOL: 0
 ;PCODE: $000006DD VOL: 0
-; 0000 011A         rychl = (180 - kompas) + 100;
+; 0000 0117     }
+; 0000 0118     else{
 ;PCODE: $000006DE VOL: 0
 ;PCODE: $000006DF VOL: 0
+; 0000 0119         rychl = (180 - kompas) + 100;
 ;PCODE: $000006E0 VOL: 0
 ;PCODE: $000006E1 VOL: 0
 ;PCODE: $000006E2 VOL: 0
-; 0000 011B     }
 ;PCODE: $000006E3 VOL: 0
-; 0000 011C     //------------------------------------------------------
-; 0000 011D     if (kompas <= 10){
 ;PCODE: $000006E4 VOL: 0
+; 0000 011A     }
 ;PCODE: $000006E5 VOL: 0
+; 0000 011B     //------------------------------------------------------
+; 0000 011C     if (kompas <= 10){
 ;PCODE: $000006E6 VOL: 0
-; 0000 011E         LED = 1;
 ;PCODE: $000006E7 VOL: 0
 ;PCODE: $000006E8 VOL: 0
-; 0000 011F         komp_ret = 1;
+; 0000 011D         LED = 1;
 ;PCODE: $000006E9 VOL: 0
 ;PCODE: $000006EA VOL: 0
-; 0000 0120     }
-; 0000 0121     else{
+; 0000 011E         komp_ret = 1;
 ;PCODE: $000006EB VOL: 0
 ;PCODE: $000006EC VOL: 0
-; 0000 0122         if( kompas <= 90){
+; 0000 011F     }
+; 0000 0120     else{
 ;PCODE: $000006ED VOL: 0
 ;PCODE: $000006EE VOL: 0
+; 0000 0121         if( kompas <= 90){
 ;PCODE: $000006EF VOL: 0
-; 0000 0123             LED = 0;
 ;PCODE: $000006F0 VOL: 0
 ;PCODE: $000006F1 VOL: 0
-; 0000 0124             m_ot(-rychl);
+; 0000 0122             LED = 0;
 ;PCODE: $000006F2 VOL: 0
 ;PCODE: $000006F3 VOL: 0
+; 0000 0123             m_ot(-rychl);
 ;PCODE: $000006F4 VOL: 0
 ;PCODE: $000006F5 VOL: 0
 ;PCODE: $000006F6 VOL: 0
-; 0000 0125         }
-; 0000 0126         else{
 ;PCODE: $000006F7 VOL: 0
 ;PCODE: $000006F8 VOL: 0
-; 0000 0127             if (kompas <= 170){
+; 0000 0124         }
+; 0000 0125         else{
 ;PCODE: $000006F9 VOL: 0
 ;PCODE: $000006FA VOL: 0
+; 0000 0126             if (kompas <= 170){
 ;PCODE: $000006FB VOL: 0
-; 0000 0128                 LED = 0;
 ;PCODE: $000006FC VOL: 0
 ;PCODE: $000006FD VOL: 0
-; 0000 0129                 m_ot(rychl);
+; 0000 0127                 LED = 0;
 ;PCODE: $000006FE VOL: 0
 ;PCODE: $000006FF VOL: 0
+; 0000 0128                 m_ot(rychl);
 ;PCODE: $00000700 VOL: 0
 ;PCODE: $00000701 VOL: 0
-; 0000 012A             }
-; 0000 012B             else {
 ;PCODE: $00000702 VOL: 0
 ;PCODE: $00000703 VOL: 0
-; 0000 012C                 LED = 1;
+; 0000 0129             }
+; 0000 012A             else {
 ;PCODE: $00000704 VOL: 0
 ;PCODE: $00000705 VOL: 0
-; 0000 012D                 komp_ret = 1;
+; 0000 012B                 LED = 1;
 ;PCODE: $00000706 VOL: 0
 ;PCODE: $00000707 VOL: 0
-; 0000 012E             }
+; 0000 012C                 komp_ret = 1;
 ;PCODE: $00000708 VOL: 0
-; 0000 012F         }
 ;PCODE: $00000709 VOL: 0
-; 0000 0130     }
+; 0000 012D             }
 ;PCODE: $0000070A VOL: 0
-; 0000 0131     return komp_ret;
+; 0000 012E         }
 ;PCODE: $0000070B VOL: 0
+; 0000 012F     }
 ;PCODE: $0000070C VOL: 0
+; 0000 0130     return komp_ret;
 ;PCODE: $0000070D VOL: 0
 ;PCODE: $0000070E VOL: 0
 ;PCODE: $0000070F VOL: 0
 ;PCODE: $00000710 VOL: 0
 ;PCODE: $00000711 VOL: 0
-; 0000 0132 }
 ;PCODE: $00000712 VOL: 0
-;void obchadzanie(int senzory){
-; 0000 0133 void obchadzanie(int senzory){
 ;PCODE: $00000713 VOL: 0
+; 0000 0131 }
 ;PCODE: $00000714 VOL: 0
-; 0000 0134     if (maxh < 80){
-;	senzory -> Y+0
+;void obchadzanie(int senzory){
+; 0000 0132 void obchadzanie(int senzory){
 ;PCODE: $00000715 VOL: 0
 ;PCODE: $00000716 VOL: 0
+; 0000 0133     if (maxh < 80){
+;	senzory -> Y+0
 ;PCODE: $00000717 VOL: 0
-; 0000 0135             switch (senzory){
 ;PCODE: $00000718 VOL: 0
-; 0000 0136                 case 1: m_0(rychlost_presunu);          break;
 ;PCODE: $00000719 VOL: 0
+; 0000 0134             switch (senzory){
 ;PCODE: $0000071A VOL: 0
+; 0000 0135                 case 1: m_0(rychlost_presunu);          break;
 ;PCODE: $0000071B VOL: 0
 ;PCODE: $0000071C VOL: 0
 ;PCODE: $0000071D VOL: 0
-; 0000 0137         //---------------------------------------------------------------------
-; 0000 0138                 case 2: m_90(rychlost_presunu-10);              break;
 ;PCODE: $0000071E VOL: 0
 ;PCODE: $0000071F VOL: 0
+; 0000 0136         //---------------------------------------------------------------------
+; 0000 0137                 case 2: m_90(rychlost_presunu-10);              break;
 ;PCODE: $00000720 VOL: 0
 ;PCODE: $00000721 VOL: 0
 ;PCODE: $00000722 VOL: 0
@@ -2683,102 +2684,102 @@
 ;PCODE: $00000726 VOL: 0
 ;PCODE: $00000727 VOL: 0
 ;PCODE: $00000728 VOL: 0
-; 0000 0139                 case 3: m_135(rychlost_presunu);                break;
 ;PCODE: $00000729 VOL: 0
 ;PCODE: $0000072A VOL: 0
+; 0000 0138                 case 3: m_135(rychlost_presunu);                break;
 ;PCODE: $0000072B VOL: 0
 ;PCODE: $0000072C VOL: 0
 ;PCODE: $0000072D VOL: 0
 ;PCODE: $0000072E VOL: 0
-; 0000 013A                 case 4: m_135(rychlost_presunu);                break;
 ;PCODE: $0000072F VOL: 0
 ;PCODE: $00000730 VOL: 0
+; 0000 0139                 case 4: m_135(rychlost_presunu);                break;
 ;PCODE: $00000731 VOL: 0
 ;PCODE: $00000732 VOL: 0
 ;PCODE: $00000733 VOL: 0
 ;PCODE: $00000734 VOL: 0
-; 0000 013B                 case 5: m_180(rychlost_presunu);                break;
 ;PCODE: $00000735 VOL: 0
 ;PCODE: $00000736 VOL: 0
+; 0000 013A                 case 5: m_180(rychlost_presunu);                break;
 ;PCODE: $00000737 VOL: 0
 ;PCODE: $00000738 VOL: 0
 ;PCODE: $00000739 VOL: 0
 ;PCODE: $0000073A VOL: 0
-; 0000 013C         //---------------------------------------------------------------------
-; 0000 013D                 case 6: m_225(rychlost_presunu_vzad);           break;
 ;PCODE: $0000073B VOL: 0
 ;PCODE: $0000073C VOL: 0
+; 0000 013B         //---------------------------------------------------------------------
+; 0000 013C                 case 6: m_225(rychlost_presunu_vzad);           break;
 ;PCODE: $0000073D VOL: 0
 ;PCODE: $0000073E VOL: 0
 ;PCODE: $0000073F VOL: 0
 ;PCODE: $00000740 VOL: 0
-; 0000 013E                 case 7: m_225(rychlost_presunu_vzad);           break;
 ;PCODE: $00000741 VOL: 0
 ;PCODE: $00000742 VOL: 0
+; 0000 013D                 case 7: m_225(rychlost_presunu_vzad);           break;
 ;PCODE: $00000743 VOL: 0
 ;PCODE: $00000744 VOL: 0
 ;PCODE: $00000745 VOL: 0
 ;PCODE: $00000746 VOL: 0
-; 0000 013F                 case 8: m_270(rychlost_presunu_vzad);           break;
 ;PCODE: $00000747 VOL: 0
 ;PCODE: $00000748 VOL: 0
+; 0000 013E                 case 8: m_270(rychlost_presunu_vzad);           break;
 ;PCODE: $00000749 VOL: 0
 ;PCODE: $0000074A VOL: 0
 ;PCODE: $0000074B VOL: 0
 ;PCODE: $0000074C VOL: 0
-; 0000 0140                 case 9: m_270(rychlost_presunu_vzad);           break;
 ;PCODE: $0000074D VOL: 0
 ;PCODE: $0000074E VOL: 0
+; 0000 013F                 case 9: m_270(rychlost_presunu_vzad);           break;
 ;PCODE: $0000074F VOL: 0
 ;PCODE: $00000750 VOL: 0
 ;PCODE: $00000751 VOL: 0
 ;PCODE: $00000752 VOL: 0
-; 0000 0141                 case 10: m_90(rychlost_presunu_vzad);           break;
 ;PCODE: $00000753 VOL: 0
 ;PCODE: $00000754 VOL: 0
+; 0000 0140                 case 10: m_90(rychlost_presunu_vzad);           break;
 ;PCODE: $00000755 VOL: 0
 ;PCODE: $00000756 VOL: 0
 ;PCODE: $00000757 VOL: 0
 ;PCODE: $00000758 VOL: 0
-; 0000 0142                 case 11: m_135(rychlost_presunu_vzad);          break;
 ;PCODE: $00000759 VOL: 0
 ;PCODE: $0000075A VOL: 0
+; 0000 0141                 case 11: m_135(rychlost_presunu_vzad);          break;
 ;PCODE: $0000075B VOL: 0
 ;PCODE: $0000075C VOL: 0
 ;PCODE: $0000075D VOL: 0
 ;PCODE: $0000075E VOL: 0
-; 0000 0143                 case 12: m_135(rychlost_presunu_vzad);          break;
 ;PCODE: $0000075F VOL: 0
 ;PCODE: $00000760 VOL: 0
+; 0000 0142                 case 12: m_135(rychlost_presunu_vzad);          break;
 ;PCODE: $00000761 VOL: 0
 ;PCODE: $00000762 VOL: 0
 ;PCODE: $00000763 VOL: 0
 ;PCODE: $00000764 VOL: 0
-; 0000 0144         //----------------------------------------------------------------------
-; 0000 0145                 case 13: m_180(rychlost_presunu);               break;
 ;PCODE: $00000765 VOL: 0
 ;PCODE: $00000766 VOL: 0
+; 0000 0143         //----------------------------------------------------------------------
+; 0000 0144                 case 13: m_180(rychlost_presunu);               break;
 ;PCODE: $00000767 VOL: 0
 ;PCODE: $00000768 VOL: 0
 ;PCODE: $00000769 VOL: 0
 ;PCODE: $0000076A VOL: 0
-; 0000 0146                 case 14: m_225(rychlost_presunu);               break;
 ;PCODE: $0000076B VOL: 0
 ;PCODE: $0000076C VOL: 0
+; 0000 0145                 case 14: m_225(rychlost_presunu);               break;
 ;PCODE: $0000076D VOL: 0
 ;PCODE: $0000076E VOL: 0
 ;PCODE: $0000076F VOL: 0
 ;PCODE: $00000770 VOL: 0
-; 0000 0147                 case 15: m_225(rychlost_presunu);               break;
 ;PCODE: $00000771 VOL: 0
 ;PCODE: $00000772 VOL: 0
+; 0000 0146                 case 15: m_225(rychlost_presunu);               break;
 ;PCODE: $00000773 VOL: 0
 ;PCODE: $00000774 VOL: 0
 ;PCODE: $00000775 VOL: 0
 ;PCODE: $00000776 VOL: 0
-; 0000 0148                 case 16: m_270(rychlost_presunu-10);            break;
 ;PCODE: $00000777 VOL: 0
 ;PCODE: $00000778 VOL: 0
+; 0000 0147                 case 16: m_270(rychlost_presunu-10);            break;
 ;PCODE: $00000779 VOL: 0
 ;PCODE: $0000077A VOL: 0
 ;PCODE: $0000077B VOL: 0
@@ -2788,174 +2789,166 @@
 ;PCODE: $0000077F VOL: 0
 ;PCODE: $00000780 VOL: 0
 ;PCODE: $00000781 VOL: 0
-; 0000 0149         //----------------------------------------------------------------------
-; 0000 014A                 case 17: m_vyp();                               break;
 ;PCODE: $00000782 VOL: 0
 ;PCODE: $00000783 VOL: 0
+; 0000 0148         //----------------------------------------------------------------------
+; 0000 0149                 case 17: m_vyp();                               break;
 ;PCODE: $00000784 VOL: 0
 ;PCODE: $00000785 VOL: 0
 ;PCODE: $00000786 VOL: 0
-; 0000 014B             }
 ;PCODE: $00000787 VOL: 0
-; 0000 014C        }
-; 0000 014D     else{
 ;PCODE: $00000788 VOL: 0
+; 0000 014A             }
 ;PCODE: $00000789 VOL: 0
-; 0000 014E            switch (senzory){
+; 0000 014B        }
+; 0000 014C     else{
 ;PCODE: $0000078A VOL: 0
-; 0000 014F                 case 1: m_0(rychlost_presunu_zrychlene);         break;
 ;PCODE: $0000078B VOL: 0
+; 0000 014D            switch (senzory){
 ;PCODE: $0000078C VOL: 0
+; 0000 014E                 case 1: m_0(rychlost_presunu_zrychlene);         break;
 ;PCODE: $0000078D VOL: 0
 ;PCODE: $0000078E VOL: 0
 ;PCODE: $0000078F VOL: 0
-; 0000 0150         //---------------------------------------------------------------------
-; 0000 0151                 case 2: m_45(rychlost_presunu_zrychlene);                 break;
 ;PCODE: $00000790 VOL: 0
 ;PCODE: $00000791 VOL: 0
+; 0000 014F         //---------------------------------------------------------------------
+; 0000 0150                 case 2: m_45(rychlost_presunu_zrychlene);                 break;
 ;PCODE: $00000792 VOL: 0
 ;PCODE: $00000793 VOL: 0
 ;PCODE: $00000794 VOL: 0
 ;PCODE: $00000795 VOL: 0
-; 0000 0152                 case 3: m_45(rychlost_presunu_zrychlene);                 break;
 ;PCODE: $00000796 VOL: 0
 ;PCODE: $00000797 VOL: 0
+; 0000 0151                 case 3: m_45(rychlost_presunu_zrychlene);                 break;
 ;PCODE: $00000798 VOL: 0
 ;PCODE: $00000799 VOL: 0
 ;PCODE: $0000079A VOL: 0
 ;PCODE: $0000079B VOL: 0
-; 0000 0153                 case 4: m_90(rychlost_presunu_zrychlene);                 break;
 ;PCODE: $0000079C VOL: 0
 ;PCODE: $0000079D VOL: 0
+; 0000 0152                 case 4: m_90(rychlost_presunu_zrychlene);                 break;
 ;PCODE: $0000079E VOL: 0
 ;PCODE: $0000079F VOL: 0
 ;PCODE: $000007A0 VOL: 0
 ;PCODE: $000007A1 VOL: 0
-; 0000 0154                 case 5: m_90(rychlost_presunu_zrychlene);                 break;
 ;PCODE: $000007A2 VOL: 0
 ;PCODE: $000007A3 VOL: 0
+; 0000 0153                 case 5: m_90(rychlost_presunu_zrychlene);                 break;
 ;PCODE: $000007A4 VOL: 0
 ;PCODE: $000007A5 VOL: 0
 ;PCODE: $000007A6 VOL: 0
 ;PCODE: $000007A7 VOL: 0
-; 0000 0155         //---------------------------------------------------------------------
-; 0000 0156                 case 6: m_135(rychlost_presunu);                     break;
 ;PCODE: $000007A8 VOL: 0
 ;PCODE: $000007A9 VOL: 0
+; 0000 0154         //---------------------------------------------------------------------
+; 0000 0155                 case 6: m_135(rychlost_presunu);                     break;
 ;PCODE: $000007AA VOL: 0
 ;PCODE: $000007AB VOL: 0
 ;PCODE: $000007AC VOL: 0
 ;PCODE: $000007AD VOL: 0
-; 0000 0157                 case 7: m_135(rychlost_presunu);                     break;
 ;PCODE: $000007AE VOL: 0
 ;PCODE: $000007AF VOL: 0
+; 0000 0156                 case 7: m_135(rychlost_presunu);                     break;
 ;PCODE: $000007B0 VOL: 0
 ;PCODE: $000007B1 VOL: 0
 ;PCODE: $000007B2 VOL: 0
 ;PCODE: $000007B3 VOL: 0
-; 0000 0158                 case 8: m_135(rychlost_presunu);                          break;
 ;PCODE: $000007B4 VOL: 0
 ;PCODE: $000007B5 VOL: 0
+; 0000 0157                 case 8: m_135(rychlost_presunu);                          break;
 ;PCODE: $000007B6 VOL: 0
 ;PCODE: $000007B7 VOL: 0
 ;PCODE: $000007B8 VOL: 0
 ;PCODE: $000007B9 VOL: 0
-; 0000 0159                 case 9: m_180(rychlost_presunu);                          break;
 ;PCODE: $000007BA VOL: 0
 ;PCODE: $000007BB VOL: 0
+; 0000 0158                 case 9: m_180(rychlost_presunu);                          break;
 ;PCODE: $000007BC VOL: 0
 ;PCODE: $000007BD VOL: 0
 ;PCODE: $000007BE VOL: 0
 ;PCODE: $000007BF VOL: 0
-; 0000 015A                 case 10: m_225(rychlost_presunu);                         break;
 ;PCODE: $000007C0 VOL: 0
 ;PCODE: $000007C1 VOL: 0
+; 0000 0159                 case 10: m_225(rychlost_presunu);                         break;
 ;PCODE: $000007C2 VOL: 0
 ;PCODE: $000007C3 VOL: 0
 ;PCODE: $000007C4 VOL: 0
 ;PCODE: $000007C5 VOL: 0
-; 0000 015B                 case 11: m_225(rychlost_presunu);                         break;
 ;PCODE: $000007C6 VOL: 0
 ;PCODE: $000007C7 VOL: 0
+; 0000 015A                 case 11: m_225(rychlost_presunu);                         break;
 ;PCODE: $000007C8 VOL: 0
 ;PCODE: $000007C9 VOL: 0
 ;PCODE: $000007CA VOL: 0
 ;PCODE: $000007CB VOL: 0
-; 0000 015C                 case 12: m_225(rychlost_presunu);                         break;
 ;PCODE: $000007CC VOL: 0
 ;PCODE: $000007CD VOL: 0
+; 0000 015B                 case 12: m_225(rychlost_presunu);                         break;
 ;PCODE: $000007CE VOL: 0
 ;PCODE: $000007CF VOL: 0
 ;PCODE: $000007D0 VOL: 0
 ;PCODE: $000007D1 VOL: 0
-; 0000 015D         //----------------------------------------------------------------------
-; 0000 015E                 case 13: m_270(rychlost_presunu_zrychlene);               break;
 ;PCODE: $000007D2 VOL: 0
 ;PCODE: $000007D3 VOL: 0
+; 0000 015C         //----------------------------------------------------------------------
+; 0000 015D                 case 13: m_270(rychlost_presunu_zrychlene);               break;
 ;PCODE: $000007D4 VOL: 0
 ;PCODE: $000007D5 VOL: 0
 ;PCODE: $000007D6 VOL: 0
 ;PCODE: $000007D7 VOL: 0
-; 0000 015F                 case 14: m_270(rychlost_presunu_zrychlene);               break;
 ;PCODE: $000007D8 VOL: 0
 ;PCODE: $000007D9 VOL: 0
+; 0000 015E                 case 14: m_270(rychlost_presunu_zrychlene);               break;
 ;PCODE: $000007DA VOL: 0
 ;PCODE: $000007DB VOL: 0
 ;PCODE: $000007DC VOL: 0
 ;PCODE: $000007DD VOL: 0
-; 0000 0160                 case 15: m_315(rychlost_presunu_zrychlene);               break;
 ;PCODE: $000007DE VOL: 0
 ;PCODE: $000007DF VOL: 0
+; 0000 015F                 case 15: m_315(rychlost_presunu_zrychlene);               break;
 ;PCODE: $000007E0 VOL: 0
 ;PCODE: $000007E1 VOL: 0
 ;PCODE: $000007E2 VOL: 0
 ;PCODE: $000007E3 VOL: 0
-; 0000 0161                 case 16: m_315(rychlost_presunu_zrychlene);               break;
 ;PCODE: $000007E4 VOL: 0
 ;PCODE: $000007E5 VOL: 0
+; 0000 0160                 case 16: m_315(rychlost_presunu_zrychlene);               break;
 ;PCODE: $000007E6 VOL: 0
 ;PCODE: $000007E7 VOL: 0
 ;PCODE: $000007E8 VOL: 0
 ;PCODE: $000007E9 VOL: 0
-; 0000 0162         //----------------------------------------------------------------------
-; 0000 0163                 case 17: m_vyp();                                         break;
 ;PCODE: $000007EA VOL: 0
 ;PCODE: $000007EB VOL: 0
+; 0000 0161         //----------------------------------------------------------------------
+; 0000 0162                 case 17: m_vyp();                                         break;
 ;PCODE: $000007EC VOL: 0
 ;PCODE: $000007ED VOL: 0
 ;PCODE: $000007EE VOL: 0
-; 0000 0164         }
 ;PCODE: $000007EF VOL: 0
-; 0000 0165     }
 ;PCODE: $000007F0 VOL: 0
-; 0000 0166 }
+; 0000 0163         }
 ;PCODE: $000007F1 VOL: 0
+; 0000 0164     }
 ;PCODE: $000007F2 VOL: 0
+; 0000 0165 }
 ;PCODE: $000007F3 VOL: 0
+;PCODE: $000007F4 VOL: 0
+;PCODE: $000007F5 VOL: 0
 ;//------------------------------
 ;//------------------------------
 ;//odosielanie do PC
 ;//------------------------------
-;char bolo_nacita = 0;
 ;void odosli_dataPC(){
-; 0000 016C void odosli_dataPC(){
-;PCODE: $000007F4 VOL: 0
-;PCODE: $000007F5 VOL: 0
-; 0000 016D     char data[12];
-; 0000 016E     int test;
-; 0000 016F //--prijem_dat------------------------
-; 0000 0170     prijem_dat();
+; 0000 016A void odosli_dataPC(){
 ;PCODE: $000007F6 VOL: 0
 ;PCODE: $000007F7 VOL: 0
+; 0000 016B //--prijem_dat------------------------
+; 0000 016C     char str[20];
+; 0000 016D     scanf ("%s",str);
 ;PCODE: $000007F8 VOL: 0
-;	data -> Y+2
-;	test -> R16,R17
+;	str -> Y+0
 ;PCODE: $000007F9 VOL: 0
-; 0000 0171 //------------------------------------
-; 0000 0172 //printf("test\n");
-; 0000 0173 //spracovanie dat---------------------
-; 0000 0174 //------------------------------------
-; 0000 0175     if (strcmpf(datax[0],"data") == 0){
 ;PCODE: $000007FA VOL: 0
 ;PCODE: $000007FB VOL: 0
 ;PCODE: $000007FC VOL: 0
@@ -2964,90 +2957,95 @@
 ;PCODE: $000007FF VOL: 0
 ;PCODE: $00000800 VOL: 0
 ;PCODE: $00000801 VOL: 0
-; 0000 0176         data[0] = Senzor_1;
 ;PCODE: $00000802 VOL: 0
+; 0000 016E //------------------------------------
+; 0000 016F //spracovanie dat---------------------
+; 0000 0170 //------------------------------------
+; 0000 0171     if (strcmpf(str,"data") == 0){
 ;PCODE: $00000803 VOL: 0
 ;PCODE: $00000804 VOL: 0
 ;PCODE: $00000805 VOL: 0
-; 0000 0177         data[1] = Senzor_2;
 ;PCODE: $00000806 VOL: 0
 ;PCODE: $00000807 VOL: 0
 ;PCODE: $00000808 VOL: 0
 ;PCODE: $00000809 VOL: 0
-; 0000 0178         data[2] = Senzor_3;
 ;PCODE: $0000080A VOL: 0
+; 0000 0172         char data[12];
+; 0000 0173         data[0] = Senzor_1;
 ;PCODE: $0000080B VOL: 0
+;	str -> Y+12
+;	data -> Y+0
 ;PCODE: $0000080C VOL: 0
 ;PCODE: $0000080D VOL: 0
-; 0000 0179         data[3] = Senzor_4;
 ;PCODE: $0000080E VOL: 0
 ;PCODE: $0000080F VOL: 0
+; 0000 0174         data[1] = Senzor_2;
 ;PCODE: $00000810 VOL: 0
 ;PCODE: $00000811 VOL: 0
-; 0000 017A         data[4] = Senzor_5;
 ;PCODE: $00000812 VOL: 0
 ;PCODE: $00000813 VOL: 0
+; 0000 0175         data[2] = Senzor_3;
 ;PCODE: $00000814 VOL: 0
 ;PCODE: $00000815 VOL: 0
-; 0000 017B         data[5] = Senzor_6;
 ;PCODE: $00000816 VOL: 0
 ;PCODE: $00000817 VOL: 0
+; 0000 0176         data[3] = Senzor_4;
 ;PCODE: $00000818 VOL: 0
 ;PCODE: $00000819 VOL: 0
-; 0000 017C         data[6] = Senzor_7;
 ;PCODE: $0000081A VOL: 0
 ;PCODE: $0000081B VOL: 0
+; 0000 0177         data[4] = Senzor_5;
 ;PCODE: $0000081C VOL: 0
 ;PCODE: $0000081D VOL: 0
-; 0000 017D         data[7] = Senzor_8;
 ;PCODE: $0000081E VOL: 0
 ;PCODE: $0000081F VOL: 0
+; 0000 0178         data[5] = Senzor_6;
 ;PCODE: $00000820 VOL: 0
 ;PCODE: $00000821 VOL: 0
-; 0000 017E         data[8] = maxx(200);
 ;PCODE: $00000822 VOL: 0
 ;PCODE: $00000823 VOL: 0
+; 0000 0179         data[6] = Senzor_7;
 ;PCODE: $00000824 VOL: 0
 ;PCODE: $00000825 VOL: 0
-; 0000 017F         data[9] = Kick_sens+20;
 ;PCODE: $00000826 VOL: 0
 ;PCODE: $00000827 VOL: 0
+; 0000 017A         data[7] = Senzor_8;
 ;PCODE: $00000828 VOL: 0
 ;PCODE: $00000829 VOL: 0
-; 0000 0180         data[10] = (int)(prepocetcompasu(branka,1)*0.71);
 ;PCODE: $0000082A VOL: 0
 ;PCODE: $0000082B VOL: 0
+; 0000 017B         data[8] = maxx(200);
 ;PCODE: $0000082C VOL: 0
 ;PCODE: $0000082D VOL: 0
 ;PCODE: $0000082E VOL: 0
 ;PCODE: $0000082F VOL: 0
+; 0000 017C         data[9] = (int)(prepocetcompasu(branka,1)*0.71);
 ;PCODE: $00000830 VOL: 0
 ;PCODE: $00000831 VOL: 0
 ;PCODE: $00000832 VOL: 0
 ;PCODE: $00000833 VOL: 0
 ;PCODE: $00000834 VOL: 0
 ;PCODE: $00000835 VOL: 0
-; 0000 0181         puts(data);
 ;PCODE: $00000836 VOL: 0
 ;PCODE: $00000837 VOL: 0
 ;PCODE: $00000838 VOL: 0
-; 0000 0182         bolo_nacita = 1;
 ;PCODE: $00000839 VOL: 0
 ;PCODE: $0000083A VOL: 0
-; 0000 0183         }
-; 0000 0184     else if (strcmpf(datax[0],"kick") == 0)     kick_no();
 ;PCODE: $0000083B VOL: 0
+; 0000 017D         data[10] = Kick_sens;
 ;PCODE: $0000083C VOL: 0
 ;PCODE: $0000083D VOL: 0
 ;PCODE: $0000083E VOL: 0
+; 0000 017E         puts(data);
 ;PCODE: $0000083F VOL: 0
 ;PCODE: $00000840 VOL: 0
 ;PCODE: $00000841 VOL: 0
+; 0000 017F         }
 ;PCODE: $00000842 VOL: 0
+; 0000 0180     else if (strcmpf(str,"kick") == 0)     kick_no();
 ;PCODE: $00000843 VOL: 0
 ;PCODE: $00000844 VOL: 0
 ;PCODE: $00000845 VOL: 0
-; 0000 0185     else if (strcmpf(datax[0],"L1ed") == 0){     on = 1; }
 ;PCODE: $00000846 VOL: 0
 ;PCODE: $00000847 VOL: 0
 ;PCODE: $00000848 VOL: 0
@@ -3056,12 +3054,12 @@
 ;PCODE: $0000084B VOL: 0
 ;PCODE: $0000084C VOL: 0
 ;PCODE: $0000084D VOL: 0
+; 0000 0181     else if (strcmpf(str,"LED0") == 0)     LED = 1;
 ;PCODE: $0000084E VOL: 0
 ;PCODE: $0000084F VOL: 0
 ;PCODE: $00000850 VOL: 0
 ;PCODE: $00000851 VOL: 0
 ;PCODE: $00000852 VOL: 0
-; 0000 0186     else if (strcmpf(datax[0],"L0ed") == 0){      on = 0;}
 ;PCODE: $00000853 VOL: 0
 ;PCODE: $00000854 VOL: 0
 ;PCODE: $00000855 VOL: 0
@@ -3069,31 +3067,37 @@
 ;PCODE: $00000857 VOL: 0
 ;PCODE: $00000858 VOL: 0
 ;PCODE: $00000859 VOL: 0
+; 0000 0182     else if (strcmpf(str,"LED1") == 0)     LED = 0;
 ;PCODE: $0000085A VOL: 0
 ;PCODE: $0000085B VOL: 0
 ;PCODE: $0000085C VOL: 0
 ;PCODE: $0000085D VOL: 0
 ;PCODE: $0000085E VOL: 0
 ;PCODE: $0000085F VOL: 0
-; 0000 0187     else if (strcmpf(datax[0],"LED0") == 0)     LED = 1;
 ;PCODE: $00000860 VOL: 0
 ;PCODE: $00000861 VOL: 0
 ;PCODE: $00000862 VOL: 0
 ;PCODE: $00000863 VOL: 0
 ;PCODE: $00000864 VOL: 0
 ;PCODE: $00000865 VOL: 0
+; 0000 0183     else if (strcmpf(str,"blik") == 0)    {
 ;PCODE: $00000866 VOL: 0
 ;PCODE: $00000867 VOL: 0
 ;PCODE: $00000868 VOL: 0
 ;PCODE: $00000869 VOL: 0
 ;PCODE: $0000086A VOL: 0
 ;PCODE: $0000086B VOL: 0
-; 0000 0188     else if (strcmpf(datax[0],"LED1") == 0)     LED = 0;
 ;PCODE: $0000086C VOL: 0
 ;PCODE: $0000086D VOL: 0
 ;PCODE: $0000086E VOL: 0
 ;PCODE: $0000086F VOL: 0
+; 0000 0184         int pocet;
+; 0000 0185         char str1[20];
+; 0000 0186         scanf ("%s",str1);
 ;PCODE: $00000870 VOL: 0
+;	str -> Y+22
+;	pocet -> Y+20
+;	str1 -> Y+0
 ;PCODE: $00000871 VOL: 0
 ;PCODE: $00000872 VOL: 0
 ;PCODE: $00000873 VOL: 0
@@ -3101,10 +3105,10 @@
 ;PCODE: $00000875 VOL: 0
 ;PCODE: $00000876 VOL: 0
 ;PCODE: $00000877 VOL: 0
-; 0000 0189     else if (strcmpf(datax[0],"smer") == 0)    {
 ;PCODE: $00000878 VOL: 0
 ;PCODE: $00000879 VOL: 0
 ;PCODE: $0000087A VOL: 0
+; 0000 0187         for(pocet = atoi(str1);pocet!=0;pocet--){
 ;PCODE: $0000087B VOL: 0
 ;PCODE: $0000087C VOL: 0
 ;PCODE: $0000087D VOL: 0
@@ -3112,665 +3116,632 @@
 ;PCODE: $0000087F VOL: 0
 ;PCODE: $00000880 VOL: 0
 ;PCODE: $00000881 VOL: 0
-; 0000 018A         smer = atoi(datax[1]);
 ;PCODE: $00000882 VOL: 0
 ;PCODE: $00000883 VOL: 0
 ;PCODE: $00000884 VOL: 0
 ;PCODE: $00000885 VOL: 0
 ;PCODE: $00000886 VOL: 0
-; 0000 018B         switch(smer){
+; 0000 0188             LED = 0;
 ;PCODE: $00000887 VOL: 0
 ;PCODE: $00000888 VOL: 0
-; 0000 018C             case 0:
+; 0000 0189             delay_ms(500);
 ;PCODE: $00000889 VOL: 0
 ;PCODE: $0000088A VOL: 0
-; 0000 018D                 m_vyp();
 ;PCODE: $0000088B VOL: 0
-; 0000 018E                 break;
+; 0000 018A             LED = 1;
 ;PCODE: $0000088C VOL: 0
-; 0000 018F             case 1:
 ;PCODE: $0000088D VOL: 0
+; 0000 018B             delay_ms(500);
 ;PCODE: $0000088E VOL: 0
 ;PCODE: $0000088F VOL: 0
-; 0000 0190                 m_0(rychlost);
 ;PCODE: $00000890 VOL: 0
+; 0000 018C             }
 ;PCODE: $00000891 VOL: 0
-; 0000 0191                 break;
 ;PCODE: $00000892 VOL: 0
-; 0000 0192             case 2:
 ;PCODE: $00000893 VOL: 0
 ;PCODE: $00000894 VOL: 0
 ;PCODE: $00000895 VOL: 0
-; 0000 0193                 m_45(rychlost);
 ;PCODE: $00000896 VOL: 0
+; 0000 018D     }
 ;PCODE: $00000897 VOL: 0
-; 0000 0194                 break;
+; 0000 018E     else if (strcmpf(str,"smer") == 0)    {
 ;PCODE: $00000898 VOL: 0
-; 0000 0195             case 3:
 ;PCODE: $00000899 VOL: 0
 ;PCODE: $0000089A VOL: 0
 ;PCODE: $0000089B VOL: 0
-; 0000 0196                 m_90(rychlost);
 ;PCODE: $0000089C VOL: 0
 ;PCODE: $0000089D VOL: 0
-; 0000 0197                 break;
 ;PCODE: $0000089E VOL: 0
-; 0000 0198             case 4:
 ;PCODE: $0000089F VOL: 0
 ;PCODE: $000008A0 VOL: 0
 ;PCODE: $000008A1 VOL: 0
-; 0000 0199                 m_135(rychlost);
+; 0000 018F         char str1[20];
+; 0000 0190         scanf ("%s",str1);
 ;PCODE: $000008A2 VOL: 0
+;	str -> Y+20
+;	str1 -> Y+0
 ;PCODE: $000008A3 VOL: 0
-; 0000 019A                 break;
 ;PCODE: $000008A4 VOL: 0
-; 0000 019B             case 5:
 ;PCODE: $000008A5 VOL: 0
 ;PCODE: $000008A6 VOL: 0
 ;PCODE: $000008A7 VOL: 0
-; 0000 019C                 m_180(rychlost);
 ;PCODE: $000008A8 VOL: 0
 ;PCODE: $000008A9 VOL: 0
-; 0000 019D                 break;
 ;PCODE: $000008AA VOL: 0
-; 0000 019E             case 6:
 ;PCODE: $000008AB VOL: 0
 ;PCODE: $000008AC VOL: 0
+; 0000 0191         smer = atoi(str1);
 ;PCODE: $000008AD VOL: 0
-; 0000 019F                 m_225(rychlost);
 ;PCODE: $000008AE VOL: 0
 ;PCODE: $000008AF VOL: 0
-; 0000 01A0                 break;
 ;PCODE: $000008B0 VOL: 0
-; 0000 01A1             case 7:
+; 0000 0192         switch(smer){
 ;PCODE: $000008B1 VOL: 0
 ;PCODE: $000008B2 VOL: 0
+; 0000 0193             case 0:
 ;PCODE: $000008B3 VOL: 0
-; 0000 01A2                 m_270(rychlost);
 ;PCODE: $000008B4 VOL: 0
+; 0000 0194                 m_vyp();
 ;PCODE: $000008B5 VOL: 0
-; 0000 01A3                 break;
+; 0000 0195                 break;
 ;PCODE: $000008B6 VOL: 0
-; 0000 01A4             case 8:
+; 0000 0196             case 1:
 ;PCODE: $000008B7 VOL: 0
 ;PCODE: $000008B8 VOL: 0
 ;PCODE: $000008B9 VOL: 0
-; 0000 01A5                 m_315(rychlost);
+; 0000 0197                 m_0(rychlost);
 ;PCODE: $000008BA VOL: 0
 ;PCODE: $000008BB VOL: 0
-; 0000 01A6                 break;
+; 0000 0198                 break;
 ;PCODE: $000008BC VOL: 0
-; 0000 01A7             case 10:
+; 0000 0199             case 2:
 ;PCODE: $000008BD VOL: 0
 ;PCODE: $000008BE VOL: 0
 ;PCODE: $000008BF VOL: 0
-; 0000 01A8                 m_ot(170);
+; 0000 019A                 m_45(rychlost);
 ;PCODE: $000008C0 VOL: 0
 ;PCODE: $000008C1 VOL: 0
+; 0000 019B                 break;
 ;PCODE: $000008C2 VOL: 0
-; 0000 01A9                 break;
+; 0000 019C             case 3:
 ;PCODE: $000008C3 VOL: 0
-; 0000 01AA             case 9:
 ;PCODE: $000008C4 VOL: 0
 ;PCODE: $000008C5 VOL: 0
+; 0000 019D                 m_90(rychlost);
 ;PCODE: $000008C6 VOL: 0
-; 0000 01AB                 m_ot(-170);
 ;PCODE: $000008C7 VOL: 0
+; 0000 019E                 break;
 ;PCODE: $000008C8 VOL: 0
+; 0000 019F             case 4:
 ;PCODE: $000008C9 VOL: 0
 ;PCODE: $000008CA VOL: 0
-; 0000 01AC                 break;
 ;PCODE: $000008CB VOL: 0
-; 0000 01AD             }
+; 0000 01A0                 m_135(rychlost);
 ;PCODE: $000008CC VOL: 0
-; 0000 01AE         }
-; 0000 01AF     else if (strcmpf(datax[0],"rych") == 0)    {
 ;PCODE: $000008CD VOL: 0
+; 0000 01A1                 break;
 ;PCODE: $000008CE VOL: 0
+; 0000 01A2             case 5:
 ;PCODE: $000008CF VOL: 0
 ;PCODE: $000008D0 VOL: 0
 ;PCODE: $000008D1 VOL: 0
+; 0000 01A3                 m_180(rychlost);
 ;PCODE: $000008D2 VOL: 0
 ;PCODE: $000008D3 VOL: 0
+; 0000 01A4                 break;
 ;PCODE: $000008D4 VOL: 0
+; 0000 01A5             case 6:
 ;PCODE: $000008D5 VOL: 0
 ;PCODE: $000008D6 VOL: 0
-; 0000 01B0         rychlost = atoi(datax[1]);
 ;PCODE: $000008D7 VOL: 0
+; 0000 01A6                 m_225(rychlost);
 ;PCODE: $000008D8 VOL: 0
 ;PCODE: $000008D9 VOL: 0
+; 0000 01A7                 break;
 ;PCODE: $000008DA VOL: 0
+; 0000 01A8             case 7:
 ;PCODE: $000008DB VOL: 0
-; 0000 01B1         switch(smer){
 ;PCODE: $000008DC VOL: 0
 ;PCODE: $000008DD VOL: 0
-; 0000 01B2             case 0:
+; 0000 01A9                 m_270(rychlost);
 ;PCODE: $000008DE VOL: 0
 ;PCODE: $000008DF VOL: 0
-; 0000 01B3                 m_vyp();
+; 0000 01AA                 break;
 ;PCODE: $000008E0 VOL: 0
-; 0000 01B4                 break;
+; 0000 01AB             case 8:
 ;PCODE: $000008E1 VOL: 0
-; 0000 01B5             case 1:
 ;PCODE: $000008E2 VOL: 0
 ;PCODE: $000008E3 VOL: 0
+; 0000 01AC                 m_315(rychlost);
 ;PCODE: $000008E4 VOL: 0
-; 0000 01B6                 m_0(rychlost);
 ;PCODE: $000008E5 VOL: 0
+; 0000 01AD                 break;
 ;PCODE: $000008E6 VOL: 0
-; 0000 01B7                 break;
+; 0000 01AE             case 10:
 ;PCODE: $000008E7 VOL: 0
-; 0000 01B8             case 2:
 ;PCODE: $000008E8 VOL: 0
 ;PCODE: $000008E9 VOL: 0
+; 0000 01AF                 m_ot(170);
 ;PCODE: $000008EA VOL: 0
-; 0000 01B9                 m_45(rychlost);
 ;PCODE: $000008EB VOL: 0
 ;PCODE: $000008EC VOL: 0
-; 0000 01BA                 break;
+; 0000 01B0                 break;
 ;PCODE: $000008ED VOL: 0
-; 0000 01BB             case 3:
+; 0000 01B1             case 9:
 ;PCODE: $000008EE VOL: 0
 ;PCODE: $000008EF VOL: 0
 ;PCODE: $000008F0 VOL: 0
-; 0000 01BC                 m_90(rychlost);
+; 0000 01B2                 m_ot(-170);
 ;PCODE: $000008F1 VOL: 0
 ;PCODE: $000008F2 VOL: 0
-; 0000 01BD                 break;
 ;PCODE: $000008F3 VOL: 0
-; 0000 01BE             case 4:
 ;PCODE: $000008F4 VOL: 0
+; 0000 01B3                 break;
 ;PCODE: $000008F5 VOL: 0
+; 0000 01B4             }
 ;PCODE: $000008F6 VOL: 0
-; 0000 01BF                 m_135(rychlost);
+; 0000 01B5         }
 ;PCODE: $000008F7 VOL: 0
+; 0000 01B6     else if (strcmpf(str,"rych") == 0)    {
 ;PCODE: $000008F8 VOL: 0
-; 0000 01C0                 break;
 ;PCODE: $000008F9 VOL: 0
-; 0000 01C1             case 5:
 ;PCODE: $000008FA VOL: 0
 ;PCODE: $000008FB VOL: 0
 ;PCODE: $000008FC VOL: 0
-; 0000 01C2                 m_180(rychlost);
 ;PCODE: $000008FD VOL: 0
 ;PCODE: $000008FE VOL: 0
-; 0000 01C3                 break;
 ;PCODE: $000008FF VOL: 0
-; 0000 01C4             case 6:
 ;PCODE: $00000900 VOL: 0
 ;PCODE: $00000901 VOL: 0
+; 0000 01B7         char str1[20];
+; 0000 01B8         scanf ("%s",str1);
 ;PCODE: $00000902 VOL: 0
-; 0000 01C5                 m_225(rychlost);
+;	str -> Y+20
+;	str1 -> Y+0
 ;PCODE: $00000903 VOL: 0
 ;PCODE: $00000904 VOL: 0
-; 0000 01C6                 break;
 ;PCODE: $00000905 VOL: 0
-; 0000 01C7             case 7:
 ;PCODE: $00000906 VOL: 0
 ;PCODE: $00000907 VOL: 0
 ;PCODE: $00000908 VOL: 0
-; 0000 01C8                 m_270(rychlost);
 ;PCODE: $00000909 VOL: 0
 ;PCODE: $0000090A VOL: 0
-; 0000 01C9                 break;
 ;PCODE: $0000090B VOL: 0
-; 0000 01CA             case 8:
 ;PCODE: $0000090C VOL: 0
+; 0000 01B9         rychlost = atoi(str1);
 ;PCODE: $0000090D VOL: 0
 ;PCODE: $0000090E VOL: 0
-; 0000 01CB                 m_315(rychlost);
 ;PCODE: $0000090F VOL: 0
 ;PCODE: $00000910 VOL: 0
-; 0000 01CC                 break;
+; 0000 01BA         switch(smer){
 ;PCODE: $00000911 VOL: 0
-; 0000 01CD             case 10:
 ;PCODE: $00000912 VOL: 0
+; 0000 01BB             case 0:
 ;PCODE: $00000913 VOL: 0
 ;PCODE: $00000914 VOL: 0
-; 0000 01CE                 m_ot(170);
+; 0000 01BC                 m_vyp();
 ;PCODE: $00000915 VOL: 0
+; 0000 01BD                 break;
 ;PCODE: $00000916 VOL: 0
+; 0000 01BE             case 1:
 ;PCODE: $00000917 VOL: 0
-; 0000 01CF                 break;
 ;PCODE: $00000918 VOL: 0
-; 0000 01D0             case 9:
 ;PCODE: $00000919 VOL: 0
+; 0000 01BF                 m_0(rychlost);
 ;PCODE: $0000091A VOL: 0
 ;PCODE: $0000091B VOL: 0
-; 0000 01D1                 m_ot(-170);
+; 0000 01C0                 break;
 ;PCODE: $0000091C VOL: 0
+; 0000 01C1             case 2:
 ;PCODE: $0000091D VOL: 0
 ;PCODE: $0000091E VOL: 0
 ;PCODE: $0000091F VOL: 0
-; 0000 01D2                 break;
+; 0000 01C2                 m_45(rychlost);
 ;PCODE: $00000920 VOL: 0
-; 0000 01D3             }
 ;PCODE: $00000921 VOL: 0
-; 0000 01D4         }
-; 0000 01D5     else if (strcmpf(datax[0],"obch") == 0)     obchadzanie(maxx(200));
+; 0000 01C3                 break;
 ;PCODE: $00000922 VOL: 0
+; 0000 01C4             case 3:
 ;PCODE: $00000923 VOL: 0
 ;PCODE: $00000924 VOL: 0
 ;PCODE: $00000925 VOL: 0
+; 0000 01C5                 m_90(rychlost);
 ;PCODE: $00000926 VOL: 0
 ;PCODE: $00000927 VOL: 0
+; 0000 01C6                 break;
 ;PCODE: $00000928 VOL: 0
+; 0000 01C7             case 4:
 ;PCODE: $00000929 VOL: 0
 ;PCODE: $0000092A VOL: 0
 ;PCODE: $0000092B VOL: 0
+; 0000 01C8                 m_135(rychlost);
 ;PCODE: $0000092C VOL: 0
 ;PCODE: $0000092D VOL: 0
+; 0000 01C9                 break;
 ;PCODE: $0000092E VOL: 0
+; 0000 01CA             case 5:
 ;PCODE: $0000092F VOL: 0
 ;PCODE: $00000930 VOL: 0
 ;PCODE: $00000931 VOL: 0
-; 0000 01D6     else{
+; 0000 01CB                 m_180(rychlost);
 ;PCODE: $00000932 VOL: 0
 ;PCODE: $00000933 VOL: 0
-; 0000 01D7         data[0] = 0;
+; 0000 01CC                 break;
 ;PCODE: $00000934 VOL: 0
+; 0000 01CD             case 6:
 ;PCODE: $00000935 VOL: 0
-; 0000 01D8         data[1] = 0;
 ;PCODE: $00000936 VOL: 0
 ;PCODE: $00000937 VOL: 0
-; 0000 01D9         data[2] = 0;
+; 0000 01CE                 m_225(rychlost);
 ;PCODE: $00000938 VOL: 0
 ;PCODE: $00000939 VOL: 0
-; 0000 01DA         data[3] = 0;
+; 0000 01CF                 break;
 ;PCODE: $0000093A VOL: 0
+; 0000 01D0             case 7:
 ;PCODE: $0000093B VOL: 0
-; 0000 01DB         data[4] = 0;
 ;PCODE: $0000093C VOL: 0
 ;PCODE: $0000093D VOL: 0
-; 0000 01DC         data[5] = 0;
+; 0000 01D1                 m_270(rychlost);
 ;PCODE: $0000093E VOL: 0
 ;PCODE: $0000093F VOL: 0
-; 0000 01DD         data[6] = 0;
+; 0000 01D2                 break;
 ;PCODE: $00000940 VOL: 0
+; 0000 01D3             case 8:
 ;PCODE: $00000941 VOL: 0
-; 0000 01DE         data[7] = 0;
 ;PCODE: $00000942 VOL: 0
 ;PCODE: $00000943 VOL: 0
-; 0000 01DF         data[8] = 0;
+; 0000 01D4                 m_315(rychlost);
 ;PCODE: $00000944 VOL: 0
 ;PCODE: $00000945 VOL: 0
-; 0000 01E0         data[9] = 0;
+; 0000 01D5                 break;
 ;PCODE: $00000946 VOL: 0
+; 0000 01D6             case 10:
 ;PCODE: $00000947 VOL: 0
-; 0000 01E1         data[10] = 0;
 ;PCODE: $00000948 VOL: 0
 ;PCODE: $00000949 VOL: 0
-; 0000 01E2         puts(data);
+; 0000 01D7                 m_ot(170);
 ;PCODE: $0000094A VOL: 0
 ;PCODE: $0000094B VOL: 0
 ;PCODE: $0000094C VOL: 0
-; 0000 01E3     }
+; 0000 01D8                 break;
 ;PCODE: $0000094D VOL: 0
+; 0000 01D9             case 9:
 ;PCODE: $0000094E VOL: 0
 ;PCODE: $0000094F VOL: 0
 ;PCODE: $00000950 VOL: 0
+; 0000 01DA                 m_ot(-170);
 ;PCODE: $00000951 VOL: 0
 ;PCODE: $00000952 VOL: 0
 ;PCODE: $00000953 VOL: 0
 ;PCODE: $00000954 VOL: 0
+; 0000 01DB                 break;
 ;PCODE: $00000955 VOL: 0
-; 0000 01E4         if (on == 1){
+; 0000 01DC             }
 ;PCODE: $00000956 VOL: 0
+; 0000 01DD         }
 ;PCODE: $00000957 VOL: 0
+; 0000 01DE     }
 ;PCODE: $00000958 VOL: 0
 ;PCODE: $00000959 VOL: 0
-; 0000 01E5             if (bolo_nacita == 1){
 ;PCODE: $0000095A VOL: 0
 ;PCODE: $0000095B VOL: 0
 ;PCODE: $0000095C VOL: 0
-; 0000 01E6             if (0 != nastav_podla_kompasu(data[10])){
 ;PCODE: $0000095D VOL: 0
 ;PCODE: $0000095E VOL: 0
 ;PCODE: $0000095F VOL: 0
 ;PCODE: $00000960 VOL: 0
 ;PCODE: $00000961 VOL: 0
+;//---------------------------------
+;void kalibracia_kompas(unsigned char mode){
+; 0000 01E0 void kalibracia_kompas(unsigned char mode){
 ;PCODE: $00000962 VOL: 0
-; 0000 01E7                 obchadzanie(data[8]);
 ;PCODE: $00000963 VOL: 0
+; 0000 01E1     int kompas;
+; 0000 01E2     if (mode == 1){
 ;PCODE: $00000964 VOL: 0
 ;PCODE: $00000965 VOL: 0
+;	mode -> Y+2
+;	kompas -> R16,R17
 ;PCODE: $00000966 VOL: 0
-; 0000 01E8             }
-; 0000 01E9            }
 ;PCODE: $00000967 VOL: 0
-; 0000 01EA            else{
 ;PCODE: $00000968 VOL: 0
+; 0000 01E3         if (Kick_sens == 0){
 ;PCODE: $00000969 VOL: 0
-; 0000 01EB                 obchadzanie(maxx(200));
 ;PCODE: $0000096A VOL: 0
 ;PCODE: $0000096B VOL: 0
+; 0000 01E4         while (Kick_sens == 0){
 ;PCODE: $0000096C VOL: 0
 ;PCODE: $0000096D VOL: 0
 ;PCODE: $0000096E VOL: 0
 ;PCODE: $0000096F VOL: 0
-; 0000 01EC            }
+; 0000 01E5             delay_ms(20);
 ;PCODE: $00000970 VOL: 0
-; 0000 01ED         }
-; 0000 01EE     }
 ;PCODE: $00000971 VOL: 0
 ;PCODE: $00000972 VOL: 0
+; 0000 01E6             branka = cmps03_read(1);
 ;PCODE: $00000973 VOL: 0
 ;PCODE: $00000974 VOL: 0
 ;PCODE: $00000975 VOL: 0
 ;PCODE: $00000976 VOL: 0
 ;PCODE: $00000977 VOL: 0
+; 0000 01E7                     }
 ;PCODE: $00000978 VOL: 0
-;//---------------------------------
-;void kalibracia_kompas(unsigned char mode){
-; 0000 01F0 void kalibracia_kompas(unsigned char mode){
 ;PCODE: $00000979 VOL: 0
+; 0000 01E8         while(1){
 ;PCODE: $0000097A VOL: 0
-; 0000 01F1     int kompas;
-; 0000 01F2     if (mode == 1){
+; 0000 01E9             kompas = prepocetcompasu(branka,1)*0.71;
 ;PCODE: $0000097B VOL: 0
 ;PCODE: $0000097C VOL: 0
-;	mode -> Y+2
-;	kompas -> R16,R17
 ;PCODE: $0000097D VOL: 0
 ;PCODE: $0000097E VOL: 0
 ;PCODE: $0000097F VOL: 0
-; 0000 01F3         if (Kick_sens == 0){
 ;PCODE: $00000980 VOL: 0
 ;PCODE: $00000981 VOL: 0
 ;PCODE: $00000982 VOL: 0
-; 0000 01F4         while (Kick_sens == 0){
 ;PCODE: $00000983 VOL: 0
 ;PCODE: $00000984 VOL: 0
 ;PCODE: $00000985 VOL: 0
+; 0000 01EA             if (kompas > 180)
 ;PCODE: $00000986 VOL: 0
-; 0000 01F5             delay_ms(20);
 ;PCODE: $00000987 VOL: 0
 ;PCODE: $00000988 VOL: 0
+; 0000 01EB                 kompas = 180;
 ;PCODE: $00000989 VOL: 0
-; 0000 01F6             branka = cmps03_read(1);
 ;PCODE: $0000098A VOL: 0
+; 0000 01EC             if (kompas < 20){
 ;PCODE: $0000098B VOL: 0
 ;PCODE: $0000098C VOL: 0
 ;PCODE: $0000098D VOL: 0
 ;PCODE: $0000098E VOL: 0
-; 0000 01F7                     }
+; 0000 01ED                 LED = 0;
 ;PCODE: $0000098F VOL: 0
 ;PCODE: $00000990 VOL: 0
-; 0000 01F8         while(1){
+; 0000 01EE             }
+; 0000 01EF             else{
 ;PCODE: $00000991 VOL: 0
-; 0000 01F9             kompas = prepocetcompasu(branka,1)*0.71;
 ;PCODE: $00000992 VOL: 0
+; 0000 01F0                 if( kompas < 90){
 ;PCODE: $00000993 VOL: 0
 ;PCODE: $00000994 VOL: 0
 ;PCODE: $00000995 VOL: 0
+; 0000 01F1                     LED = 1;
 ;PCODE: $00000996 VOL: 0
 ;PCODE: $00000997 VOL: 0
+; 0000 01F2                 }
+; 0000 01F3                 else
 ;PCODE: $00000998 VOL: 0
 ;PCODE: $00000999 VOL: 0
+; 0000 01F4                 {
+; 0000 01F5                     if (kompas < 160){
 ;PCODE: $0000099A VOL: 0
 ;PCODE: $0000099B VOL: 0
 ;PCODE: $0000099C VOL: 0
-; 0000 01FA             if (kompas > 180)
+; 0000 01F6                         LED = 1;
 ;PCODE: $0000099D VOL: 0
 ;PCODE: $0000099E VOL: 0
+; 0000 01F7                     }
+; 0000 01F8                     else {
 ;PCODE: $0000099F VOL: 0
-; 0000 01FB                 kompas = 180;
 ;PCODE: $000009A0 VOL: 0
+; 0000 01F9                         LED = 0;
 ;PCODE: $000009A1 VOL: 0
-; 0000 01FC             if (kompas < 20){
 ;PCODE: $000009A2 VOL: 0
+; 0000 01FA                         }
 ;PCODE: $000009A3 VOL: 0
+; 0000 01FB                 }
 ;PCODE: $000009A4 VOL: 0
+; 0000 01FC             }
 ;PCODE: $000009A5 VOL: 0
-; 0000 01FD                 LED = 0;
+; 0000 01FD         }
 ;PCODE: $000009A6 VOL: 0
 ;PCODE: $000009A7 VOL: 0
-; 0000 01FE             }
-; 0000 01FF             else{
+; 0000 01FE         }
+; 0000 01FF         }
 ;PCODE: $000009A8 VOL: 0
+; 0000 0200     else{
 ;PCODE: $000009A9 VOL: 0
-; 0000 0200                 if( kompas < 90){
 ;PCODE: $000009AA VOL: 0
+; 0000 0201          while (Kick_sens == 0){
 ;PCODE: $000009AB VOL: 0
 ;PCODE: $000009AC VOL: 0
-; 0000 0201                     LED = 1;
 ;PCODE: $000009AD VOL: 0
 ;PCODE: $000009AE VOL: 0
-; 0000 0202                 }
-; 0000 0203                 else
+; 0000 0202                     branka = cmps03_read(2);
 ;PCODE: $000009AF VOL: 0
 ;PCODE: $000009B0 VOL: 0
-; 0000 0204                 {
-; 0000 0205                     if (kompas < 160){
 ;PCODE: $000009B1 VOL: 0
 ;PCODE: $000009B2 VOL: 0
 ;PCODE: $000009B3 VOL: 0
-; 0000 0206                         LED = 1;
+; 0000 0203                     delay_ms(10);
 ;PCODE: $000009B4 VOL: 0
 ;PCODE: $000009B5 VOL: 0
-; 0000 0207                     }
-; 0000 0208                     else {
 ;PCODE: $000009B6 VOL: 0
+; 0000 0204                             }
 ;PCODE: $000009B7 VOL: 0
-; 0000 0209                         LED = 0;
 ;PCODE: $000009B8 VOL: 0
+; 0000 0205          delay_ms(1000);
 ;PCODE: $000009B9 VOL: 0
-; 0000 020A                         }
 ;PCODE: $000009BA VOL: 0
-; 0000 020B                 }
 ;PCODE: $000009BB VOL: 0
-; 0000 020C             }
+; 0000 0206          while(1){
 ;PCODE: $000009BC VOL: 0
-; 0000 020D         }
+; 0000 0207                     kompas = prepocetcompasu(branka,2);
 ;PCODE: $000009BD VOL: 0
 ;PCODE: $000009BE VOL: 0
-; 0000 020E         }
-; 0000 020F         }
 ;PCODE: $000009BF VOL: 0
-; 0000 0210     else{
 ;PCODE: $000009C0 VOL: 0
 ;PCODE: $000009C1 VOL: 0
-; 0000 0211          while (Kick_sens == 0){
 ;PCODE: $000009C2 VOL: 0
 ;PCODE: $000009C3 VOL: 0
+; 0000 0208                     if (kompas < 200){
 ;PCODE: $000009C4 VOL: 0
 ;PCODE: $000009C5 VOL: 0
-; 0000 0212                     branka = cmps03_read(2);
 ;PCODE: $000009C6 VOL: 0
+; 0000 0209                         LED = 0;
 ;PCODE: $000009C7 VOL: 0
 ;PCODE: $000009C8 VOL: 0
+; 0000 020A                     }
+; 0000 020B                     else{
 ;PCODE: $000009C9 VOL: 0
 ;PCODE: $000009CA VOL: 0
-; 0000 0213                     delay_ms(10);
+; 0000 020C                         if( kompas < 1800){
 ;PCODE: $000009CB VOL: 0
 ;PCODE: $000009CC VOL: 0
 ;PCODE: $000009CD VOL: 0
-; 0000 0214                             }
+; 0000 020D                             LED = 1;
 ;PCODE: $000009CE VOL: 0
 ;PCODE: $000009CF VOL: 0
-; 0000 0215          delay_ms(1000);
+; 0000 020E                         }
+; 0000 020F                         else
 ;PCODE: $000009D0 VOL: 0
 ;PCODE: $000009D1 VOL: 0
+; 0000 0210                         {
+; 0000 0211                             if (kompas < 3400){
 ;PCODE: $000009D2 VOL: 0
-; 0000 0216          while(1){
 ;PCODE: $000009D3 VOL: 0
-; 0000 0217                     kompas = prepocetcompasu(branka,2);
 ;PCODE: $000009D4 VOL: 0
+; 0000 0212                                 LED = 1;
 ;PCODE: $000009D5 VOL: 0
 ;PCODE: $000009D6 VOL: 0
+; 0000 0213                             }
+; 0000 0214                             else {
 ;PCODE: $000009D7 VOL: 0
 ;PCODE: $000009D8 VOL: 0
+; 0000 0215                                 LED = 0;
 ;PCODE: $000009D9 VOL: 0
 ;PCODE: $000009DA VOL: 0
-; 0000 0218                     if (kompas < 200){
+; 0000 0216                                 }
 ;PCODE: $000009DB VOL: 0
+; 0000 0217                         }
 ;PCODE: $000009DC VOL: 0
+; 0000 0218                     }
 ;PCODE: $000009DD VOL: 0
-; 0000 0219                         LED = 0;
+; 0000 0219                 }
 ;PCODE: $000009DE VOL: 0
 ;PCODE: $000009DF VOL: 0
-; 0000 021A                     }
-; 0000 021B                     else{
+; 0000 021A     }
 ;PCODE: $000009E0 VOL: 0
+; 0000 021B }
 ;PCODE: $000009E1 VOL: 0
-; 0000 021C                         if( kompas < 1800){
 ;PCODE: $000009E2 VOL: 0
 ;PCODE: $000009E3 VOL: 0
 ;PCODE: $000009E4 VOL: 0
-; 0000 021D                             LED = 1;
 ;PCODE: $000009E5 VOL: 0
 ;PCODE: $000009E6 VOL: 0
-; 0000 021E                         }
-; 0000 021F                         else
 ;PCODE: $000009E7 VOL: 0
-;PCODE: $000009E8 VOL: 0
-; 0000 0220                         {
-; 0000 0221                             if (kompas < 3400){
-;PCODE: $000009E9 VOL: 0
-;PCODE: $000009EA VOL: 0
-;PCODE: $000009EB VOL: 0
-; 0000 0222                                 LED = 1;
-;PCODE: $000009EC VOL: 0
-;PCODE: $000009ED VOL: 0
-; 0000 0223                             }
-; 0000 0224                             else {
-;PCODE: $000009EE VOL: 0
-;PCODE: $000009EF VOL: 0
-; 0000 0225                                 LED = 0;
-;PCODE: $000009F0 VOL: 0
-;PCODE: $000009F1 VOL: 0
-; 0000 0226                                 }
-;PCODE: $000009F2 VOL: 0
-; 0000 0227                         }
-;PCODE: $000009F3 VOL: 0
-; 0000 0228                     }
-;PCODE: $000009F4 VOL: 0
-; 0000 0229                 }
-;PCODE: $000009F5 VOL: 0
-;PCODE: $000009F6 VOL: 0
-; 0000 022A     }
-;PCODE: $000009F7 VOL: 0
-; 0000 022B }
-;PCODE: $000009F8 VOL: 0
-;PCODE: $000009F9 VOL: 0
-;PCODE: $000009FA VOL: 0
-;PCODE: $000009FB VOL: 0
-;PCODE: $000009FC VOL: 0
-;PCODE: $000009FD VOL: 0
-;PCODE: $000009FE VOL: 0
 ;//--------------------------------------------------
 ;void main(void)
-; 0000 022E {
+; 0000 021E {
+;PCODE: $000009E8 VOL: 0
+; 0000 021F init_8535();
+;PCODE: $000009E9 VOL: 0
+; 0000 0220 // pre odosielanie do pc nastav 1
+; 0000 0221 prog = 1;
+;PCODE: $000009EA VOL: 0
+;PCODE: $000009EB VOL: 0
+; 0000 0222 //kompas reset, nastavenie rychlosti na 33ms
+; 0000 0223 cmps03_reset();
+;PCODE: $000009EC VOL: 0
+; 0000 0224 cmps03_scanmode(3);
+;PCODE: $000009ED VOL: 0
+;PCODE: $000009EE VOL: 0
+;PCODE: $000009EF VOL: 0
+; 0000 0225 //-----------------------------------
+; 0000 0226 delay_ms(200);
+;PCODE: $000009F0 VOL: 0
+;PCODE: $000009F1 VOL: 0
+;PCODE: $000009F2 VOL: 0
+; 0000 0227 kalibracia_kompas(1);
+;PCODE: $000009F3 VOL: 0
+;PCODE: $000009F4 VOL: 0
+;PCODE: $000009F5 VOL: 0
+; 0000 0228 //-----------------------------------
+; 0000 0229 testmotor:
+;PCODE: $000009F6 VOL: 0
+; 0000 022A     while(1){
+;PCODE: $000009F7 VOL: 0
+; 0000 022B     /*
+; 0000 022C         if (Mot_sens == 1)  {
+; 0000 022D           goto zaciatok;
+; 0000 022E         }
+; 0000 022F         else{
+; 0000 0230             switch (senzory){
+; 0000 0231                 case 1:     goto zaciatok;                  break;
+; 0000 0232         //---------------------------------------------------------------------
+; 0000 0233                 case 2:     m_0(255);          break;
+; 0000 0234                 case 3:     m_0(255);          break;
+; 0000 0235                 case 4:     m_45(255);          break;
+; 0000 0236                 case 5:     m_45(255);         break;
+; 0000 0237         //---------------------------------------------------------------------
+; 0000 0238                 case 6:     m_vyp();                        break;
+; 0000 0239                 case 7:     m_vyp();                        break;
+; 0000 023A                 case 8:     m_vyp();                        break;
+; 0000 023B                 case 9:     m_vyp();                        break;
+; 0000 023C                 case 10:    m_vyp();                        break;
+; 0000 023D                 case 11:    m_vyp();                        break;
+; 0000 023E                 case 12:    m_vyp();                        break;
+; 0000 023F         //----------------------------------------------------------------------
+; 0000 0240                 case 13:    m_315(255);        break;
+; 0000 0241                 case 14:    m_315(255);          break;
+; 0000 0242                 case 15:    m_0(255);          break;
+; 0000 0243                 case 16:    m_0(255);          break;
+; 0000 0244         //----------------------------------------------------------------------
+; 0000 0245                 case 17:    m_vyp();                        break;
+; 0000 0246             }
+; 0000 0247             if (senzory != 1){
+; 0000 0248                 delay_ms(400);
+; 0000 0249             }
+; 0000 024A         }
+; 0000 024B         */
+; 0000 024C //        while(1){
+; 0000 024D           odosli_dataPC();
+;PCODE: $000009F8 VOL: 0
+; 0000 024E     //    }
+; 0000 024F goto testmotor;
+;PCODE: $000009F9 VOL: 0
+; 0000 0250 goto zaciatok;
+;PCODE: $000009FA VOL: 0
+; 0000 0251 }
+;PCODE: $000009FB VOL: 0
+;PCODE: $000009FC VOL: 0
+; 0000 0252 //-----------------------------------
+; 0000 0253 zaciatok:
+;PCODE: $000009FD VOL: 0
+; 0000 0254     while (1){
+;PCODE: $000009FE VOL: 0
+; 0000 0255         if (0 != nastav_podla_kompasu((int)(prepocetcompasu(branka,1)*0.71))){
 ;PCODE: $000009FF VOL: 0
-; 0000 022F init_8535();
 ;PCODE: $00000A00 VOL: 0
-; 0000 0230 // pre odosielanie do pc nastav 1
-; 0000 0231 prog = 1;
 ;PCODE: $00000A01 VOL: 0
 ;PCODE: $00000A02 VOL: 0
-; 0000 0232 //kompas reset, nastavenie rychlosti na 33ms
-; 0000 0233 cmps03_reset();
 ;PCODE: $00000A03 VOL: 0
-; 0000 0234 cmps03_scanmode(3);
 ;PCODE: $00000A04 VOL: 0
 ;PCODE: $00000A05 VOL: 0
 ;PCODE: $00000A06 VOL: 0
-; 0000 0235 //-----------------------------------
-; 0000 0236 delay_ms(200);
 ;PCODE: $00000A07 VOL: 0
 ;PCODE: $00000A08 VOL: 0
 ;PCODE: $00000A09 VOL: 0
-; 0000 0237 kalibracia_kompas(1);
 ;PCODE: $00000A0A VOL: 0
 ;PCODE: $00000A0B VOL: 0
 ;PCODE: $00000A0C VOL: 0
-; 0000 0238 //-----------------------------------
-; 0000 0239 testmotor:
+; 0000 0256             obchadzanie(maxx(200));
 ;PCODE: $00000A0D VOL: 0
-; 0000 023A     while(1){
 ;PCODE: $00000A0E VOL: 0
-; 0000 023B     /*
-; 0000 023C         if (Mot_sens == 1)  {
-; 0000 023D           goto zaciatok;
-; 0000 023E         }
-; 0000 023F         else{
-; 0000 0240             switch (senzory){
-; 0000 0241                 case 1:     goto zaciatok;                  break;
-; 0000 0242         //---------------------------------------------------------------------
-; 0000 0243                 case 2:     m_0(255);          break;
-; 0000 0244                 case 3:     m_0(255);          break;
-; 0000 0245                 case 4:     m_45(255);          break;
-; 0000 0246                 case 5:     m_45(255);         break;
-; 0000 0247         //---------------------------------------------------------------------
-; 0000 0248                 case 6:     m_vyp();                        break;
-; 0000 0249                 case 7:     m_vyp();                        break;
-; 0000 024A                 case 8:     m_vyp();                        break;
-; 0000 024B                 case 9:     m_vyp();                        break;
-; 0000 024C                 case 10:    m_vyp();                        break;
-; 0000 024D                 case 11:    m_vyp();                        break;
-; 0000 024E                 case 12:    m_vyp();                        break;
-; 0000 024F         //----------------------------------------------------------------------
-; 0000 0250                 case 13:    m_315(255);        break;
-; 0000 0251                 case 14:    m_315(255);          break;
-; 0000 0252                 case 15:    m_0(255);          break;
-; 0000 0253                 case 16:    m_0(255);          break;
-; 0000 0254         //----------------------------------------------------------------------
-; 0000 0255                 case 17:    m_vyp();                        break;
-; 0000 0256             }
-; 0000 0257             if (senzory != 1){
-; 0000 0258                 delay_ms(400);
-; 0000 0259             }
-; 0000 025A         }
-; 0000 025B         */
-; 0000 025C //        while(1){
-; 0000 025D           odosli_dataPC();
 ;PCODE: $00000A0F VOL: 0
-; 0000 025E     //    }
-; 0000 025F goto testmotor;
 ;PCODE: $00000A10 VOL: 0
-; 0000 0260 goto zaciatok;
 ;PCODE: $00000A11 VOL: 0
-; 0000 0261 }
 ;PCODE: $00000A12 VOL: 0
+; 0000 0257         }
+; 0000 0258         delay_ms(30);
 ;PCODE: $00000A13 VOL: 0
-; 0000 0262 //-----------------------------------
-; 0000 0263 zaciatok:
 ;PCODE: $00000A14 VOL: 0
-; 0000 0264     while (1){
 ;PCODE: $00000A15 VOL: 0
-; 0000 0265         if (0 != nastav_podla_kompasu((int)(prepocetcompasu(branka,1)*0.71))){
 ;PCODE: $00000A16 VOL: 0
+; 0000 0259 };
 ;PCODE: $00000A17 VOL: 0
 ;PCODE: $00000A18 VOL: 0
+; 0000 025A //-----------------------------------
+; 0000 025B }
 ;PCODE: $00000A19 VOL: 0
 ;PCODE: $00000A1A VOL: 0
 ;PCODE: $00000A1B VOL: 0
-;PCODE: $00000A1C VOL: 0
-;PCODE: $00000A1D VOL: 0
-;PCODE: $00000A1E VOL: 0
-;PCODE: $00000A1F VOL: 0
-;PCODE: $00000A20 VOL: 0
-;PCODE: $00000A21 VOL: 0
-;PCODE: $00000A22 VOL: 0
-;PCODE: $00000A23 VOL: 0
-; 0000 0266             obchadzanie(maxx(200));
-;PCODE: $00000A24 VOL: 0
-;PCODE: $00000A25 VOL: 0
-;PCODE: $00000A26 VOL: 0
-;PCODE: $00000A27 VOL: 0
-;PCODE: $00000A28 VOL: 0
-;PCODE: $00000A29 VOL: 0
-; 0000 0267         }
-; 0000 0268         delay_ms(30);
-;PCODE: $00000A2A VOL: 0
-;PCODE: $00000A2B VOL: 0
-;PCODE: $00000A2C VOL: 0
-;PCODE: $00000A2D VOL: 0
-; 0000 0269 };
-;PCODE: $00000A2E VOL: 0
-;PCODE: $00000A2F VOL: 0
-; 0000 026A //-----------------------------------
-; 0000 026B }
-;PCODE: $00000A30 VOL: 0
-;PCODE: $00000A31 VOL: 0
-;PCODE: $00000A32 VOL: 0

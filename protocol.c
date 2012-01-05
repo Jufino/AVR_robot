@@ -24,7 +24,8 @@ int zakoduj(char data_vystup[],char data_vstup[][char_for_array],int size){
             posun++;
         }
 //--------------------------------------------------
-    }    
+    } 
+    return posun;   
 }
 //data_vystup je multiarray = vystupne rozkodovane data
 //data_vstup je char = zakodovane data v klastrovom protokole
@@ -49,6 +50,7 @@ int dekoduj(char data_vystup[][char_for_array],char data_vstup[]){
         }
 //------------------------------------------
     }
+    return posun;
 }
 void odosli_data_beagle(char data[][char_for_array],int pocet_dat){
     char buffer[128];

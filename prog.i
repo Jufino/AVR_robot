@@ -484,7 +484,8 @@ data_vystup[posun] = data_vstup[i][z];
 posun++;
 }
 
-}    
+} 
+return posun;   
 }
 
 int dekoduj(char data_vystup[][10    ],char data_vstup[]){
@@ -508,6 +509,7 @@ posun++;
 }
 
 }
+return posun;
 }
 void odosli_data_beagle(char data[][10    ],int pocet_dat){
 char buffer[128];
@@ -656,7 +658,6 @@ unsigned char smer=0;
 unsigned int x1;
 unsigned char rychlost=200;
 unsigned char rychl;
-eeprom char on = 0;
 
 void init_8535(){
 
@@ -779,7 +780,7 @@ case 16: m_315(rychlost_presunu);             break;
 case 17: m_vyp();                                break;    
 }
 }
-x1=x1-1;
+x1--;
 delay_ms(2);
 }
 }
@@ -883,14 +884,13 @@ case 17: m_vyp();                                         break;
 }
 }
 
-char bolo_nacita = 0;
 void odosli_dataPC(){
+
+char str[20];
+scanf ("%s",str);
+
+if (strcmpf(str,"data") == 0){
 char data[12];
-int test;
-
-prijem_dat();
-
-if (strcmpf(datax[0],"data") == 0){
 data[0] = read_adc(7);
 data[1] = read_adc(6); 
 data[2] = read_adc(5);
@@ -900,18 +900,28 @@ data[5] = read_adc(1);
 data[6] = read_adc(2);
 data[7] = read_adc(3);
 data[8] = maxx(200);
-data[9] = PINB.5                     +20;
-data[10] = (int)(prepocetcompasu(branka,1)*0.71);
+data[9] = (int)(prepocetcompasu(branka,1)*0.71);
+data[10] = PINB.5                     ;
 puts(data);   
-bolo_nacita = 1;
 }           
-else if (strcmpf(datax[0],"kick") == 0)     kick_no();
-else if (strcmpf(datax[0],"L1ed") == 0){     on = 1; }
-else if (strcmpf(datax[0],"L0ed") == 0){      on = 0;}  
-else if (strcmpf(datax[0],"LED0") == 0)     PORTB.4 = 1;
-else if (strcmpf(datax[0],"LED1") == 0)     PORTB.4 = 0;
-else if (strcmpf(datax[0],"smer") == 0)    {
-smer = atoi(datax[1]); 
+else if (strcmpf(str,"kick") == 0)     kick_no();
+else if (strcmpf(str,"LED0") == 0)     PORTB.4 = 1;
+else if (strcmpf(str,"LED1") == 0)     PORTB.4 = 0;
+else if (strcmpf(str,"blik") == 0)    {
+int pocet;
+char str1[20];
+scanf ("%s",str1);
+for(pocet = atoi(str1);pocet!=0;pocet--){    
+PORTB.4 = 0;
+delay_ms(500);
+PORTB.4 = 1;
+delay_ms(500);
+}
+}
+else if (strcmpf(str,"smer") == 0)    {
+char str1[20];
+scanf ("%s",str1);
+smer = atoi(str1); 
 switch(smer){
 case 0:
 m_vyp();
@@ -948,8 +958,10 @@ m_ot(-170);
 break;
 } 
 }  
-else if (strcmpf(datax[0],"rych") == 0)    {
-rychlost = atoi(datax[1]);
+else if (strcmpf(str,"rych") == 0)    {
+char str1[20];
+scanf ("%s",str1);
+rychlost = atoi(str1);
 switch(smer){
 case 0:
 m_vyp();
@@ -986,31 +998,6 @@ m_ot(-170);
 break;
 } 
 }                    
-else if (strcmpf(datax[0],"obch") == 0)     obchadzanie(maxx(200)); 
-else{
-data[0] = 0;
-data[1] = 0; 
-data[2] = 0;
-data[3] = 0;
-data[4] = 0;
-data[5] = 0;
-data[6] = 0;
-data[7] = 0;
-data[8] = 0;
-data[9] = 0;
-data[10] = 0;
-puts(data);
-}
-if (on == 1){
-if (bolo_nacita == 1){        
-if (0 != nastav_podla_kompasu(data[10])){
-obchadzanie(data[8]);    
-}     
-}
-else{
-obchadzanie(maxx(200));          
-}
-}
 }  
 
 void kalibracia_kompas(unsigned char mode){
